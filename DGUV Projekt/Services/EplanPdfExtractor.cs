@@ -25,40 +25,48 @@ namespace DGUV_Projekt.Services
     }
 
     /// <summary>
-    /// Liest ein EPLAN-PDF seitenweise mit UglyToad.PdfPig ein, filtert die
-    /// relevanten Seiten (enthalten '+' und '#') und laesst deren Text von der
-    /// KI in ein Lage-zu-Ort-Mapping ueberfuehren.
-    /// Die Rate-Limit-Bremse (Task.Delay 2s) bleibt zwingend erhalten.
+    /// Liest ein EPLAN-PDF seitenweise ein und ermittelt pro Seite die
+    /// Zuordnung Lfd.-Nr. (#) -> Ortskennzeichen (+) aus dem Schriftfeld.
+    ///
+    /// Zwei Betriebsarten:
+    ///  - Deterministisch (Standard): Auswertung ueber Koordinaten + Muster,
+    ///    ohne API-Aufruf -> schnell und reproduzierbar.
+    ///  - KI-Modus (optional): der reine Schriftfeld-Text wird an die
+    ///    Siemens-KI geschickt. Dabei bleibt die Rate-Limit-Bremse (2s) erhalten.
     /// </summary>
     public class EplanPdfExtractor
     {
-        // Rate-Limit-Schutz: Der Siemens-Key erlaubt nur 30 Anfragen pro Minute.
-        // Diese Pause pro KI-Aufruf ist der Tempomat und darf nicht entfernt werden.
+        // Rate-Limit-Schutz fuer den KI-Modus: Der Siemens-Key erlaubt nur
+        // 30 Anfragen pro Minute. Diese Pause pro KI-Aufruf ist der Tempomat.
         private const int RateLimitDelayMs = 2000;
 
-        private readonly SiemensAiClient _aiClient;
+        private readonly TitleBlockExtractor _titleBlock;
+        private readonly SiemensAiClient _aiClient; // nur im KI-Modus benoetigt
         private readonly Action<string> _log;
 
-        public EplanPdfExtractor(SiemensAiClient aiClient, Action<string> log)
+        public EplanPdfExtractor(TitleBlockExtractor titleBlock, SiemensAiClient aiClient, Action<string> log)
         {
-            _aiClient = aiClient ?? throw new ArgumentNullException(nameof(aiClient));
+            _titleBlock = titleBlock ?? throw new ArgumentNullException(nameof(titleBlock));
+            _aiClient = aiClient;
             _log = log ?? (_ => { });
         }
 
         /// <summary>
         /// Fuehrt die vollstaendige Extraktion durch und liefert das
-        /// aggregierte Mapping (Lage -> Ortskennzeichen).
-        /// Sollte auf einem Hintergrund-Thread ausgefuehrt werden, damit die
-        /// UI waehrend des PDF-Parsens nicht einfriert.
+        /// aggregierte Mapping (Lfd.-Nr. -> Ortskennzeichen).
+        /// Sollte auf einem Hintergrund-Thread laufen, damit die UI nicht einfriert.
         /// </summary>
         public async Task<Dictionary<string, string>> ExtractAsync(
             string pdfPath,
+            bool useAi,
             IProgress<ExtractionProgress> progress,
             CancellationToken cancellationToken)
         {
             var finalMapping = new Dictionary<string, string>();
 
-            _log("Starte PDF-Extraktion...");
+            _log(useAi
+                ? "Starte Extraktion im KI-Modus (Schriftfeld -> Siemens-KI)..."
+                : "Starte deterministische Extraktion (Schriftfeld ueber Koordinaten)...");
 
             using (PdfDocument document = PdfDocument.Open(pdfPath))
             {
@@ -69,32 +77,72 @@ namespace DGUV_Projekt.Services
                     cancellationToken.ThrowIfCancellationRequested();
 
                     Page page = document.GetPage(i);
-                    string pageText = page.Text;
-
                     progress?.Report(new ExtractionProgress(i, totalPages));
 
-                    // Nur Seiten mit Ortskennzeichen ('+') und Lage ('#') sind relevant.
-                    if (pageText.Contains("+") && pageText.Contains("#"))
+                    TitleBlockResult titleBlock = _titleBlock.Extract(page);
+
+                    if (useAi)
                     {
-                        _log($"Verarbeite Seite {i} von {totalPages} via KI...");
-
-                        string aiResponse = await _aiClient.AskAsync(pageText, cancellationToken).ConfigureAwait(false);
-
-                        MergeMapping(finalMapping, aiResponse, i);
-
-                        _log("Warte 2 Sekunden (Rate-Limit-Schutz fuer Siemens-API)...");
-                        await Task.Delay(RateLimitDelayMs, cancellationToken).ConfigureAwait(false);
+                        await ProcessPageWithAiAsync(finalMapping, titleBlock, i, totalPages, cancellationToken)
+                            .ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        ProcessPageDeterministic(finalMapping, titleBlock, i);
                     }
                 }
             }
 
+            _log($"Fertig. {finalMapping.Count} Zuordnung(en) gefunden.");
             return finalMapping;
         }
 
-        /// <summary>
-        /// Deserialisiert die KI-Antwort und uebernimmt die gefundenen
-        /// Zuordnungen in das Gesamt-Mapping.
-        /// </summary>
+        // --- Deterministische Auswertung -----------------------------------
+
+        private void ProcessPageDeterministic(Dictionary<string, string> mapping, TitleBlockResult titleBlock, int pageNumber)
+        {
+            if (titleBlock.IsComplete)
+            {
+                mapping[titleBlock.Lage] = titleBlock.Ort;
+                _log($"Seite {pageNumber}: {titleBlock.Lage} -> {titleBlock.Ort}");
+            }
+            else if (titleBlock.HasCandidates)
+            {
+                // Schriftfeld erkannt, aber nicht beide Werte gefunden -> zur
+                // Diagnose kurz protokollieren (hilft beim Justieren der Region).
+                _log($"Seite {pageNumber}: unvollstaendig. Schriftfeld-Text: \"{Shorten(titleBlock.RawText)}\"");
+            }
+        }
+
+        // --- KI-Auswertung --------------------------------------------------
+
+        private async Task ProcessPageWithAiAsync(
+            Dictionary<string, string> mapping,
+            TitleBlockResult titleBlock,
+            int pageNumber,
+            int totalPages,
+            CancellationToken cancellationToken)
+        {
+            if (_aiClient == null)
+            {
+                throw new InvalidOperationException("KI-Modus aktiv, aber kein API-Client vorhanden.");
+            }
+
+            // Nur Seiten mit Schriftfeld-Kandidaten (+ und #) an die KI schicken.
+            if (!(titleBlock.RawText.Contains("+") && titleBlock.RawText.Contains("#")))
+            {
+                return;
+            }
+
+            _log($"Seite {pageNumber} von {totalPages}: Schriftfeld an KI...");
+
+            string aiResponse = await _aiClient.AskAsync(titleBlock.RawText, cancellationToken).ConfigureAwait(false);
+            MergeMapping(mapping, aiResponse, pageNumber);
+
+            _log("Warte 2 Sekunden (Rate-Limit-Schutz fuer Siemens-API)...");
+            await Task.Delay(RateLimitDelayMs, cancellationToken).ConfigureAwait(false);
+        }
+
         private void MergeMapping(Dictionary<string, string> target, string aiResponse, int pageNumber)
         {
             if (string.IsNullOrEmpty(aiResponse))
@@ -117,6 +165,16 @@ namespace DGUV_Projekt.Services
             {
                 _log($"Warnung: KI hat auf Seite {pageNumber} kein sauberes JSON zurueckgegeben.");
             }
+        }
+
+        private static string Shorten(string value)
+        {
+            if (string.IsNullOrEmpty(value) || value.Length <= 120)
+            {
+                return value;
+            }
+
+            return value.Substring(0, 120) + "...";
         }
     }
 }

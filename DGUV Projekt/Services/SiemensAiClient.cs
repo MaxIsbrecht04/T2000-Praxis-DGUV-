@@ -22,11 +22,12 @@ namespace DGUV_Projekt.Services
         // Der Extraktions-Auftrag an die KI. Bewusst als Konstante gehalten,
         // damit der Prompt zentral und nachvollziehbar bleibt.
         private const string SystemPrompt =
-            "Du bist ein Datenextraktions-Tool fuer EPLAN. Finde im folgenden Text das " +
-            "Ortskennzeichen (beginnt mit '+') und weise es der Seiten-Lage (beginnt mit '#', " +
-            "z.B. '#0070') zu. Antworte AUSSCHLIESSLICH mit einem validen, rohen JSON-Objekt im " +
-            "Format {\"#0070\": \"+Schaltschrank_1\"}. Verwende keine Markdown-Bloecke (wie ```json) " +
-            "und keinen zusaetzlichen Text.";
+            "Du bekommst den Text aus dem EPLAN-Schriftfeld (unten rechts auf dem Blatt). " +
+            "Finde die Lfd.-Nr., die mit '#' beginnt (z.B. '#0310'), und das Ortskennzeichen, " +
+            "das mit '+' beginnt (z.B. '+P141'). Weise die Lfd.-Nr. dem Ortskennzeichen zu. " +
+            "Ignoriere das Anlagenkennzeichen, das mit '=' beginnt. Antworte AUSSCHLIESSLICH mit " +
+            "einem validen, rohen JSON-Objekt im Format {\"#0310\": \"+P141\"}. Verwende keine " +
+            "Markdown-Bloecke (wie ```json) und keinen zusaetzlichen Text.";
 
         // Ein einziger, wiederverwendeter HttpClient (Best Practice, verhindert
         // Socket-Erschoepfung). Der Bearer-Token wird pro Request gesetzt, damit

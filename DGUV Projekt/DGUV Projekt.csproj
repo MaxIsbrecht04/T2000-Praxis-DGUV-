@@ -58,6 +58,7 @@
     </Compile>
     <Compile Include="Services\SiemensAiClient.cs" />
     <Compile Include="Services\EplanPdfExtractor.cs" />
+    <Compile Include="Services\TitleBlockExtractor.cs" />
     <Compile Include="Program.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
