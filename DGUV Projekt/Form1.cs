@@ -21,7 +21,10 @@ namespace DGUV_Projekt
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Log("Modul 0 (PDF-Extraktion) bereit. Bitte PDF auswaehlen und API-Key eingeben.");
+            Log("Modul 0 (PDF-Extraktion) bereit. Bitte PDF auswaehlen.");
+            Log("Standard: deterministische Schriftfeld-Auswertung (schnell). " +
+                "Fuer den KI-Modus die Checkbox aktivieren und API-Key eingeben.");
+            UpdateApiKeyState();
         }
 
         // ------------------------------------------------------------------
@@ -57,6 +60,18 @@ namespace DGUV_Projekt
             }
         }
 
+        private void chkUseAi_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateApiKeyState();
+        }
+
+        // API-Key-Feld nur im KI-Modus aktiv.
+        private void UpdateApiKeyState()
+        {
+            txtApiKey.Enabled = chkUseAi.Checked;
+            lblApiKey.Enabled = chkUseAi.Checked;
+        }
+
         private async void btnStartExtraction_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtPdfPath.Text) || !File.Exists(txtPdfPath.Text))
@@ -66,9 +81,11 @@ namespace DGUV_Projekt
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(txtApiKey.Text))
+            bool useAi = chkUseAi.Checked;
+
+            if (useAi && string.IsNullOrWhiteSpace(txtApiKey.Text))
             {
-                MessageBox.Show("Bitte gib deinen Siemens API-Key ein.", "Fehler",
+                MessageBox.Show("Fuer den KI-Modus bitte den Siemens API-Key eingeben.", "Fehler",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -82,16 +99,17 @@ namespace DGUV_Projekt
 
             try
             {
-                var aiClient = new SiemensAiClient(txtApiKey.Text, Log);
-                var extractor = new EplanPdfExtractor(aiClient, Log);
+                var titleBlock = new TitleBlockExtractor();
+                var aiClient = useAi ? new SiemensAiClient(txtApiKey.Text, Log) : null;
+                var extractor = new EplanPdfExtractor(titleBlock, aiClient, Log);
 
                 string pdfPath = txtPdfPath.Text;
                 CancellationToken token = _cts.Token;
 
-                // Die gesamte (teils synchrone) PDF-Verarbeitung laeuft auf einem
-                // Hintergrund-Thread -> die UI bleibt jederzeit reaktionsfaehig.
+                // Die gesamte PDF-Verarbeitung laeuft auf einem Hintergrund-Thread
+                // -> die UI bleibt jederzeit reaktionsfaehig.
                 Dictionary<string, string> finalMapping =
-                    await Task.Run(() => extractor.ExtractAsync(pdfPath, progress, token));
+                    await Task.Run(() => extractor.ExtractAsync(pdfPath, useAi, progress, token));
 
                 SaveMappingToJson(finalMapping);
             }
@@ -140,7 +158,8 @@ namespace DGUV_Projekt
         {
             btnStartExtraction.Enabled = !running;
             btnSelectPdf.Enabled = !running;
-            txtApiKey.Enabled = !running;
+            chkUseAi.Enabled = !running;
+            txtApiKey.Enabled = !running && chkUseAi.Checked;
             btnCancel.Enabled = running;
 
             if (running)

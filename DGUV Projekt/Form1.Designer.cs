@@ -29,6 +29,7 @@ namespace DGUV_Projekt
         private void InitializeComponent()
         {
             this.grpInputs = new System.Windows.Forms.GroupBox();
+            this.chkUseAi = new System.Windows.Forms.CheckBox();
             this.lblApiKey = new System.Windows.Forms.Label();
             this.txtApiKey = new System.Windows.Forms.TextBox();
             this.lblPdf = new System.Windows.Forms.Label();
@@ -47,6 +48,7 @@ namespace DGUV_Projekt
             //
             this.grpInputs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpInputs.Controls.Add(this.chkUseAi);
             this.grpInputs.Controls.Add(this.lblApiKey);
             this.grpInputs.Controls.Add(this.txtApiKey);
             this.grpInputs.Controls.Add(this.lblPdf);
@@ -54,10 +56,21 @@ namespace DGUV_Projekt
             this.grpInputs.Controls.Add(this.txtPdfPath);
             this.grpInputs.Location = new System.Drawing.Point(12, 12);
             this.grpInputs.Name = "grpInputs";
-            this.grpInputs.Size = new System.Drawing.Size(776, 110);
+            this.grpInputs.Size = new System.Drawing.Size(776, 142);
             this.grpInputs.TabIndex = 0;
             this.grpInputs.TabStop = false;
             this.grpInputs.Text = "Eingaben";
+            //
+            // chkUseAi
+            //
+            this.chkUseAi.AutoSize = true;
+            this.chkUseAi.Location = new System.Drawing.Point(150, 106);
+            this.chkUseAi.Name = "chkUseAi";
+            this.chkUseAi.Size = new System.Drawing.Size(442, 20);
+            this.chkUseAi.TabIndex = 5;
+            this.chkUseAi.Text = "KI-Extraktion statt deterministischer Auswertung verwenden (Vergleich)";
+            this.chkUseAi.UseVisualStyleBackColor = true;
+            this.chkUseAi.CheckedChanged += new System.EventHandler(this.chkUseAi_CheckedChanged);
             //
             // lblApiKey
             //
@@ -110,7 +123,7 @@ namespace DGUV_Projekt
             //
             // btnStartExtraction
             //
-            this.btnStartExtraction.Location = new System.Drawing.Point(12, 132);
+            this.btnStartExtraction.Location = new System.Drawing.Point(12, 166);
             this.btnStartExtraction.Name = "btnStartExtraction";
             this.btnStartExtraction.Size = new System.Drawing.Size(160, 40);
             this.btnStartExtraction.TabIndex = 1;
@@ -121,7 +134,7 @@ namespace DGUV_Projekt
             // btnCancel
             //
             this.btnCancel.Enabled = false;
-            this.btnCancel.Location = new System.Drawing.Point(178, 132);
+            this.btnCancel.Location = new System.Drawing.Point(178, 166);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(120, 40);
             this.btnCancel.TabIndex = 2;
@@ -133,7 +146,7 @@ namespace DGUV_Projekt
             //
             this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar.Location = new System.Drawing.Point(304, 132);
+            this.progressBar.Location = new System.Drawing.Point(304, 166);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(484, 23);
             this.progressBar.TabIndex = 3;
@@ -142,7 +155,7 @@ namespace DGUV_Projekt
             //
             this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(304, 158);
+            this.lblStatus.Location = new System.Drawing.Point(304, 192);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(48, 16);
             this.lblStatus.TabIndex = 4;
@@ -151,7 +164,7 @@ namespace DGUV_Projekt
             // lblLog
             //
             this.lblLog.AutoSize = true;
-            this.lblLog.Location = new System.Drawing.Point(12, 185);
+            this.lblLog.Location = new System.Drawing.Point(12, 219);
             this.lblLog.Name = "lblLog";
             this.lblLog.Size = new System.Drawing.Size(83, 16);
             this.lblLog.TabIndex = 5;
@@ -164,10 +177,10 @@ namespace DGUV_Projekt
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtLog.BackColor = System.Drawing.Color.White;
             this.txtLog.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtLog.Location = new System.Drawing.Point(12, 204);
+            this.txtLog.Location = new System.Drawing.Point(12, 238);
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
-            this.txtLog.Size = new System.Drawing.Size(776, 234);
+            this.txtLog.Size = new System.Drawing.Size(776, 262);
             this.txtLog.TabIndex = 6;
             this.txtLog.Text = "";
             //
@@ -175,7 +188,7 @@ namespace DGUV_Projekt
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 512);
             this.Controls.Add(this.lblLog);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.progressBar);
@@ -183,7 +196,7 @@ namespace DGUV_Projekt
             this.Controls.Add(this.btnStartExtraction);
             this.Controls.Add(this.txtLog);
             this.Controls.Add(this.grpInputs);
-            this.MinimumSize = new System.Drawing.Size(600, 400);
+            this.MinimumSize = new System.Drawing.Size(620, 470);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DGUV V3 - Modul 0: EPLAN PDF-Extraktion";
@@ -198,6 +211,7 @@ namespace DGUV_Projekt
         #endregion
 
         private System.Windows.Forms.GroupBox grpInputs;
+        private System.Windows.Forms.CheckBox chkUseAi;
         private System.Windows.Forms.Label lblApiKey;
         private System.Windows.Forms.TextBox txtApiKey;
         private System.Windows.Forms.Label lblPdf;
