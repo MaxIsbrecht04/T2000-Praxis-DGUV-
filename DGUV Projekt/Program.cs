@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Net;
 using System.Windows.Forms;
 
 namespace DGUV_Projekt
@@ -14,6 +12,10 @@ namespace DGUV_Projekt
         [STAThread]
         static void Main()
         {
+            // Unter .NET Framework sicherstellen, dass TLS 1.2 fuer die
+            // HTTPS-Aufrufe an die Siemens-API aktiviert ist.
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
