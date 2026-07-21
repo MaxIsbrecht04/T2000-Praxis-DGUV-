@@ -1,19 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DGUV_Projekt.Services;
+using DGUV_Projekt.Services.Excel;
 
 namespace DGUV_Projekt
 {
+    /// <summary>
+    /// Prüfprotokoll-Generator: Füllt die beiden Untertabellen des
+    /// DGUV-V3-Prüfprotokolls.
+    ///   - Loopliste            -> Blatt "Messdatenblatt ZLPE IK RISO"
+    ///   - Erdungsverbindungen  -> Blatt "Messdatenblatt RPE"
+    /// </summary>
     public partial class Form1 : Form
     {
-        // Steuert den Abbruch eines laufenden Extraktionslaufs.
-        private CancellationTokenSource _cts;
-
         public Form1()
         {
             InitializeComponent();
@@ -21,17 +22,12 @@ namespace DGUV_Projekt
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Log("Modul 0 (PDF-Extraktion) bereit. Bitte PDF auswaehlen.");
-            Log("Standard: deterministische Schriftfeld-Auswertung (schnell). " +
-                "Fuer den KI-Modus die Checkbox aktivieren und API-Key eingeben.");
-            UpdateApiKeyState();
+            Log("Bereit. 1) Vorlage waehlen, 2) Loopliste und/oder Erdungsverbindungen waehlen, 3) Ausfuellen.");
+            Log("Loopliste  -> Blatt \"Messdatenblatt ZLPE IK RISO\"");
+            Log("Erdungsverbindungen  -> Blatt \"Messdatenblatt RPE\"");
         }
 
-        // ------------------------------------------------------------------
-        // Thread-sicheres Live-Logging in die RichTextBox.
-        // Aufrufe aus Hintergrund-Threads werden per Invoke auf den UI-Thread
-        // marshalled, sodass die Oberflaeche fluessig aktualisiert wird.
-        // ------------------------------------------------------------------
+        // Thread-sicheres Live-Logging (Aufrufe aus Hintergrund-Threads via Invoke).
         private void Log(string message)
         {
             if (txtLog.InvokeRequired)
@@ -39,169 +35,152 @@ namespace DGUV_Projekt
                 txtLog.Invoke(new Action(() => Log(message)));
                 return;
             }
-
             txtLog.AppendText($"{DateTime.Now:HH:mm:ss}: {message}\r\n");
             txtLog.SelectionStart = txtLog.TextLength;
             txtLog.ScrollToCaret();
         }
 
-        private void btnSelectPdf_Click(object sender, EventArgs e)
+        private void btnTemplate_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            string path = PickExcel("Pruefprotokoll-Vorlage auswaehlen",
+                "Excel-Vorlage (*.xlsx;*.xlsm)|*.xlsx;*.xlsm");
+            if (path != null)
             {
-                openFileDialog.Filter = "PDF Dateien (*.pdf)|*.pdf";
-                openFileDialog.Title = "EPLAN PDF auswaehlen";
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    txtPdfPath.Text = openFileDialog.FileName;
-                    Log($"PDF ausgewaehlt: {openFileDialog.FileName}");
-                }
+                txtTemplate.Text = path;
+                Log($"Vorlage: {path}");
             }
         }
 
-        private void chkUseAi_CheckedChanged(object sender, EventArgs e)
+        private void btnLoop_Click(object sender, EventArgs e)
         {
-            UpdateApiKeyState();
-        }
-
-        // API-Key-Feld nur im KI-Modus aktiv.
-        private void UpdateApiKeyState()
-        {
-            txtApiKey.Enabled = chkUseAi.Checked;
-            lblApiKey.Enabled = chkUseAi.Checked;
-        }
-
-        private async void btnStartExtraction_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(txtPdfPath.Text) || !File.Exists(txtPdfPath.Text))
+            string path = PickExcel("Loopliste auswaehlen (fuellt ZLPE IK RISO)",
+                "Excel (*.xlsx;*.xlsm;*.xls)|*.xlsx;*.xlsm;*.xls");
+            if (path != null)
             {
-                MessageBox.Show("Bitte waehle zuerst eine gueltige PDF-Datei aus.", "Fehler",
+                txtLoop.Text = path;
+                Log($"Loopliste: {path}");
+            }
+        }
+
+        private void btnGround_Click(object sender, EventArgs e)
+        {
+            string path = PickExcel("Erdungsverbindungen auswaehlen (fuellt RPE)",
+                "Excel (*.xls;*.xlsx;*.xlsm)|*.xls;*.xlsx;*.xlsm");
+            if (path != null)
+            {
+                txtGround.Text = path;
+                Log($"Erdungsverbindungen: {path}");
+            }
+        }
+
+        private async void btnFill_Click(object sender, EventArgs e)
+        {
+            string template = txtTemplate.Text;
+            string loop = txtLoop.Text;
+            string ground = txtGround.Text;
+
+            if (string.IsNullOrWhiteSpace(template) || !File.Exists(template))
+            {
+                MessageBox.Show("Bitte zuerst die Pruefprotokoll-Vorlage auswaehlen.", "Fehler",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            bool useAi = chkUseAi.Checked;
+            bool hasLoop = !string.IsNullOrWhiteSpace(loop) && File.Exists(loop);
+            bool hasGround = !string.IsNullOrWhiteSpace(ground) && File.Exists(ground);
 
-            if (useAi && string.IsNullOrWhiteSpace(txtApiKey.Text))
+            if (!hasLoop && !hasGround)
             {
-                MessageBox.Show("Fuer den KI-Modus bitte den Siemens API-Key eingeben.", "Fehler",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Bitte mindestens die Loopliste oder die Erdungsverbindungen auswaehlen.",
+                    "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            SetRunningState(true);
-            _cts = new CancellationTokenSource();
+            // Zielpfad abfragen (Vorlage selbst nicht ueberschreiben).
+            string outputPath;
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "Excel (*.xlsx)|*.xlsx";
+                sfd.Title = "Ausgefuelltes Pruefprotokoll speichern unter";
+                sfd.FileName = Path.GetFileNameWithoutExtension(template) + "_ausgefuellt.xlsx";
+                if (sfd.ShowDialog() != DialogResult.OK) return;
+                outputPath = sfd.FileName;
+            }
 
-            // Progress wird auf dem UI-Thread erzeugt und marshallt Report()
-            // dadurch automatisch zurueck auf die Oberflaeche.
-            var progress = new Progress<ExtractionProgress>(OnExtractionProgress);
-
+            SetBusy(true);
             try
             {
-                var titleBlock = new TitleBlockExtractor();
-                var aiClient = useAi ? new SiemensAiClient(txtApiKey.Text, Log) : null;
-                var extractor = new EplanPdfExtractor(titleBlock, aiClient, Log);
+                FillResult result = await Task.Run(() =>
+                    RunFill(template, hasLoop ? loop : null, hasGround ? ground : null, outputPath));
 
-                string pdfPath = txtPdfPath.Text;
-                CancellationToken token = _cts.Token;
+                if (result.ZlpeRows >= 0)
+                    Log($"ZLPE IK RISO: {result.ZlpeRows} Eintraege aus der Loopliste geschrieben.");
+                if (result.RpeRows >= 0)
+                    Log($"RPE: {result.RpeRows} Eintraege aus den Erdungsverbindungen geschrieben.");
+                Log($"Gespeichert unter: {outputPath}");
+                Log("Fertig.");
 
-                // Die gesamte PDF-Verarbeitung laeuft auf einem Hintergrund-Thread
-                // -> die UI bleibt jederzeit reaktionsfaehig.
-                Dictionary<string, string> finalMapping =
-                    await Task.Run(() => extractor.ExtractAsync(pdfPath, useAi, progress, token));
-
-                SaveMappingToJson(finalMapping);
-            }
-            catch (OperationCanceledException)
-            {
-                Log("Vorgang wurde abgebrochen.");
+                MessageBox.Show("Pruefprotokoll erfolgreich ausgefuellt.", "Fertig",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                Log($"Ein Fehler ist aufgetreten: {ex.Message}");
+                Log($"Fehler: {ex.Message}");
+                MessageBox.Show($"Beim Ausfuellen ist ein Fehler aufgetreten:\n{ex.Message}",
+                    "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
-                _cts?.Dispose();
-                _cts = null;
-                SetRunningState(false);
-                Log("Vorgang abgeschlossen.");
+                SetBusy(false);
             }
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        // Laeuft auf dem Hintergrund-Thread.
+        private FillResult RunFill(string template, string loopPath, string groundPath, string outputPath)
         {
-            if (_cts != null && !_cts.IsCancellationRequested)
+            var result = new FillResult();
+            using (var filler = new ProtokollFiller(template))
             {
-                Log("Abbruch angefordert...");
-                btnCancel.Enabled = false;
-                _cts.Cancel();
-            }
-        }
-
-        // Aktualisiert Fortschrittsbalken und Statuszeile (laeuft via Progress
-        // bereits auf dem UI-Thread).
-        private void OnExtractionProgress(ExtractionProgress p)
-        {
-            if (p.TotalPages > 0)
-            {
-                progressBar.Maximum = p.TotalPages;
-                progressBar.Value = Math.Min(p.CurrentPage, p.TotalPages);
-            }
-
-            lblStatus.Text = $"Seite {p.CurrentPage} von {p.TotalPages}";
-        }
-
-        // Schaltet die Bedienelemente zwischen "bereit" und "laeuft" um.
-        private void SetRunningState(bool running)
-        {
-            btnStartExtraction.Enabled = !running;
-            btnSelectPdf.Enabled = !running;
-            chkUseAi.Enabled = !running;
-            txtApiKey.Enabled = !running && chkUseAi.Checked;
-            btnCancel.Enabled = running;
-
-            if (running)
-            {
-                progressBar.Value = 0;
-                lblStatus.Text = "Verarbeitung laeuft...";
-            }
-            else
-            {
-                lblStatus.Text = "Bereit.";
-            }
-        }
-
-        private void SaveMappingToJson(Dictionary<string, string> mapping)
-        {
-            if (mapping.Count == 0)
-            {
-                Log("Keine Mappings gefunden. Es wird keine Datei gespeichert.");
-                return;
-            }
-
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
-            {
-                saveFileDialog.Filter = "JSON Dateien (*.json)|*.json";
-                saveFileDialog.Title = "Mapping-Ergebnis speichern";
-                saveFileDialog.FileName = "Lage_zu_Ort_Mapping.json";
-
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                if (loopPath != null)
                 {
-                    var options = new JsonSerializerOptions { WriteIndented = true };
-                    string jsonString = JsonSerializer.Serialize(mapping, options);
-                    File.WriteAllText(saveFileDialog.FileName, jsonString);
-                    Log($"Erfolgreich gespeichert unter: {saveFileDialog.FileName}");
+                    Log("Lese Loopliste...");
+                    IList<LooplistRow> loopRows = LooplistReader.Read(loopPath);
+                    Log($"Loopliste: {loopRows.Count} Datenzeilen gelesen. Schreibe in ZLPE IK RISO...");
+                    result.ZlpeRows = filler.FillZlpe(loopRows);
                 }
+
+                if (groundPath != null)
+                {
+                    Log("Lese Erdungsverbindungen...");
+                    IList<GroundRow> groundRows = GroundConnectionsReader.Read(groundPath);
+                    Log($"Erdungsverbindungen: {groundRows.Count} Datenzeilen gelesen. Schreibe in RPE...");
+                    result.RpeRows = filler.FillRpe(groundRows);
+                }
+
+                Log("Speichere Arbeitsmappe...");
+                filler.Save(outputPath);
+            }
+            return result;
+        }
+
+        private string PickExcel(string title, string filter)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Title = title;
+                ofd.Filter = filter;
+                return ofd.ShowDialog() == DialogResult.OK ? ofd.FileName : null;
             }
         }
 
-        // Laufenden Vorgang beim Schliessen des Fensters sauber abbrechen.
-        protected override void OnFormClosing(FormClosingEventArgs e)
+        private void SetBusy(bool busy)
         {
-            _cts?.Cancel();
-            base.OnFormClosing(e);
+            btnFill.Enabled = !busy;
+            btnTemplate.Enabled = !busy;
+            btnLoop.Enabled = !busy;
+            btnGround.Enabled = !busy;
+            progressBar.Style = busy ? ProgressBarStyle.Marquee : ProgressBarStyle.Blocks;
+            lblStatus.Text = busy ? "Verarbeitung laeuft..." : "Bereit.";
         }
     }
 }
