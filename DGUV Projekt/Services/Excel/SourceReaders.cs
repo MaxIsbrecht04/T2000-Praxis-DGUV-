@@ -68,7 +68,8 @@ namespace DGUV_Projekt.Services.Excel
 
     /// <summary>
     /// Liest die Erdungsverbindungen. Spalten (1-basiert): A=(=), B=(-BMK),
-    /// C=von(=), D=von(+), H=nach(=), I=nach(+), L=Kommentar.
+    /// C=von(=), D=von(+), F=Erdungsklasse (POT/NET/MESH-BN), H=nach(=),
+    /// I=nach(+), L=Kommentar.
     /// Es werden alle Zeilen genommen, deren Spalte A mit '=' beginnt.
     /// </summary>
     public static class GroundConnectionsReader
@@ -91,6 +92,7 @@ namespace DGUV_Projekt.Services.Excel
                     Bmk = CellHelper.Str(row, 1),          // B
                     VonFunktion = CellHelper.Str(row, 2),  // C
                     VonOrt = CellHelper.Str(row, 3),       // D
+                    Erdungsklasse = CellHelper.Str(row, 5),// F
                     NachFunktion = CellHelper.Str(row, 7), // H
                     NachOrt = CellHelper.Str(row, 8),      // I
                     Kommentar = CellHelper.Str(row, 11)    // L

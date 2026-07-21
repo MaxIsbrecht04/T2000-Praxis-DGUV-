@@ -28,6 +28,7 @@ namespace DGUV_Projekt.Services.Excel
         public string Bmk { get; set; }             // (-) BTMK z.B. -WE2
         public string VonFunktion { get; set; }     // von Betriebsmittel (=)
         public string VonOrt { get; set; }          // von Betriebsmittel (+)
+        public string Erdungsklasse { get; set; }   // [POT] / [NET] / [MESH-BN]
         public string NachFunktion { get; set; }    // nach Betriebsmittel (=)
         public string NachOrt { get; set; }         // nach Betriebsmittel (+)
         public string Kommentar { get; set; }
