@@ -10,7 +10,7 @@ namespace DGUV_Projekt
     /// <summary>
     /// Prüfprotokoll-Generator: Füllt die beiden Untertabellen des
     /// DGUV-V3-Prüfprotokolls.
-    ///   - Loopliste            -> Blatt "Messdatenblatt ZLPE IK RISO"
+    ///   - Betriebsmittelliste  -> Blatt "Messdatenblatt ZLPE IK RISO"
     ///   - Erdungsverbindungen  -> Blatt "Messdatenblatt RPE"
     /// </summary>
     public partial class Form1 : Form
@@ -22,8 +22,8 @@ namespace DGUV_Projekt
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Log("Bereit. 1) Vorlage waehlen, 2) Loopliste und/oder Erdungsverbindungen waehlen, 3) Ausfuellen.");
-            Log("Loopliste  -> Blatt \"Messdatenblatt ZLPE IK RISO\"");
+            Log("Bereit. 1) Vorlage waehlen, 2) Betriebsmittelliste und/oder Erdungsverbindungen waehlen, 3) Ausfuellen.");
+            Log("Betriebsmittelliste  -> Blatt \"Messdatenblatt ZLPE IK RISO\" (nur Betriebsmittel + Kommentar)");
             Log("Erdungsverbindungen  -> Blatt \"Messdatenblatt RPE\"");
         }
 
@@ -51,14 +51,14 @@ namespace DGUV_Projekt
             }
         }
 
-        private void btnLoop_Click(object sender, EventArgs e)
+        private void btnDevices_Click(object sender, EventArgs e)
         {
-            string path = PickExcel("Loopliste auswaehlen (fuellt ZLPE IK RISO)",
+            string path = PickExcel("Betriebsmittelliste auswaehlen (fuellt ZLPE IK RISO)",
                 "Excel (*.xlsx;*.xlsm;*.xls)|*.xlsx;*.xlsm;*.xls");
             if (path != null)
             {
-                txtLoop.Text = path;
-                Log($"Loopliste: {path}");
+                txtDevices.Text = path;
+                Log($"Betriebsmittelliste: {path}");
             }
         }
 
@@ -76,7 +76,7 @@ namespace DGUV_Projekt
         private async void btnFill_Click(object sender, EventArgs e)
         {
             string template = txtTemplate.Text;
-            string loop = txtLoop.Text;
+            string devices = txtDevices.Text;
             string ground = txtGround.Text;
 
             if (string.IsNullOrWhiteSpace(template) || !File.Exists(template))
@@ -86,12 +86,12 @@ namespace DGUV_Projekt
                 return;
             }
 
-            bool hasLoop = !string.IsNullOrWhiteSpace(loop) && File.Exists(loop);
+            bool hasDevices = !string.IsNullOrWhiteSpace(devices) && File.Exists(devices);
             bool hasGround = !string.IsNullOrWhiteSpace(ground) && File.Exists(ground);
 
-            if (!hasLoop && !hasGround)
+            if (!hasDevices && !hasGround)
             {
-                MessageBox.Show("Bitte mindestens die Loopliste oder die Erdungsverbindungen auswaehlen.",
+                MessageBox.Show("Bitte mindestens die Betriebsmittelliste oder die Erdungsverbindungen auswaehlen.",
                     "Fehler", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -111,10 +111,10 @@ namespace DGUV_Projekt
             try
             {
                 FillResult result = await Task.Run(() =>
-                    RunFill(template, hasLoop ? loop : null, hasGround ? ground : null, outputPath));
+                    RunFill(template, hasDevices ? devices : null, hasGround ? ground : null, outputPath));
 
                 if (result.ZlpeRows >= 0)
-                    Log($"ZLPE IK RISO: {result.ZlpeRows} Eintraege aus der Loopliste geschrieben.");
+                    Log($"ZLPE IK RISO: {result.ZlpeRows} Betriebsmittel geschrieben.");
                 if (result.RpeRows >= 0)
                     Log($"RPE: {result.RpeRows} Eintraege aus den Erdungsverbindungen geschrieben.");
                 Log($"Gespeichert unter: {outputPath}");
@@ -136,17 +136,17 @@ namespace DGUV_Projekt
         }
 
         // Laeuft auf dem Hintergrund-Thread.
-        private FillResult RunFill(string template, string loopPath, string groundPath, string outputPath)
+        private FillResult RunFill(string template, string devicePath, string groundPath, string outputPath)
         {
             var result = new FillResult();
             using (var filler = new ProtokollFiller(template))
             {
-                if (loopPath != null)
+                if (devicePath != null)
                 {
-                    Log("Lese Loopliste...");
-                    IList<LooplistRow> loopRows = LooplistReader.Read(loopPath);
-                    Log($"Loopliste: {loopRows.Count} Datenzeilen gelesen. Schreibe in ZLPE IK RISO...");
-                    result.ZlpeRows = filler.FillZlpe(loopRows);
+                    Log("Lese Betriebsmittelliste...");
+                    IList<BetriebsmittelRow> devices = BetriebsmittelReader.Read(devicePath);
+                    Log($"Betriebsmittelliste: {devices.Count} zu pruefende Betriebsmittel gefiltert. Schreibe in ZLPE IK RISO...");
+                    result.ZlpeRows = filler.FillZlpe(devices);
                 }
 
                 if (groundPath != null)
@@ -177,7 +177,7 @@ namespace DGUV_Projekt
         {
             btnFill.Enabled = !busy;
             btnTemplate.Enabled = !busy;
-            btnLoop.Enabled = !busy;
+            btnDevices.Enabled = !busy;
             btnGround.Enabled = !busy;
             progressBar.Style = busy ? ProgressBarStyle.Marquee : ProgressBarStyle.Blocks;
             lblStatus.Text = busy ? "Verarbeitung laeuft..." : "Bereit.";

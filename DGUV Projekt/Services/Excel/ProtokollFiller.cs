@@ -38,13 +38,10 @@ namespace DGUV_Projekt.Services.Excel
         private const int RpeColCount = 12;  // A..L
 
         // ---- Spaltenindizes (0-basiert) ZLPE ------------------------------
-        private const int ZColFunktion = 1;   // B  (=)Funktionsgruppe  (Zeile A)
-        private const int ZColZusatz = 2;     // C  Zusatzinfo / Loop-Nr.
-        private const int ZColBauform = 7;    // H  Technische Kenngroesse Bauform
-        private const int ZColNennstrom = 8;  // I  Nennstrom (Setting)
-        private const int ZColCharakt = 9;    // J  Betriebsklasse/Charakteristik
+        // Aktuell werden bewusst nur Spalte B (Betriebsmittel) und der
+        // Kommentar geschrieben; die uebrigen Spalten bleiben leer.
+        private const int ZColFunktion = 1;   // B  Zeile oben: (=)Funktion; Zeile unten: "-BMK +Ort"
         private const int ZColKommentar = 26; // AA Kommentar
-        // Zeile B des Eintrags: Spalte B = "-BMK +Ort"
 
         // ---- Spaltenindizes (0-basiert) RPE -------------------------------
         private const int RColFunktion = 1;   // B  (=)Funktionsgruppe
@@ -66,8 +63,13 @@ namespace DGUV_Projekt.Services.Excel
             }
         }
 
-        /// <summary>Befuellt das ZLPE-Blatt aus der Loopliste.</summary>
-        public int FillZlpe(IList<LooplistRow> rows)
+        /// <summary>
+        /// Befuellt das ZLPE-Blatt aus der (gefilterten) Betriebsmittelliste.
+        /// Geschrieben werden nur Spalte B (Betriebsmittel) und der Kommentar:
+        ///   Zeile oben:  (=)Funktion            | Kommentar (Spalte AA)
+        ///   Zeile unten: "-BMK +Ort"
+        /// </summary>
+        public int FillZlpe(IList<BetriebsmittelRow> rows)
         {
             ISheet sheet = RequireSheet(SheetZlpe);
             int firstRow = ZlpeFirstDataRow - 1;
@@ -80,19 +82,13 @@ namespace DGUV_Projekt.Services.Excel
                 int top = firstRow + i * ZlpeBlockHeight;
                 template.ApplyTo(sheet, top);
 
-                LooplistRow src = rows[i];
+                BetriebsmittelRow src = rows[i];
                 IRow rowA = sheet.GetRow(top);
                 IRow rowB = sheet.GetRow(top + 1);
 
-                Set(rowA, ZColFunktion, src.Funktionsgruppe);
-                Set(rowA, ZColZusatz, src.Loop);
-                Set(rowA, ZColBauform, StripAmpere(src.Bauform));
-                Set(rowA, ZColNennstrom, StripAmpere(src.Nennstrom));
-                Set(rowA, ZColCharakt, src.Charakteristik);
-                Set(rowA, ZColKommentar, src.Kommentar);
-
-                // 2. Zeile: "-BMK +Ort" (z.B. "-QB1 +H011")
-                Set(rowB, ZColFunktion, Join(src.Bmk, src.Ort));
+                Set(rowA, ZColFunktion, src.Funktion);     // B oben: =Funktion
+                Set(rowA, ZColKommentar, src.Kommentar);   // AA: Kommentar
+                Set(rowB, ZColFunktion, Join(src.Bmk, src.Ort)); // B unten: "-BMK +Ort"
             }
             return rows.Count;
         }
@@ -251,18 +247,6 @@ namespace DGUV_Projekt.Services.Excel
         private static string Join(string bmk, string ort)
         {
             return $"{bmk} {ort}".Trim();
-        }
-
-        // "63A" -> "63", "1-10A" -> "1-10"; die Spalte traegt die Einheit [A] bereits.
-        private static string StripAmpere(string value)
-        {
-            if (string.IsNullOrEmpty(value)) return value;
-            string v = value.Trim();
-            if (v.EndsWith("A") || v.EndsWith("a"))
-            {
-                v = v.Substring(0, v.Length - 1).Trim();
-            }
-            return v;
         }
 
         public void Dispose()
