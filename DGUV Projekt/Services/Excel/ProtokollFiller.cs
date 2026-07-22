@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 
@@ -65,7 +66,9 @@ namespace DGUV_Projekt.Services.Excel
 
         /// <summary>
         /// Befuellt das ZLPE-Blatt aus der (gefilterten) Betriebsmittelliste.
-        /// Geschrieben werden nur Spalte B (Betriebsmittel) und der Kommentar:
+        /// Die Betriebsmittel werden nach Ortskennzeichen (+) sortiert und je
+        /// Ort mit einer fett-zentrierten Bannerzeile (ueber B..AA) abgetrennt.
+        /// Je Betriebsmittel werden nur Spalte B und der Kommentar geschrieben:
         ///   Zeile oben:  (=)Funktion            | Kommentar (Spalte AA)
         ///   Zeile unten: "-BMK +Ort"
         /// </summary>
@@ -75,22 +78,83 @@ namespace DGUV_Projekt.Services.Excel
             int firstRow = ZlpeFirstDataRow - 1;
 
             var template = BlockTemplate.Capture(sheet, firstRow, ZlpeBlockHeight, ZlpeColCount);
+            ICellStyle bannerStyle = CreateBannerStyle(sheet, firstRow);
             RemoveMergedRegionsFrom(sheet, firstRow);
 
-            for (int i = 0; i < rows.Count; i++)
-            {
-                int top = firstRow + i * ZlpeBlockHeight;
-                template.ApplyTo(sheet, top);
+            // Nach Ortskennzeichen sortieren (leere Orte ans Ende); Reihenfolge
+            // innerhalb eines Ortes bleibt stabil erhalten.
+            var sorted = rows
+                .OrderBy(r => string.IsNullOrEmpty(r.Ort) ? "￿" : r.Ort, StringComparer.OrdinalIgnoreCase)
+                .ToList();
 
-                BetriebsmittelRow src = rows[i];
-                IRow rowA = sheet.GetRow(top);
-                IRow rowB = sheet.GetRow(top + 1);
+            int cursor = firstRow;
+            string currentOrt = null;
+
+            foreach (BetriebsmittelRow src in sorted)
+            {
+                string ort = string.IsNullOrEmpty(src.Ort) ? "(ohne Ortskennzeichen)" : src.Ort;
+
+                // Neuer Ort -> Bannerzeile einschieben.
+                if (!string.Equals(ort, currentOrt, StringComparison.OrdinalIgnoreCase))
+                {
+                    WriteBanner(sheet, cursor, ort, bannerStyle);
+                    cursor += ZlpeBlockHeight;
+                    currentOrt = ort;
+                }
+
+                template.ApplyTo(sheet, cursor);
+                IRow rowA = sheet.GetRow(cursor);
+                IRow rowB = sheet.GetRow(cursor + 1);
 
                 Set(rowA, ZColFunktion, src.Funktion);     // B oben: =Funktion
                 Set(rowA, ZColKommentar, src.Kommentar);   // AA: Kommentar
                 Set(rowB, ZColFunktion, Join(src.Bmk, src.Ort)); // B unten: "-BMK +Ort"
+
+                cursor += ZlpeBlockHeight;
             }
-            return rows.Count;
+
+            return sorted.Count;
+        }
+
+        // Erzeugt eine fett-zentrierte Bannerzeile ueber B..AA (2 Zeilen hoch),
+        // wie die Ort-Trenner im Originalprotokoll.
+        private void WriteBanner(ISheet sheet, int top, string text, ICellStyle style)
+        {
+            const int colB = 1;
+            const int colAA = 26;
+            for (int b = 0; b < ZlpeBlockHeight; b++)
+            {
+                IRow row = sheet.GetRow(top + b) ?? sheet.CreateRow(top + b);
+                for (int c = colB; c <= colAA; c++)
+                {
+                    ICell cell = row.GetCell(c) ?? row.CreateCell(c);
+                    cell.CellStyle = style;
+                }
+            }
+            sheet.AddMergedRegion(new CellRangeAddress(top, top + ZlpeBlockHeight - 1, colB, colAA));
+            sheet.GetRow(top).GetCell(colB).SetCellValue(text);
+        }
+
+        private ICellStyle CreateBannerStyle(ISheet sheet, int protoRow)
+        {
+            ICellStyle style = _wb.CreateCellStyle();
+            IRow proto = sheet.GetRow(protoRow);
+            ICell baseCell = proto != null ? proto.GetCell(1) : null;
+            if (baseCell != null)
+            {
+                style.CloneStyleFrom(baseCell.CellStyle); // Rahmen/Schriftfamilie uebernehmen
+            }
+            IFont bold = _wb.CreateFont();
+            bold.IsBold = true;
+            style.SetFont(bold);
+            style.Alignment = HorizontalAlignment.Center;
+            style.VerticalAlignment = VerticalAlignment.Center;
+            // Sauberer Rahmen ringsum (Basiszelle hat nur Teil-Rahmen).
+            style.BorderTop = BorderStyle.Thin;
+            style.BorderBottom = BorderStyle.Thin;
+            style.BorderLeft = BorderStyle.Thin;
+            style.BorderRight = BorderStyle.Thin;
+            return style;
         }
 
         /// <summary>Befuellt das RPE-Blatt aus den Erdungsverbindungen.</summary>

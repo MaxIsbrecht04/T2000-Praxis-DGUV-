@@ -134,13 +134,29 @@ namespace DGUV_Projekt.Services.Excel
                     Bmk = CellHelper.Str(row, 1),          // B
                     VonFunktion = CellHelper.Str(row, 2),  // C
                     VonOrt = CellHelper.Str(row, 3),       // D
-                    Erdungsklasse = CellHelper.Str(row, 5),// F
+                    Erdungsklasse = MapErdungsklasse(CellHelper.Str(row, 5)), // F
                     NachFunktion = CellHelper.Str(row, 7), // H
                     NachOrt = CellHelper.Str(row, 8),      // I
                     Kommentar = CellHelper.Str(row, 11)    // L
                 });
             }
             return result;
+        }
+
+        // Uebersetzt die Erdungsklasse aus dem EPLAN-Export in die Schreibweise
+        // des DGUV-Protokolls. EPLAN exportiert "POT" fuer den vermaschten
+        // Potentialausgleich; im Protokoll steht dort "MESH-BN". Andere Werte
+        // (z.B. "NET") bleiben unveraendert. Bei Bedarf pro Anlage erweiterbar.
+        private static readonly Dictionary<string, string> ErdungsklasseMap =
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "POT", "MESH-BN" }
+            };
+
+        private static string MapErdungsklasse(string value)
+        {
+            string mapped;
+            return ErdungsklasseMap.TryGetValue(value, out mapped) ? mapped : value;
         }
     }
 }
