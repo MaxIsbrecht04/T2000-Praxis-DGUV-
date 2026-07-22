@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using NPOI.SS.UserModel;
 
 namespace DGUV_Projekt.Services.Excel
@@ -31,38 +32,79 @@ namespace DGUV_Projekt.Services.Excel
     }
 
     /// <summary>
-    /// Liest die Loopliste. Spalten (1-basiert): B=(=), C=(+Ort), D=(-BMK),
-    /// E=Loop-Nr., J=Bauform, K=Nennstrom, L=Charakteristik, M=Kommentar.
-    /// Es werden alle Zeilen genommen, deren Spalte B mit '=' beginnt
-    /// (Kopfzeilen werden dadurch automatisch uebersprungen).
+    /// Liest die Betriebsmittelliste (z.B. SIE_MB_DataList) und filtert die zu
+    /// pruefenden Betriebsmittel heraus. Spalten (1-basiert): B=(=)Funktion,
+    /// C=(+)Ort, D=(-)BMK, G=Artikelbezeichnung.
+    ///
+    /// Uebernommen werden Schutzorgane (BMK -QA/-QB/-FC) und Motoren/Antriebe
+    /// (-MA/-TA); alles andere (Klemmen, Kabel, PE, Sensoren, ...) wird
+    /// verworfen. Mehrfach vorkommende Geraete (=/+/-BMK) werden zusammengefasst;
+    /// als Kommentar wird die aussagekraeftigste Artikelbezeichnung gewaehlt.
     /// </summary>
-    public static class LooplistReader
+    public static class BetriebsmittelReader
     {
-        public static IList<LooplistRow> Read(string path)
+        private static readonly HashSet<string> KeepClasses =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "QA", "QB", "FC", "MA", "TA" };
+
+        private static readonly Regex ClassRegex = new Regex(@"^-([A-Za-z]+)", RegexOptions.Compiled);
+
+        // Bevorzugte, aussagekraeftige Artikelbezeichnungen fuer den Kommentar.
+        private static readonly Regex KeywordRegex = new Regex(
+            @"schalter|motorschutz|leistungsschalter|lasttrenn|sicherung|überwachung|umrichter|antrieb|protec|motor",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly HashSet<string> IgnoreText =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "CAD-Systemeintrag", "None" };
+
+        public static IList<BetriebsmittelRow> Read(string path)
         {
-            var result = new List<LooplistRow>();
             IWorkbook wb = CellHelper.Open(path);
-            ISheet sheet = wb.GetSheetAt(0);
+            ISheet sheet = wb.GetSheet("SIE_MB_DataList") ?? wb.GetSheetAt(0);
+
+            var map = new Dictionary<string, BetriebsmittelRow>();
+            var order = new List<string>();
 
             for (int r = 0; r <= sheet.LastRowNum; r++)
             {
                 IRow row = sheet.GetRow(r);
-                string fg = CellHelper.Str(row, 1); // B
-                if (!fg.StartsWith("=")) continue;
+                string fg = CellHelper.Str(row, 1);  // B (=)
+                string bmk = CellHelper.Str(row, 3); // D (-)
+                if (!fg.StartsWith("=") || bmk.Length == 0) continue;
+                if (!KeepClasses.Contains(ClassOf(bmk))) continue;
 
-                result.Add(new LooplistRow
+                string ort = CellHelper.Str(row, 2); // C (+)
+                string bez = CellHelper.Str(row, 6); // G Artikelbezeichnung
+                string key = fg + "|" + ort + "|" + bmk;
+
+                BetriebsmittelRow dev;
+                if (!map.TryGetValue(key, out dev))
                 {
-                    Funktionsgruppe = fg,
-                    Ort = CellHelper.Str(row, 2),            // C
-                    Bmk = CellHelper.Str(row, 3),            // D
-                    Loop = CellHelper.Str(row, 4),           // E
-                    Bauform = CellHelper.Str(row, 9),        // J
-                    Nennstrom = CellHelper.Str(row, 10),     // K
-                    Charakteristik = CellHelper.Str(row, 11),// L
-                    Kommentar = CellHelper.Str(row, 12)      // M
-                });
+                    dev = new BetriebsmittelRow { Funktion = fg, Ort = ort, Bmk = bmk, Kommentar = string.Empty };
+                    map[key] = dev;
+                    order.Add(key);
+                }
+
+                if (IsMeaningful(bez) &&
+                    (dev.Kommentar.Length == 0 || (KeywordRegex.IsMatch(bez) && !KeywordRegex.IsMatch(dev.Kommentar))))
+                {
+                    dev.Kommentar = bez;
+                }
             }
+
+            var result = new List<BetriebsmittelRow>();
+            foreach (string k in order) result.Add(map[k]);
             return result;
+        }
+
+        private static string ClassOf(string bmk)
+        {
+            Match m = ClassRegex.Match(bmk.Trim());
+            return m.Success ? m.Groups[1].Value : string.Empty;
+        }
+
+        private static bool IsMeaningful(string bez)
+        {
+            return bez.Length > 0 && !IgnoreText.Contains(bez);
         }
     }
 
@@ -92,13 +134,29 @@ namespace DGUV_Projekt.Services.Excel
                     Bmk = CellHelper.Str(row, 1),          // B
                     VonFunktion = CellHelper.Str(row, 2),  // C
                     VonOrt = CellHelper.Str(row, 3),       // D
-                    Erdungsklasse = CellHelper.Str(row, 5),// F
+                    Erdungsklasse = MapErdungsklasse(CellHelper.Str(row, 5)), // F
                     NachFunktion = CellHelper.Str(row, 7), // H
                     NachOrt = CellHelper.Str(row, 8),      // I
                     Kommentar = CellHelper.Str(row, 11)    // L
                 });
             }
             return result;
+        }
+
+        // Uebersetzt die Erdungsklasse aus dem EPLAN-Export in die Schreibweise
+        // des DGUV-Protokolls. EPLAN exportiert "POT" fuer den vermaschten
+        // Potentialausgleich; im Protokoll steht dort "MESH-BN". Andere Werte
+        // (z.B. "NET") bleiben unveraendert. Bei Bedarf pro Anlage erweiterbar.
+        private static readonly Dictionary<string, string> ErdungsklasseMap =
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "POT", "MESH-BN" }
+            };
+
+        private static string MapErdungsklasse(string value)
+        {
+            string mapped;
+            return ErdungsklasseMap.TryGetValue(value, out mapped) ? mapped : value;
         }
     }
 }

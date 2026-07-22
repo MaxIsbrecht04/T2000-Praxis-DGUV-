@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 
@@ -38,13 +39,10 @@ namespace DGUV_Projekt.Services.Excel
         private const int RpeColCount = 12;  // A..L
 
         // ---- Spaltenindizes (0-basiert) ZLPE ------------------------------
-        private const int ZColFunktion = 1;   // B  (=)Funktionsgruppe  (Zeile A)
-        private const int ZColZusatz = 2;     // C  Zusatzinfo / Loop-Nr.
-        private const int ZColBauform = 7;    // H  Technische Kenngroesse Bauform
-        private const int ZColNennstrom = 8;  // I  Nennstrom (Setting)
-        private const int ZColCharakt = 9;    // J  Betriebsklasse/Charakteristik
+        // Aktuell werden bewusst nur Spalte B (Betriebsmittel) und der
+        // Kommentar geschrieben; die uebrigen Spalten bleiben leer.
+        private const int ZColFunktion = 1;   // B  Zeile oben: (=)Funktion; Zeile unten: "-BMK +Ort"
         private const int ZColKommentar = 26; // AA Kommentar
-        // Zeile B des Eintrags: Spalte B = "-BMK +Ort"
 
         // ---- Spaltenindizes (0-basiert) RPE -------------------------------
         private const int RColFunktion = 1;   // B  (=)Funktionsgruppe
@@ -66,35 +64,97 @@ namespace DGUV_Projekt.Services.Excel
             }
         }
 
-        /// <summary>Befuellt das ZLPE-Blatt aus der Loopliste.</summary>
-        public int FillZlpe(IList<LooplistRow> rows)
+        /// <summary>
+        /// Befuellt das ZLPE-Blatt aus der (gefilterten) Betriebsmittelliste.
+        /// Die Betriebsmittel werden nach Ortskennzeichen (+) sortiert und je
+        /// Ort mit einer fett-zentrierten Bannerzeile (ueber B..AA) abgetrennt.
+        /// Je Betriebsmittel werden nur Spalte B und der Kommentar geschrieben:
+        ///   Zeile oben:  (=)Funktion            | Kommentar (Spalte AA)
+        ///   Zeile unten: "-BMK +Ort"
+        /// </summary>
+        public int FillZlpe(IList<BetriebsmittelRow> rows)
         {
             ISheet sheet = RequireSheet(SheetZlpe);
             int firstRow = ZlpeFirstDataRow - 1;
 
             var template = BlockTemplate.Capture(sheet, firstRow, ZlpeBlockHeight, ZlpeColCount);
+            ICellStyle bannerStyle = CreateBannerStyle(sheet, firstRow);
             RemoveMergedRegionsFrom(sheet, firstRow);
 
-            for (int i = 0; i < rows.Count; i++)
+            // Nach Ortskennzeichen sortieren (leere Orte ans Ende); Reihenfolge
+            // innerhalb eines Ortes bleibt stabil erhalten.
+            var sorted = rows
+                .OrderBy(r => string.IsNullOrEmpty(r.Ort) ? "￿" : r.Ort, StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            int cursor = firstRow;
+            string currentOrt = null;
+
+            foreach (BetriebsmittelRow src in sorted)
             {
-                int top = firstRow + i * ZlpeBlockHeight;
-                template.ApplyTo(sheet, top);
+                string ort = string.IsNullOrEmpty(src.Ort) ? "(ohne Ortskennzeichen)" : src.Ort;
 
-                LooplistRow src = rows[i];
-                IRow rowA = sheet.GetRow(top);
-                IRow rowB = sheet.GetRow(top + 1);
+                // Neuer Ort -> Bannerzeile einschieben.
+                if (!string.Equals(ort, currentOrt, StringComparison.OrdinalIgnoreCase))
+                {
+                    WriteBanner(sheet, cursor, ort, bannerStyle);
+                    cursor += ZlpeBlockHeight;
+                    currentOrt = ort;
+                }
 
-                Set(rowA, ZColFunktion, src.Funktionsgruppe);
-                Set(rowA, ZColZusatz, src.Loop);
-                Set(rowA, ZColBauform, StripAmpere(src.Bauform));
-                Set(rowA, ZColNennstrom, StripAmpere(src.Nennstrom));
-                Set(rowA, ZColCharakt, src.Charakteristik);
-                Set(rowA, ZColKommentar, src.Kommentar);
+                template.ApplyTo(sheet, cursor);
+                IRow rowA = sheet.GetRow(cursor);
+                IRow rowB = sheet.GetRow(cursor + 1);
 
-                // 2. Zeile: "-BMK +Ort" (z.B. "-QB1 +H011")
-                Set(rowB, ZColFunktion, Join(src.Bmk, src.Ort));
+                Set(rowA, ZColFunktion, src.Funktion);     // B oben: =Funktion
+                Set(rowA, ZColKommentar, src.Kommentar);   // AA: Kommentar
+                Set(rowB, ZColFunktion, Join(src.Bmk, src.Ort)); // B unten: "-BMK +Ort"
+
+                cursor += ZlpeBlockHeight;
             }
-            return rows.Count;
+
+            return sorted.Count;
+        }
+
+        // Erzeugt eine fett-zentrierte Bannerzeile ueber B..AA (2 Zeilen hoch),
+        // wie die Ort-Trenner im Originalprotokoll.
+        private void WriteBanner(ISheet sheet, int top, string text, ICellStyle style)
+        {
+            const int colB = 1;
+            const int colAA = 26;
+            for (int b = 0; b < ZlpeBlockHeight; b++)
+            {
+                IRow row = sheet.GetRow(top + b) ?? sheet.CreateRow(top + b);
+                for (int c = colB; c <= colAA; c++)
+                {
+                    ICell cell = row.GetCell(c) ?? row.CreateCell(c);
+                    cell.CellStyle = style;
+                }
+            }
+            sheet.AddMergedRegion(new CellRangeAddress(top, top + ZlpeBlockHeight - 1, colB, colAA));
+            sheet.GetRow(top).GetCell(colB).SetCellValue(text);
+        }
+
+        private ICellStyle CreateBannerStyle(ISheet sheet, int protoRow)
+        {
+            ICellStyle style = _wb.CreateCellStyle();
+            IRow proto = sheet.GetRow(protoRow);
+            ICell baseCell = proto != null ? proto.GetCell(1) : null;
+            if (baseCell != null)
+            {
+                style.CloneStyleFrom(baseCell.CellStyle); // Rahmen/Schriftfamilie uebernehmen
+            }
+            IFont bold = _wb.CreateFont();
+            bold.IsBold = true;
+            style.SetFont(bold);
+            style.Alignment = HorizontalAlignment.Center;
+            style.VerticalAlignment = VerticalAlignment.Center;
+            // Sauberer Rahmen ringsum (Basiszelle hat nur Teil-Rahmen).
+            style.BorderTop = BorderStyle.Thin;
+            style.BorderBottom = BorderStyle.Thin;
+            style.BorderLeft = BorderStyle.Thin;
+            style.BorderRight = BorderStyle.Thin;
+            return style;
         }
 
         /// <summary>Befuellt das RPE-Blatt aus den Erdungsverbindungen.</summary>
@@ -251,18 +311,6 @@ namespace DGUV_Projekt.Services.Excel
         private static string Join(string bmk, string ort)
         {
             return $"{bmk} {ort}".Trim();
-        }
-
-        // "63A" -> "63", "1-10A" -> "1-10"; die Spalte traegt die Einheit [A] bereits.
-        private static string StripAmpere(string value)
-        {
-            if (string.IsNullOrEmpty(value)) return value;
-            string v = value.Trim();
-            if (v.EndsWith("A") || v.EndsWith("a"))
-            {
-                v = v.Substring(0, v.Length - 1).Trim();
-            }
-            return v;
         }
 
         public void Dispose()

@@ -21,9 +21,9 @@ namespace DGUV_Projekt
             this.btnTemplate = new System.Windows.Forms.Button();
             this.txtTemplate = new System.Windows.Forms.TextBox();
             this.grpSources = new System.Windows.Forms.GroupBox();
-            this.lblLoop = new System.Windows.Forms.Label();
-            this.txtLoop = new System.Windows.Forms.TextBox();
-            this.btnLoop = new System.Windows.Forms.Button();
+            this.lblDevices = new System.Windows.Forms.Label();
+            this.txtDevices = new System.Windows.Forms.TextBox();
+            this.btnDevices = new System.Windows.Forms.Button();
             this.lblGround = new System.Windows.Forms.Label();
             this.txtGround = new System.Windows.Forms.TextBox();
             this.btnGround = new System.Windows.Forms.Button();
@@ -74,9 +74,9 @@ namespace DGUV_Projekt
             //
             this.grpSources.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpSources.Controls.Add(this.lblLoop);
-            this.grpSources.Controls.Add(this.txtLoop);
-            this.grpSources.Controls.Add(this.btnLoop);
+            this.grpSources.Controls.Add(this.lblDevices);
+            this.grpSources.Controls.Add(this.txtDevices);
+            this.grpSources.Controls.Add(this.btnDevices);
             this.grpSources.Controls.Add(this.lblGround);
             this.grpSources.Controls.Add(this.txtGround);
             this.grpSources.Controls.Add(this.btnGround);
@@ -87,35 +87,35 @@ namespace DGUV_Projekt
             this.grpSources.TabStop = false;
             this.grpSources.Text = "2) Quelldateien";
             //
-            // lblLoop
+            // lblDevices
             //
-            this.lblLoop.AutoSize = true;
-            this.lblLoop.Location = new System.Drawing.Point(16, 26);
-            this.lblLoop.Name = "lblLoop";
-            this.lblLoop.Size = new System.Drawing.Size(390, 16);
-            this.lblLoop.TabIndex = 0;
-            this.lblLoop.Text = "Loopliste   →   füllt Blatt „Messdatenblatt ZLPE IK RISO\"";
+            this.lblDevices.AutoSize = true;
+            this.lblDevices.Location = new System.Drawing.Point(16, 26);
+            this.lblDevices.Name = "lblDevices";
+            this.lblDevices.Size = new System.Drawing.Size(520, 16);
+            this.lblDevices.TabIndex = 0;
+            this.lblDevices.Text = "Betriebsmittelliste   →   füllt „Messdatenblatt ZLPE IK RISO\" (nur Betriebsmittel + Kommentar)";
             //
-            // txtLoop
+            // txtDevices
             //
-            this.txtLoop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.txtDevices.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtLoop.Location = new System.Drawing.Point(16, 45);
-            this.txtLoop.Name = "txtLoop";
-            this.txtLoop.ReadOnly = true;
-            this.txtLoop.Size = new System.Drawing.Size(649, 22);
-            this.txtLoop.TabIndex = 1;
+            this.txtDevices.Location = new System.Drawing.Point(16, 45);
+            this.txtDevices.Name = "txtDevices";
+            this.txtDevices.ReadOnly = true;
+            this.txtDevices.Size = new System.Drawing.Size(649, 22);
+            this.txtDevices.TabIndex = 1;
             //
-            // btnLoop
+            // btnDevices
             //
-            this.btnLoop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLoop.Location = new System.Drawing.Point(677, 43);
-            this.btnLoop.Name = "btnLoop";
-            this.btnLoop.Size = new System.Drawing.Size(127, 27);
-            this.btnLoop.TabIndex = 2;
-            this.btnLoop.Text = "Loopliste...";
-            this.btnLoop.UseVisualStyleBackColor = true;
-            this.btnLoop.Click += new System.EventHandler(this.btnLoop_Click);
+            this.btnDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDevices.Location = new System.Drawing.Point(677, 43);
+            this.btnDevices.Name = "btnDevices";
+            this.btnDevices.Size = new System.Drawing.Size(127, 27);
+            this.btnDevices.TabIndex = 2;
+            this.btnDevices.Text = "Betriebsmittel...";
+            this.btnDevices.UseVisualStyleBackColor = true;
+            this.btnDevices.Click += new System.EventHandler(this.btnDevices_Click);
             //
             // lblGround
             //
@@ -231,9 +231,9 @@ namespace DGUV_Projekt
         private System.Windows.Forms.Button btnTemplate;
         private System.Windows.Forms.TextBox txtTemplate;
         private System.Windows.Forms.GroupBox grpSources;
-        private System.Windows.Forms.Label lblLoop;
-        private System.Windows.Forms.TextBox txtLoop;
-        private System.Windows.Forms.Button btnLoop;
+        private System.Windows.Forms.Label lblDevices;
+        private System.Windows.Forms.TextBox txtDevices;
+        private System.Windows.Forms.Button btnDevices;
         private System.Windows.Forms.Label lblGround;
         private System.Windows.Forms.TextBox txtGround;
         private System.Windows.Forms.Button btnGround;
