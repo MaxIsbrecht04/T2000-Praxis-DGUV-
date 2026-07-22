@@ -32,79 +32,74 @@ namespace DGUV_Projekt.Services.Excel
     }
 
     /// <summary>
-    /// Liest die Betriebsmittelliste (z.B. SIE_MB_DataList) und filtert die zu
-    /// pruefenden Betriebsmittel heraus. Spalten (1-basiert): B=(=)Funktion,
-    /// C=(+)Ort, D=(-)BMK, G=Artikelbezeichnung.
-    ///
-    /// Uebernommen werden Schutzorgane (BMK -QA/-QB/-FC) und Motoren/Antriebe
-    /// (-MA/-TA); alles andere (Klemmen, Kabel, PE, Sensoren, ...) wird
-    /// verworfen. Mehrfach vorkommende Geraete (=/+/-BMK) werden zusammengefasst;
-    /// als Kommentar wird die aussagekraeftigste Artikelbezeichnung gewaehlt.
+    /// Liest die SAG-Kabeluebersicht und filtert die Leistungskabel (-WD*)
+    /// heraus - das sind die messrelevanten Kabel fuer das ZLPE-Blatt.
+    /// Spalten (1-basiert): A=volle Kabelbezeichnung, E=Typnummer,
+    /// G=Quelle (volle Bezeichnung), H=Ziel (volle Bezeichnung).
     /// </summary>
-    public static class BetriebsmittelReader
+    public static class KabelUebersichtReader
     {
-        private static readonly HashSet<string> KeepClasses =
-            new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "QA", "QB", "FC", "MA", "TA" };
+        // "==133_32_K17=004VW_026-WD2.1" -> fg "=004VW_026", kabel "-WD2.1"
+        private static readonly Regex KabelRegex =
+            new Regex(@"^==[^=+\-]*(=[0-9A-Za-z._]+)(-WD[\w.]*)$", RegexOptions.Compiled);
 
-        private static readonly Regex ClassRegex = new Regex(@"^-([A-Za-z]+)", RegexOptions.Compiled);
-
-        // Bevorzugte, aussagekraeftige Artikelbezeichnungen fuer den Kommentar.
-        private static readonly Regex KeywordRegex = new Regex(
-            @"schalter|motorschutz|leistungsschalter|lasttrenn|sicherung|überwachung|umrichter|antrieb|protec|motor",
-            RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-        private static readonly HashSet<string> IgnoreText =
-            new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "CAD-Systemeintrag", "None" };
-
-        public static IList<BetriebsmittelRow> Read(string path)
+        public static IList<KabelRow> Read(string path)
         {
+            var result = new List<KabelRow>();
             IWorkbook wb = CellHelper.Open(path);
-            ISheet sheet = wb.GetSheet("SIE_MB_DataList") ?? wb.GetSheetAt(0);
-
-            var map = new Dictionary<string, BetriebsmittelRow>();
-            var order = new List<string>();
+            ISheet sheet = wb.GetSheetAt(0);
 
             for (int r = 0; r <= sheet.LastRowNum; r++)
             {
                 IRow row = sheet.GetRow(r);
-                string fg = CellHelper.Str(row, 1);  // B (=)
-                string bmk = CellHelper.Str(row, 3); // D (-)
-                if (!fg.StartsWith("=") || bmk.Length == 0) continue;
-                if (!KeepClasses.Contains(ClassOf(bmk))) continue;
+                Match m = KabelRegex.Match(CellHelper.Str(row, 0)); // A
+                if (!m.Success) continue;
 
-                string ort = CellHelper.Str(row, 2); // C (+)
-                string bez = CellHelper.Str(row, 6); // G Artikelbezeichnung
-                string key = fg + "|" + ort + "|" + bmk;
-
-                BetriebsmittelRow dev;
-                if (!map.TryGetValue(key, out dev))
+                result.Add(new KabelRow
                 {
-                    dev = new BetriebsmittelRow { Funktion = fg, Ort = ort, Bmk = bmk, Kommentar = string.Empty };
-                    map[key] = dev;
-                    order.Add(key);
-                }
-
-                if (IsMeaningful(bez) &&
-                    (dev.Kommentar.Length == 0 || (KeywordRegex.IsMatch(bez) && !KeywordRegex.IsMatch(dev.Kommentar))))
-                {
-                    dev.Kommentar = bez;
-                }
+                    Funktion = m.Groups[1].Value,
+                    Kabel = m.Groups[2].Value,
+                    Typ = CellHelper.Str(row, 4),   // E Typnummer
+                    Quelle = CellHelper.Str(row, 6),// G
+                    Ziel = CellHelper.Str(row, 7)   // H
+                });
             }
-
-            var result = new List<BetriebsmittelRow>();
-            foreach (string k in order) result.Add(map[k]);
             return result;
         }
+    }
 
-        private static string ClassOf(string bmk)
+    /// <summary>
+    /// Liest die Loopliste: je Abgang das Schutzorgan mit Loop-Nr. und
+    /// Kenndaten. Spalten (1-basiert): B=(=), C=(+Ort), D=(-BMK), E=Loop,
+    /// J=Bauform, K=Nennstrom, L=Charakteristik, M=Bemerkung.
+    /// </summary>
+    public static class LooplistReader
+    {
+        public static IList<LoopRow> Read(string path)
         {
-            Match m = ClassRegex.Match(bmk.Trim());
-            return m.Success ? m.Groups[1].Value : string.Empty;
-        }
+            var result = new List<LoopRow>();
+            IWorkbook wb = CellHelper.Open(path);
+            ISheet sheet = wb.GetSheetAt(0);
 
-        private static bool IsMeaningful(string bez)
-        {
-            return bez.Length > 0 && !IgnoreText.Contains(bez);
+            for (int r = 0; r <= sheet.LastRowNum; r++)
+            {
+                IRow row = sheet.GetRow(r);
+                string fg = CellHelper.Str(row, 1); // B
+                if (!fg.StartsWith("=")) continue;
+
+                result.Add(new LoopRow
+                {
+                    Funktion = fg,
+                    Ort = CellHelper.Str(row, 2),            // C
+                    Bmk = CellHelper.Str(row, 3),            // D
+                    Loop = CellHelper.Str(row, 4),           // E
+                    Bauform = CellHelper.Str(row, 9),        // J
+                    Nennstrom = CellHelper.Str(row, 10),     // K
+                    Charakteristik = CellHelper.Str(row, 11),// L
+                    Kommentar = CellHelper.Str(row, 12)      // M
+                });
+            }
+            return result;
         }
     }
 
