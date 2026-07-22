@@ -39,9 +39,13 @@ namespace DGUV_Projekt.Services.Excel
         private const int RpeColCount = 12;  // A..L
 
         // ---- Spaltenindizes (0-basiert) ZLPE ------------------------------
-        // Aktuell werden bewusst nur Spalte B (Betriebsmittel) und der
-        // Kommentar geschrieben; die uebrigen Spalten bleiben leer.
-        private const int ZColFunktion = 1;   // B  Zeile oben: (=)Funktion; Zeile unten: "-BMK +Ort"
+        private const int ZColFunktion = 1;   // B  Zeile oben: (=)Funktion; Zeile unten: "-SchutzBMK +Ort"
+        private const int ZColLoop = 2;       // C  Zusatzinfo / Loop-Nr.
+        private const int ZColKabel = 3;      // D  Kabel (-) BMK
+        private const int ZColQuerschnitt = 6;// G  Querschnitt [mm²]
+        private const int ZColBauform = 7;    // H  Technische Kenngroesse Bauform
+        private const int ZColNennstrom = 8;  // I  Nennstrom (Setting) [A]
+        private const int ZColCharakt = 9;    // J  Betriebsklasse / Charakteristik
         private const int ZColKommentar = 26; // AA Kommentar
 
         // ---- Spaltenindizes (0-basiert) RPE -------------------------------
@@ -65,14 +69,15 @@ namespace DGUV_Projekt.Services.Excel
         }
 
         /// <summary>
-        /// Befuellt das ZLPE-Blatt aus der (gefilterten) Betriebsmittelliste.
-        /// Die Betriebsmittel werden nach Ortskennzeichen (+) sortiert und je
-        /// Ort mit einer fett-zentrierten Bannerzeile (ueber B..AA) abgetrennt.
-        /// Je Betriebsmittel werden nur Spalte B und der Kommentar geschrieben:
-        ///   Zeile oben:  (=)Funktion            | Kommentar (Spalte AA)
-        ///   Zeile unten: "-BMK +Ort"
+        /// Befuellt das ZLPE-Blatt mit den vom ZlpeBuilder erzeugten Eintraegen
+        /// (bereits nach Ort sortiert). Je Ort wird eine fett-zentrierte
+        /// Bannerzeile (ueber B..AA) eingeschoben. Je Eintrag:
+        ///   Zeile oben:  B=(=)Funktion, C=Loop, D=Kabel, G=Querschnitt,
+        ///                H=Bauform, I=Nennstrom, J=Charakteristik, AA=Kommentar
+        ///   Zeile unten: B="-SchutzBMK +Ort" (speisendes Schutzorgan)
+        /// Messwert-Spalten (K..N Ik/Z, O..X RISO, ...) bleiben leer.
         /// </summary>
-        public int FillZlpe(IList<BetriebsmittelRow> rows)
+        public int FillZlpe(IList<ZlpeEintrag> rows)
         {
             ISheet sheet = RequireSheet(SheetZlpe);
             int firstRow = ZlpeFirstDataRow - 1;
@@ -81,39 +86,43 @@ namespace DGUV_Projekt.Services.Excel
             ICellStyle bannerStyle = CreateBannerStyle(sheet, firstRow);
             RemoveMergedRegionsFrom(sheet, firstRow);
 
-            // Nach Ortskennzeichen sortieren (leere Orte ans Ende); Reihenfolge
-            // innerhalb eines Ortes bleibt stabil erhalten.
-            var sorted = rows
-                .OrderBy(r => string.IsNullOrEmpty(r.Ort) ? "￿" : r.Ort, StringComparer.OrdinalIgnoreCase)
-                .ToList();
-
             int cursor = firstRow;
             string currentOrt = null;
 
-            foreach (BetriebsmittelRow src in sorted)
+            foreach (ZlpeEintrag src in rows)
             {
-                string ort = string.IsNullOrEmpty(src.Ort) ? "(ohne Ortskennzeichen)" : src.Ort;
-
                 // Neuer Ort -> Bannerzeile einschieben.
-                if (!string.Equals(ort, currentOrt, StringComparison.OrdinalIgnoreCase))
+                if (!string.Equals(src.Ort, currentOrt, StringComparison.OrdinalIgnoreCase))
                 {
-                    WriteBanner(sheet, cursor, ort, bannerStyle);
+                    WriteBanner(sheet, cursor, src.Ort, bannerStyle);
                     cursor += ZlpeBlockHeight;
-                    currentOrt = ort;
+                    currentOrt = src.Ort;
                 }
 
                 template.ApplyTo(sheet, cursor);
                 IRow rowA = sheet.GetRow(cursor);
                 IRow rowB = sheet.GetRow(cursor + 1);
 
-                Set(rowA, ZColFunktion, src.Funktion);     // B oben: =Funktion
-                Set(rowA, ZColKommentar, src.Kommentar);   // AA: Kommentar
-                Set(rowB, ZColFunktion, Join(src.Bmk, src.Ort)); // B unten: "-BMK +Ort"
+                Set(rowA, ZColFunktion, src.Funktion);
+                Set(rowA, ZColLoop, src.Loop);
+                Set(rowA, ZColKabel, src.Kabel);
+                Set(rowA, ZColQuerschnitt, src.Querschnitt);
+                Set(rowA, ZColBauform, src.Bauform);
+                Set(rowA, ZColNennstrom, src.Nennstrom);
+                Set(rowA, ZColCharakt, src.Charakteristik);
+                Set(rowA, ZColKommentar, src.Kommentar);
+
+                // Zeile unten: speisendes Schutzorgan "-QA1 +H011".
+                if (!string.IsNullOrEmpty(src.SchutzBmk))
+                {
+                    string ortToken = src.Ort != null && src.Ort.StartsWith("+") ? src.Ort : null;
+                    Set(rowB, ZColFunktion, Join(src.SchutzBmk, ortToken));
+                }
 
                 cursor += ZlpeBlockHeight;
             }
 
-            return sorted.Count;
+            return rows.Count;
         }
 
         // Erzeugt eine fett-zentrierte Bannerzeile ueber B..AA (2 Zeilen hoch),

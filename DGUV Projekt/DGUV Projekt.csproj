@@ -57,6 +57,7 @@
     </Compile>
     <Compile Include="Services\Excel\ExcelData.cs" />
     <Compile Include="Services\Excel\SourceReaders.cs" />
+    <Compile Include="Services\Excel\ZlpeBuilder.cs" />
     <Compile Include="Services\Excel\ProtokollFiller.cs" />
     <Compile Include="Program.cs" />
     <EmbeddedResource Include="Form1.resx">
