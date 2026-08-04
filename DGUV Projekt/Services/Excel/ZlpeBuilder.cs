@@ -31,7 +31,9 @@ namespace DGUV_Projekt.Services.Excel
         private static readonly Regex QuerschnittRegex = new Regex(
             @"\d+\s*[Gx]\s*(\d+(?:[.,]\d+)?)(/\d+)?", RegexOptions.Compiled);
 
-        private const string OhneZuordnung = "(ohne Zuordnung)";
+        // Sicherungs-BMK "-FC<Zahl>": es wird nur "-FC1" uebernommen.
+        private static readonly Regex FcRegex = new Regex(
+            @"^-FC(\d+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private class Node
         {
@@ -109,13 +111,29 @@ namespace DGUV_Projekt.Services.Excel
                 });
             }
 
-            // Sortierung: nach Ort (unaufgeloeste ans Ende), dann Funktion, dann Kabel.
+            // Filtern und nach Ort, Funktion, Kabel sortieren.
             return result
-                .OrderBy(e => string.IsNullOrEmpty(e.Ort) ? "￿" : e.Ort, StringComparer.OrdinalIgnoreCase)
+                .Where(KeepEntry)
+                .OrderBy(e => e.Ort, StringComparer.OrdinalIgnoreCase)
                 .ThenBy(e => e.Funktion, StringComparer.OrdinalIgnoreCase)
                 .ThenBy(e => e.Kabel ?? string.Empty, StringComparer.OrdinalIgnoreCase)
-                .Select(e => { if (string.IsNullOrEmpty(e.Ort)) e.Ort = OhneZuordnung; return e; })
                 .ToList();
+        }
+
+        /// <summary>
+        /// Filterregeln fuer das ZLPE-Blatt:
+        ///  - keine Eintraege ohne speisendes (-) Schutzorgan oder ohne (+) Ort,
+        ///  - Sicherungen (-FC): nur "-FC1", keine weiteren FC-Nummern.
+        /// </summary>
+        private static bool KeepEntry(ZlpeEintrag e)
+        {
+            if (string.IsNullOrEmpty(e.SchutzBmk)) return false;                 // kein (-) BMK
+            if (string.IsNullOrEmpty(e.Ort) || !e.Ort.StartsWith("+")) return false; // kein (+) Ort
+
+            Match fc = FcRegex.Match(e.SchutzBmk);
+            if (fc.Success && fc.Groups[1].Value != "1") return false;           // nur -FC1
+
+            return true;
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -16,6 +17,10 @@ namespace DGUV_Projekt
     /// </summary>
     public partial class Form1 : Form
     {
+        private static readonly Color Teal = Color.FromArgb(23, 162, 162);
+        private static readonly Color NavInactive = Color.FromArgb(243, 243, 243);
+        private static readonly Color NavText = Color.FromArgb(60, 60, 60);
+
         public Form1()
         {
             InitializeComponent();
@@ -26,6 +31,38 @@ namespace DGUV_Projekt
             Log("Bereit. 1) Vorlage waehlen, 2) Quelldateien waehlen, 3) Ausfuellen.");
             Log("Kabeluebersicht (+ Loopliste)  -> Blatt \"Messdatenblatt ZLPE IK RISO\"");
             Log("Erdungsverbindungen            -> Blatt \"Messdatenblatt RPE\"");
+            ShowPage(true);
+        }
+
+        // ---- Seiten-Navigation (gleiches Fenster, andere Seite) -----------
+
+        private void btnNavModul1_Click(object sender, EventArgs e)
+        {
+            ShowPage(true);
+        }
+
+        private void btnNavModul2_Click(object sender, EventArgs e)
+        {
+            ShowPage(false);
+        }
+
+        private void ShowPage(bool modul1)
+        {
+            pnlModul1.Visible = modul1;
+            pnlModul2.Visible = !modul1;
+            if (modul1) pnlModul1.BringToFront(); else pnlModul2.BringToFront();
+            SetActiveNav(modul1 ? btnNavModul1 : btnNavModul2);
+        }
+
+        private void SetActiveNav(Button active)
+        {
+            foreach (Button b in new[] { btnNavModul1, btnNavModul2 })
+            {
+                bool on = b == active;
+                b.BackColor = on ? Teal : NavInactive;
+                b.ForeColor = on ? Color.White : NavText;
+                b.FlatAppearance.BorderSize = 0;
+            }
         }
 
         // Thread-sicheres Live-Logging (Aufrufe aus Hintergrund-Threads via Invoke).
