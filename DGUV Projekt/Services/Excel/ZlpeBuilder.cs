@@ -35,6 +35,11 @@ namespace DGUV_Projekt.Services.Excel
         private static readonly Regex FcRegex = new Regex(
             @"^-FC(\d+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        // Top-Level-Schutzorgan (kabelloser Abgang): -QA/-QB/-FC + Zahl.
+        // Verschachtelte Sub-Sicherungen wie "-KF037-1FC1" werden dadurch ausgeschlossen.
+        private static readonly Regex TopSchutzRegex = new Regex(
+            @"^-(QA|QB|FC)\d+$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         private class Node
         {
             public string Fg;
@@ -90,12 +95,17 @@ namespace DGUV_Projekt.Services.Excel
                 });
             }
 
-            // 2) Loopliste-Abgaenge, deren Stromkreis kein eigenes -WD-Kabel hat,
-            //    werden Eintraege ohne Kabel (z.B. Reserve-Abgaenge).
-            var fgMitKabel = new HashSet<string>(kabel.Select(k => k.Funktion), StringComparer.OrdinalIgnoreCase);
+            // 2) Loopliste-Abgaenge (Top-Level-Schutzorgane -QA/-QB/-FC) werden als
+            //    Eintraege OHNE Kabel aufgenommen - auch wenn der Stromkreis
+            //    zusaetzlich eigene Kabel hat (Verbrauchermessung, Reserven).
+            //    Verschachtelte Sub-Sicherungen bleiben aussen vor; je (Funktion,BMK)
+            //    nur einmal.
+            var seenAbgang = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             foreach (LoopRow l in loops)
             {
-                if (fgMitKabel.Contains(l.Funktion)) continue;
+                if (string.IsNullOrEmpty(l.Bmk) || !TopSchutzRegex.IsMatch(l.Bmk)) continue;
+                if (!seenAbgang.Add(l.Funktion + "|" + l.Bmk)) continue;
+
                 result.Add(new ZlpeEintrag
                 {
                     Funktion = l.Funktion,
@@ -103,9 +113,6 @@ namespace DGUV_Projekt.Services.Excel
                     Ort = l.Ort,
                     Loop = l.Loop,
                     SchutzBmk = l.Bmk,
-                    Bauform = StripAmpere(l.Bauform),
-                    Nennstrom = StripAmpere(l.Nennstrom),
-                    Charakteristik = l.Charakteristik,
                     Querschnitt = null,
                     Kommentar = l.Kommentar
                 });
@@ -123,12 +130,14 @@ namespace DGUV_Projekt.Services.Excel
         /// <summary>
         /// Filterregeln fuer das ZLPE-Blatt:
         ///  - keine Eintraege ohne speisendes (-) Schutzorgan oder ohne (+) Ort,
+        ///  - keine Eintraege mit Ort "+X" (feldinterne Punkte ohne Schrank),
         ///  - Sicherungen (-FC): nur "-FC1", keine weiteren FC-Nummern.
         /// </summary>
         private static bool KeepEntry(ZlpeEintrag e)
         {
             if (string.IsNullOrEmpty(e.SchutzBmk)) return false;                 // kein (-) BMK
             if (string.IsNullOrEmpty(e.Ort) || !e.Ort.StartsWith("+")) return false; // kein (+) Ort
+            if (e.Ort.Equals("+X", StringComparison.OrdinalIgnoreCase)) return false; // Ort +X (Feld) raus
 
             Match fc = FcRegex.Match(e.SchutzBmk);
             if (fc.Success && fc.Groups[1].Value != "1") return false;           // nur -FC1
