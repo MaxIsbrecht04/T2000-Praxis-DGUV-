@@ -107,9 +107,7 @@ namespace DGUV_Projekt.Services.Excel
                 Set(rowA, ZColLoop, src.Loop);
                 Set(rowA, ZColKabel, src.Kabel);
                 Set(rowA, ZColQuerschnitt, src.Querschnitt);
-                Set(rowA, ZColBauform, src.Bauform);
-                Set(rowA, ZColNennstrom, src.Nennstrom);
-                Set(rowA, ZColCharakt, src.Charakteristik);
+                // Kenngroesse/Nennstrom/Charakteristik werden bewusst nicht geschrieben.
                 Set(rowA, ZColKommentar, src.Kommentar);
 
                 // Zeile unten: speisendes Schutzorgan "-QA1 +H011".
