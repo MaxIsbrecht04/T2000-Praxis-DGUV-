@@ -17,6 +17,7 @@ namespace DGUV_Projekt
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.pnlHeader = new System.Windows.Forms.Panel();
             this.lblVersion = new System.Windows.Forms.Label();
             this.lblPortalTitle = new System.Windows.Forms.Label();
@@ -58,9 +59,9 @@ namespace DGUV_Projekt
             this.pnlModul2.SuspendLayout();
             this.pnlLog.SuspendLayout();
             this.SuspendLayout();
-            //
+            // 
             // pnlHeader
-            //
+            // 
             this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(162)))), ((int)(((byte)(162)))));
             this.pnlHeader.Controls.Add(this.lblVersion);
             this.pnlHeader.Controls.Add(this.lblPortalTitle);
@@ -69,9 +70,9 @@ namespace DGUV_Projekt
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(1000, 64);
             this.pnlHeader.TabIndex = 0;
-            //
+            // 
             // lblVersion
-            //
+            // 
             this.lblVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblVersion.AutoSize = true;
             this.lblVersion.ForeColor = System.Drawing.Color.White;
@@ -80,20 +81,20 @@ namespace DGUV_Projekt
             this.lblVersion.Size = new System.Drawing.Size(41, 16);
             this.lblVersion.TabIndex = 1;
             this.lblVersion.Text = "v1.0.0";
-            //
+            // 
             // lblPortalTitle
-            //
+            // 
             this.lblPortalTitle.AutoSize = true;
             this.lblPortalTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
             this.lblPortalTitle.ForeColor = System.Drawing.Color.White;
             this.lblPortalTitle.Location = new System.Drawing.Point(20, 14);
             this.lblPortalTitle.Name = "lblPortalTitle";
-            this.lblPortalTitle.Size = new System.Drawing.Size(151, 32);
+            this.lblPortalTitle.Size = new System.Drawing.Size(189, 41);
             this.lblPortalTitle.TabIndex = 0;
             this.lblPortalTitle.Text = "TOOL Portal";
-            //
+            // 
             // pnlNav
-            //
+            // 
             this.pnlNav.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(243)))), ((int)(((byte)(243)))));
             this.pnlNav.Controls.Add(this.btnNavModul1);
             this.pnlNav.Controls.Add(this.btnNavModul2);
@@ -102,9 +103,9 @@ namespace DGUV_Projekt
             this.pnlNav.Name = "pnlNav";
             this.pnlNav.Size = new System.Drawing.Size(1000, 50);
             this.pnlNav.TabIndex = 1;
-            //
+            // 
             // btnNavModul1
-            //
+            // 
             this.btnNavModul1.FlatAppearance.BorderSize = 0;
             this.btnNavModul1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNavModul1.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -112,12 +113,12 @@ namespace DGUV_Projekt
             this.btnNavModul1.Name = "btnNavModul1";
             this.btnNavModul1.Size = new System.Drawing.Size(230, 34);
             this.btnNavModul1.TabIndex = 0;
-            this.btnNavModul1.Text = "Modul 1 · Datenübertragung";
+            this.btnNavModul1.Text = "Modul 1 · Daten";
             this.btnNavModul1.UseVisualStyleBackColor = false;
             this.btnNavModul1.Click += new System.EventHandler(this.btnNavModul1_Click);
-            //
+            // 
             // btnNavModul2
-            //
+            // 
             this.btnNavModul2.FlatAppearance.BorderSize = 0;
             this.btnNavModul2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnNavModul2.Font = new System.Drawing.Font("Segoe UI", 10F);
@@ -128,9 +129,9 @@ namespace DGUV_Projekt
             this.btnNavModul2.Text = "Modul 2 · Messwerte";
             this.btnNavModul2.UseVisualStyleBackColor = false;
             this.btnNavModul2.Click += new System.EventHandler(this.btnNavModul2_Click);
-            //
+            // 
             // pnlContent
-            //
+            // 
             this.pnlContent.BackColor = System.Drawing.Color.White;
             this.pnlContent.Controls.Add(this.pnlModul1);
             this.pnlContent.Controls.Add(this.pnlModul2);
@@ -139,9 +140,9 @@ namespace DGUV_Projekt
             this.pnlContent.Name = "pnlContent";
             this.pnlContent.Size = new System.Drawing.Size(1000, 456);
             this.pnlContent.TabIndex = 2;
-            //
+            // 
             // pnlModul1
-            //
+            // 
             this.pnlModul1.AutoScroll = true;
             this.pnlModul1.BackColor = System.Drawing.Color.White;
             this.pnlModul1.Controls.Add(this.lblM1Title);
@@ -157,30 +158,30 @@ namespace DGUV_Projekt
             this.pnlModul1.Padding = new System.Windows.Forms.Padding(16);
             this.pnlModul1.Size = new System.Drawing.Size(1000, 456);
             this.pnlModul1.TabIndex = 0;
-            //
+            // 
             // lblM1Title
-            //
+            // 
             this.lblM1Title.AutoSize = true;
             this.lblM1Title.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
             this.lblM1Title.Location = new System.Drawing.Point(16, 12);
             this.lblM1Title.Name = "lblM1Title";
-            this.lblM1Title.Size = new System.Drawing.Size(268, 25);
+            this.lblM1Title.Size = new System.Drawing.Size(350, 32);
             this.lblM1Title.TabIndex = 0;
             this.lblM1Title.Text = "Modul 1 – Datenübertragung";
-            //
+            // 
             // lblM1Sub
-            //
+            // 
             this.lblM1Sub.AutoSize = true;
             this.lblM1Sub.ForeColor = System.Drawing.Color.Gray;
             this.lblM1Sub.Location = new System.Drawing.Point(16, 42);
             this.lblM1Sub.Name = "lblM1Sub";
-            this.lblM1Sub.Size = new System.Drawing.Size(430, 16);
+            this.lblM1Sub.Size = new System.Drawing.Size(411, 16);
             this.lblM1Sub.TabIndex = 1;
             this.lblM1Sub.Text = "Füllt die Blätter „ZLPE IK RISO\" und „RPE\" aus den EPLAN-Exporten.";
-            //
+            // 
             // grpTemplate
-            //
-            this.grpTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.grpTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpTemplate.Controls.Add(this.btnTemplate);
             this.grpTemplate.Controls.Add(this.txtTemplate);
@@ -190,9 +191,9 @@ namespace DGUV_Projekt
             this.grpTemplate.TabIndex = 2;
             this.grpTemplate.TabStop = false;
             this.grpTemplate.Text = "1) Prüfprotokoll-Vorlage (Ziel-Datei .xlsx)";
-            //
+            // 
             // btnTemplate
-            //
+            // 
             this.btnTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnTemplate.Location = new System.Drawing.Point(813, 25);
             this.btnTemplate.Name = "btnTemplate";
@@ -201,20 +202,20 @@ namespace DGUV_Projekt
             this.btnTemplate.Text = "Durchsuchen...";
             this.btnTemplate.UseVisualStyleBackColor = true;
             this.btnTemplate.Click += new System.EventHandler(this.btnTemplate_Click);
-            //
+            // 
             // txtTemplate
-            //
-            this.txtTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.txtTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTemplate.Location = new System.Drawing.Point(16, 27);
             this.txtTemplate.Name = "txtTemplate";
             this.txtTemplate.ReadOnly = true;
             this.txtTemplate.Size = new System.Drawing.Size(785, 22);
             this.txtTemplate.TabIndex = 0;
-            //
+            // 
             // grpSources
-            //
-            this.grpSources.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.grpSources.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpSources.Controls.Add(this.lblKabel);
             this.grpSources.Controls.Add(this.txtKabel);
@@ -231,28 +232,28 @@ namespace DGUV_Projekt
             this.grpSources.TabIndex = 3;
             this.grpSources.TabStop = false;
             this.grpSources.Text = "2) Quelldateien";
-            //
+            // 
             // lblKabel
-            //
+            // 
             this.lblKabel.AutoSize = true;
             this.lblKabel.Location = new System.Drawing.Point(16, 26);
             this.lblKabel.Name = "lblKabel";
-            this.lblKabel.Size = new System.Drawing.Size(520, 16);
+            this.lblKabel.Size = new System.Drawing.Size(99, 16);
             this.lblKabel.TabIndex = 0;
-            this.lblKabel.Text = "Kabelübersicht   →   füllt „Messdatenblatt ZLPE IK RISO\" (Leistungskabel -WD*)";
-            //
+            this.lblKabel.Text = "Kabelübersicht ";
+            // 
             // txtKabel
-            //
-            this.txtKabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.txtKabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtKabel.Location = new System.Drawing.Point(16, 45);
             this.txtKabel.Name = "txtKabel";
             this.txtKabel.ReadOnly = true;
             this.txtKabel.Size = new System.Drawing.Size(785, 22);
             this.txtKabel.TabIndex = 1;
-            //
+            // 
             // btnKabel
-            //
+            // 
             this.btnKabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnKabel.Location = new System.Drawing.Point(813, 43);
             this.btnKabel.Name = "btnKabel";
@@ -261,28 +262,28 @@ namespace DGUV_Projekt
             this.btnKabel.Text = "Kabelübersicht...";
             this.btnKabel.UseVisualStyleBackColor = true;
             this.btnKabel.Click += new System.EventHandler(this.btnKabel_Click);
-            //
+            // 
             // lblLoopl
-            //
+            // 
             this.lblLoopl.AutoSize = true;
             this.lblLoopl.Location = new System.Drawing.Point(16, 88);
             this.lblLoopl.Name = "lblLoopl";
-            this.lblLoopl.Size = new System.Drawing.Size(540, 16);
+            this.lblLoopl.Size = new System.Drawing.Size(65, 16);
             this.lblLoopl.TabIndex = 3;
-            this.lblLoopl.Text = "Loopliste   →   ergänzt ZLPE um Loop-Nr. + speisendes Schutzorgan";
-            //
+            this.lblLoopl.Text = "Loopliste ";
+            // 
             // txtLoopl
-            //
-            this.txtLoopl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.txtLoopl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtLoopl.Location = new System.Drawing.Point(16, 107);
             this.txtLoopl.Name = "txtLoopl";
             this.txtLoopl.ReadOnly = true;
             this.txtLoopl.Size = new System.Drawing.Size(785, 22);
             this.txtLoopl.TabIndex = 4;
-            //
+            // 
             // btnLoopl
-            //
+            // 
             this.btnLoopl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLoopl.Location = new System.Drawing.Point(813, 105);
             this.btnLoopl.Name = "btnLoopl";
@@ -291,28 +292,28 @@ namespace DGUV_Projekt
             this.btnLoopl.Text = "Loopliste...";
             this.btnLoopl.UseVisualStyleBackColor = true;
             this.btnLoopl.Click += new System.EventHandler(this.btnLoopl_Click);
-            //
+            // 
             // lblGround
-            //
+            // 
             this.lblGround.AutoSize = true;
             this.lblGround.Location = new System.Drawing.Point(16, 150);
             this.lblGround.Name = "lblGround";
-            this.lblGround.Size = new System.Drawing.Size(404, 16);
+            this.lblGround.Size = new System.Drawing.Size(139, 16);
             this.lblGround.TabIndex = 6;
-            this.lblGround.Text = "Erdungsverbindungen   →   füllt Blatt „Messdatenblatt RPE\"";
-            //
+            this.lblGround.Text = "Erdungsverbindungen";
+            // 
             // txtGround
-            //
-            this.txtGround.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.txtGround.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtGround.Location = new System.Drawing.Point(16, 169);
             this.txtGround.Name = "txtGround";
             this.txtGround.ReadOnly = true;
             this.txtGround.Size = new System.Drawing.Size(785, 22);
             this.txtGround.TabIndex = 7;
-            //
+            // 
             // btnGround
-            //
+            // 
             this.btnGround.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGround.Location = new System.Drawing.Point(813, 167);
             this.btnGround.Name = "btnGround";
@@ -321,9 +322,9 @@ namespace DGUV_Projekt
             this.btnGround.Text = "Erdungsverb...";
             this.btnGround.UseVisualStyleBackColor = true;
             this.btnGround.Click += new System.EventHandler(this.btnGround_Click);
-            //
+            // 
             // btnFill
-            //
+            // 
             this.btnFill.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(162)))), ((int)(((byte)(162)))));
             this.btnFill.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnFill.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
@@ -335,28 +336,28 @@ namespace DGUV_Projekt
             this.btnFill.Text = "3) Ausfüllen && speichern...";
             this.btnFill.UseVisualStyleBackColor = false;
             this.btnFill.Click += new System.EventHandler(this.btnFill_Click);
-            //
+            // 
             // progressBar
-            //
-            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar.Location = new System.Drawing.Point(272, 378);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(696, 23);
             this.progressBar.TabIndex = 5;
-            //
+            // 
             // lblStatus
-            //
+            // 
             this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblStatus.AutoSize = true;
             this.lblStatus.Location = new System.Drawing.Point(272, 404);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(48, 16);
+            this.lblStatus.Size = new System.Drawing.Size(45, 16);
             this.lblStatus.TabIndex = 6;
             this.lblStatus.Text = "Bereit.";
-            //
+            // 
             // pnlModul2
-            //
+            // 
             this.pnlModul2.BackColor = System.Drawing.Color.White;
             this.pnlModul2.Controls.Add(this.lblM2Title);
             this.pnlModul2.Controls.Add(this.lblM2Text);
@@ -367,34 +368,27 @@ namespace DGUV_Projekt
             this.pnlModul2.Size = new System.Drawing.Size(1000, 456);
             this.pnlModul2.TabIndex = 1;
             this.pnlModul2.Visible = false;
-            //
+            // 
             // lblM2Title
-            //
+            // 
             this.lblM2Title.AutoSize = true;
             this.lblM2Title.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
             this.lblM2Title.Location = new System.Drawing.Point(16, 12);
             this.lblM2Title.Name = "lblM2Title";
-            this.lblM2Title.Size = new System.Drawing.Size(430, 25);
+            this.lblM2Title.Size = new System.Drawing.Size(620, 32);
             this.lblM2Title.TabIndex = 0;
             this.lblM2Title.Text = "Modul 2 – Messwert-Erfassung (nicht implementiert)";
-            //
+            // 
             // lblM2Text
-            //
+            // 
             this.lblM2Text.Location = new System.Drawing.Point(16, 52);
             this.lblM2Text.Name = "lblM2Text";
             this.lblM2Text.Size = new System.Drawing.Size(940, 240);
             this.lblM2Text.TabIndex = 1;
-            this.lblM2Text.Text = "Modul 2 sollte die Messwerte des Prüfgeräts automatisch in die richtigen Spalten d" +
-    "es Prüfprotokolls schreiben. Dies wird im Rahmen dieser Arbeit nur konzeptionell " +
-    "behandelt und nicht praktisch umgesetzt.\r\n\r\nBegründung:\r\n• Es gibt kein standardi" +
-    "siertes DGUV-V3-Messgerät – je nach Hersteller/Modell unterschiedliche, meist prop" +
-    "rietäre Datenprotokolle.\r\n• Eine allgemeingültige Lösung müsste sehr viele Geräte-" +
-    "Schnittstellen abdecken.\r\n• Manche Geräte besitzen gar keine Computer-Schnittstell" +
-    "e.\r\n\r\nDetails und der konzeptionelle Lösungsweg (Push-Print / Zustandsautomat) sin" +
-    "d in der Dokumentation beschrieben.";
-            //
+            this.lblM2Text.Text = resources.GetString("lblM2Text.Text");
+            // 
             // pnlLog
-            //
+            // 
             this.pnlLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(243)))), ((int)(((byte)(243)))));
             this.pnlLog.Controls.Add(this.txtLog);
             this.pnlLog.Controls.Add(this.lblLog);
@@ -404,9 +398,9 @@ namespace DGUV_Projekt
             this.pnlLog.Padding = new System.Windows.Forms.Padding(8);
             this.pnlLog.Size = new System.Drawing.Size(1000, 170);
             this.pnlLog.TabIndex = 3;
-            //
+            // 
             // txtLog
-            //
+            // 
             this.txtLog.BackColor = System.Drawing.Color.White;
             this.txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtLog.Font = new System.Drawing.Font("Consolas", 9F);
@@ -416,18 +410,18 @@ namespace DGUV_Projekt
             this.txtLog.Size = new System.Drawing.Size(984, 132);
             this.txtLog.TabIndex = 1;
             this.txtLog.Text = "";
-            //
+            // 
             // lblLog
-            //
+            // 
             this.lblLog.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblLog.Location = new System.Drawing.Point(8, 8);
             this.lblLog.Name = "lblLog";
             this.lblLog.Size = new System.Drawing.Size(984, 22);
             this.lblLog.TabIndex = 0;
             this.lblLog.Text = "Live-Protokoll:";
-            //
+            // 
             // Form1
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1000, 740);
@@ -451,6 +445,7 @@ namespace DGUV_Projekt
             this.grpSources.ResumeLayout(false);
             this.grpSources.PerformLayout();
             this.pnlModul2.ResumeLayout(false);
+            this.pnlModul2.PerformLayout();
             this.pnlLog.ResumeLayout(false);
             this.ResumeLayout(false);
 

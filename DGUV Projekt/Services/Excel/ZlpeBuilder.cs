@@ -6,20 +6,12 @@ using System.Text.RegularExpressions;
 namespace DGUV_Projekt.Services.Excel
 {
     /// <summary>
-    /// Baut aus Kabeluebersicht (+ Loopliste) die Eintraege fuer das Blatt
+    /// Baut aus Kabelübersicht (+ Loopliste) die Einträge fär das Blatt
     /// "Messdatenblatt ZLPE IK RISO".
-    ///
-    /// Modell (aus dem Abgleich EPLAN-Stromlaufplan / Referenzprotokoll):
-    /// Ein ZLPE-Eintrag ist ein Leistungskabel-Segment (-WD*) eines
-    /// Stromkreises - bzw. ein Abgang ohne eigenes Kabel. In der zweiten
-    /// Zeile steht das SPEISENDE Schutzorgan (im Schrank), dessen Kenndaten
-    /// (Bauform/Nennstrom/Charakteristik) und Loop-Nr. aus der Loopliste
-    /// kommen. Da Feldkabel oft in Ketten haengen (-WD2.1 am -WD2, nicht am
-    /// Schrank), wird die Quelle/Ziel-Kette bis zum Schrank zurueckverfolgt.
     /// </summary>
     public class ZlpeBuilder
     {
-        // Geraete-Knoten in Quelle/Ziel: "=000EEA011+H011-XD0" -> FG + Ort (+BMK).
+        // Geräte-Knoten in Quelle/Ziel: "=000EEA011+H011-XD0" -> FG + Ort (+BMK).
         private static readonly Regex NodeRegex = new Regex(
             @"(=[0-9A-Za-z._]+)\+([A-Za-z0-9_]+)(-[A-Za-z0-9_.]+)?", RegexOptions.Compiled);
 
@@ -31,7 +23,7 @@ namespace DGUV_Projekt.Services.Excel
         private static readonly Regex QuerschnittRegex = new Regex(
             @"\d+\s*[Gx]\s*(\d+(?:[.,]\d+)?)(/\d+)?", RegexOptions.Compiled);
 
-        // Sicherungs-BMK "-FC<Zahl>": es wird nur "-FC1" uebernommen.
+        // Sicherungs-BMK "-FC<Zahl>": es wird nur "-FC1" übernommen.
         private static readonly Regex FcRegex = new Regex(
             @"^-FC(\d+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -45,14 +37,14 @@ namespace DGUV_Projekt.Services.Excel
         {
             loops = loops ?? new List<LoopRow>();
 
-            // Loopliste: erster Eintrag je Funktionsgruppe gewinnt.
+            // Loopliste: erster Eintrag je Funktionsgruppe.
             var loopByFg = new Dictionary<string, LoopRow>(StringComparer.OrdinalIgnoreCase);
             foreach (LoopRow l in loops)
             {
                 if (!loopByFg.ContainsKey(l.Funktion)) loopByFg[l.Funktion] = l;
             }
 
-            // Index: Knoten-Bezeichnung -> Kabel, die dort haengen (fuer Ketten).
+            // Index: Knoten-Bezeichnung -> Kabel, die dort hängen (fär Ketten).
             var nodeIndex = new Dictionary<string, List<KabelRow>>(StringComparer.OrdinalIgnoreCase);
             foreach (KabelRow k in kabel)
             {
@@ -90,8 +82,8 @@ namespace DGUV_Projekt.Services.Excel
                 });
             }
 
-            // 2) Loopliste-Abgaenge, deren Stromkreis kein eigenes -WD-Kabel hat,
-            //    werden Eintraege ohne Kabel (z.B. Reserve-Abgaenge).
+            // 2) Loopliste-Abgänge, deren Stromkreis kein eigenes -WD-Kabel hat,
+            //    werden Einträge ohne Kabel.
             var fgMitKabel = new HashSet<string>(kabel.Select(k => k.Funktion), StringComparer.OrdinalIgnoreCase);
             foreach (LoopRow l in loops)
             {
@@ -121,8 +113,8 @@ namespace DGUV_Projekt.Services.Excel
         }
 
         /// <summary>
-        /// Filterregeln fuer das ZLPE-Blatt:
-        ///  - keine Eintraege ohne speisendes (-) Schutzorgan oder ohne (+) Ort,
+        /// Filterregeln für das ZLPE-Blatt:
+        ///  - keine Einträge ohne speisendes (-) Schutzorgan oder ohne (+) Ort,
         ///  - Sicherungen (-FC): nur "-FC1", keine weiteren FC-Nummern.
         /// </summary>
         private static bool KeepEntry(ZlpeEintrag e)
@@ -145,7 +137,7 @@ namespace DGUV_Projekt.Services.Excel
         {
             if (!visited.Add(k) || visited.Count > 8) return null;
 
-            // Direkt: haengt ein Ende an einem Schrank / Looplist-Abgang?
+            // Direkt: hängt ein Ende an einem Schrank / Looplist-Abgang?
             foreach (Match m in AllNodes(k))
             {
                 string fg = m.Groups[1].Value;
@@ -156,7 +148,7 @@ namespace DGUV_Projekt.Services.Excel
                 }
             }
 
-            // Sonst: ueber gemeinsame Knoten zum Vorgaenger-Kabel.
+            // Sonst: über gemeinsame Knoten zum Vorgänger-Kabel.
             foreach (string n in NodeKeys(k))
             {
                 List<KabelRow> peers;
@@ -191,7 +183,7 @@ namespace DGUV_Projekt.Services.Excel
             return m.Groups[2].Success ? q + m.Groups[2].Value : q;
         }
 
-        // "15-36A" -> "15-36", "15A" -> "15"; die Spalte traegt die Einheit [A] bereits.
+        // "15-36A" -> "15-36", "15A" -> "15"; die Spalte trägt die Einheit [A] bereits.
         private static string StripAmpere(string value)
         {
             if (string.IsNullOrEmpty(value)) return value;

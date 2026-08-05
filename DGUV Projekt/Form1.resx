@@ -117,4 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="lblM2Text.Text" xml:space="preserve">
+    <value>Modul 2 sollte die Messwerte des Prüfgeräts automatisch in die richtigen Spalten des Prüfprotokolls schreiben. Dies wird im Rahmen dieser Arbeit nur konzeptionell behandelt und nicht praktisch umgesetzt.
+
+Begründung:
+• Es gibt kein standardisiertes DGUV-V3-Messgerät – je nach Hersteller/Modell unterschiedliche, meist proprietäre Datenprotokolle.
+• Eine allgemeingültige Lösung müsste sehr viele Geräte-Schnittstellen abdecken.
+• Manche Geräte besitzen gar keine Computer-Schnittstelle.
+
+Details und der konzeptionelle Lösungsweg (Push-Print / Zustandsautomat) sind in der Dokumentation beschrieben.</value>
+  </data>
 </root>
