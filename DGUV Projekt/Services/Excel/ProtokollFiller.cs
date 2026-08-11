@@ -47,6 +47,21 @@ namespace DGUV_Projekt.Services.Excel
         private const int ZColCharakt = 9;    // J  Betriebsklasse / Charakteristik
         private const int ZColKommentar = 26; // AA Kommentar
 
+        // ---- Auszugrauende Spalten (nicht zu messende Felder) --------------
+        // Schaltschrank/Verteiler & normaler 400-V-Stromkreis: nur die Spalten
+        // "Isolationswiderstand / Zusaetzliche Anforderungen" (O..T) entfallen.
+        private static readonly int[] GreyStandard = { 14, 15, 16, 17, 18, 19 }; // O..T
+        // Motor-/Antriebsstromkreis (Motor, FU-gesteuerter Motor, Bremswiderstand):
+        // zusaetzlich entfallen die Kenngroessen- und Schleifenimpedanz-Spalten
+        // (H..N) sowie die Standard-Isolationsmessung Spalte X.
+        private static readonly int[] GreyMotor =
+            { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 23 }; // H..T + X
+
+        // Zwischenspeicher fuer die ausgegrauten Zellstil-Varianten (je Basisstil).
+        private readonly Dictionary<short, ICellStyle> _greyCache =
+            new Dictionary<short, ICellStyle>();
+
+        // ---- Spaltenindizes (0-basiert) RPE -------------------------------
         // ---- Spaltenindizes RPE ------------------------------------------------
         private const int RColFunktion = 1;   // B  (=)Funktionsgruppe
         private const int RColBmk = 2;        // C  (-)BTMK
@@ -114,6 +129,14 @@ namespace DGUV_Projekt.Services.Excel
                 {
                     string ortToken = src.Ort != null && src.Ort.StartsWith("+") ? src.Ort : null;
                     Set(rowB, ZColFunktion, Join(src.SchutzBmk, ortToken));
+                }
+
+                // Nicht zu messende Felder ausgrauen (je nach Verbrauchertyp).
+                int[] greyCols = src.MotorStromkreis ? GreyMotor : GreyStandard;
+                foreach (int c in greyCols)
+                {
+                    GreyCell(rowA, c);
+                    GreyCell(rowB, c);
                 }
 
                 cursor += ZlpeBlockHeight;
@@ -305,6 +328,29 @@ namespace DGUV_Projekt.Services.Excel
                     sheet.RemoveMergedRegion(i);
                 }
             }
+        }
+
+        // Graut eine Zelle aus (grauer Fuellhintergrund), ohne die uebrigen
+        // Formatierungen (Rahmen, Schrift) zu verlieren. Die abgeleiteten Stile
+        // werden je Basisstil zwischengespeichert, um die 64.000-Stil-Grenze von
+        // Excel nicht zu sprengen.
+        private void GreyCell(IRow row, int col)
+        {
+            if (row == null) return;
+            ICell cell = row.GetCell(col) ?? row.CreateCell(col);
+            ICellStyle baseStyle = cell.CellStyle;
+            short key = baseStyle != null ? baseStyle.Index : (short)-1;
+
+            ICellStyle grey;
+            if (!_greyCache.TryGetValue(key, out grey))
+            {
+                grey = _wb.CreateCellStyle();
+                if (baseStyle != null) grey.CloneStyleFrom(baseStyle);
+                grey.FillForegroundColor = IndexedColors.Grey25Percent.Index;
+                grey.FillPattern = FillPattern.SolidForeground;
+                _greyCache[key] = grey;
+            }
+            cell.CellStyle = grey;
         }
 
         private static void Set(IRow row, int col, string value)
