@@ -32,9 +32,8 @@ namespace DGUV_Projekt.Services.Excel
     }
 
     /// <summary>
-    /// Liest die SAG-Kabeluebersicht und filtert die Leistungskabel (-WD*)
-    /// heraus - das sind die messrelevanten Kabel fuer das ZLPE-Blatt.
-    /// Spalten (1-basiert): A=volle Kabelbezeichnung, E=Typnummer,
+    /// Liest die SAG-Kabelübersicht und filtert die Leistungskabel (-WD*) heraus.
+    /// Spalten: A=volle Kabelbezeichnung, E=Typnummer,
     /// G=Quelle (volle Bezeichnung), H=Ziel (volle Bezeichnung).
     /// </summary>
     public static class KabelUebersichtReader
@@ -69,8 +68,8 @@ namespace DGUV_Projekt.Services.Excel
     }
 
     /// <summary>
-    /// Liest die Loopliste: je Abgang das Schutzorgan mit Loop-Nr. und
-    /// Kenndaten. Spalten (1-basiert): B=(=), C=(+Ort), D=(-BMK), E=Loop,
+    /// Liest die Loopliste.
+    /// Spalten: B=(=), C=(+Ort), D=(-BMK), E=Loop,
     /// J=Bauform, K=Nennstrom, L=Charakteristik, M=Bemerkung.
     /// </summary>
     public static class LooplistReader
@@ -104,7 +103,8 @@ namespace DGUV_Projekt.Services.Excel
     }
 
     /// <summary>
-    /// Liest die Erdungsverbindungen. Spalten (1-basiert): A=(=), B=(-BMK),
+    /// Liest die Erdungsverbindungen. 
+    /// Spalten: A=(=), B=(-BMK),
     /// C=von(=), D=von(+), F=Erdungsklasse (POT/NET/MESH-BN), H=nach(=),
     /// I=nach(+), L=Kommentar.
     /// Es werden alle Zeilen genommen, deren Spalte A mit '=' beginnt.
@@ -138,10 +138,10 @@ namespace DGUV_Projekt.Services.Excel
             return result;
         }
 
-        // Uebersetzt die Erdungsklasse aus dem EPLAN-Export in die Schreibweise
+        // übersetzt die Erdungsklasse aus dem EPLAN-Export in die Schreibweise
         // des DGUV-Protokolls. EPLAN exportiert "POT" fuer den vermaschten
         // Potentialausgleich; im Protokoll steht dort "MESH-BN". Andere Werte
-        // (z.B. "NET") bleiben unveraendert. Bei Bedarf pro Anlage erweiterbar.
+        // (z.B. "NET") bleiben unverändert. Bei Bedarf pro Anlage erweiterbar.
         private static readonly Dictionary<string, string> ErdungsklasseMap =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             {

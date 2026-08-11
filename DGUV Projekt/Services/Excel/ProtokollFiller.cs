@@ -8,27 +8,26 @@ using NPOI.SS.Util;
 namespace DGUV_Projekt.Services.Excel
 {
     /// <summary>
-    /// Oeffnet die Pruefprotokoll-Vorlage und befuellt die beiden relevanten
-    /// Untertabellen:
+    /// Oeffnet die Prüfprotokoll-Vorlage und befüllt die beiden Untertabellen:
     ///   - "Messdatenblatt ZLPE IK RISO"  aus der Loopliste (2 Zeilen je Eintrag)
     ///   - "Messdatenblatt RPE"           aus den Erdungsverbindungen (1 Zeile)
     ///
-    /// Da die Vorlage nur wenige vorformatierte Zeilen enthaelt, wird pro
-    /// Eintrag der Formatierungs-Block der ersten Datenzeile(n) geklont:
-    /// Zellstile/Rahmen, Zeilenhoehe und die vertikal verbundenen Zellen.
-    /// So bekommen auch alle zusaetzlich angelegten Zeilen die korrekte
+    /// Da die Vorlage nur wenige vorformatierte Zeilen enthält, wird pro
+    /// Eintrag der Formatierungs-Block der ersten Datenzeile(n) geklont.
+    /// Zellstile/Rahmen, Zeilenhöhe und die vertikal verbundenen Zellen.
+    /// So bekommen auch alle zusätzlich angelegten Zeilen die korrekte
     /// Formatierung.
     ///
-    /// Nur Struktur-/Stammdaten werden geschrieben; die reinen Messwert-Spalten
+    /// Nur Struktur-/Stammdaten werden geschrieben, die reinen Messwert-Spalten
     /// bleiben leer.
     /// </summary>
     public class ProtokollFiller : IDisposable
     {
-        // ---- Blattnamen in der Vorlage ------------------------------------
+        // ---- Blattnamen in der Vorlage ---------------------------------------
         private const string SheetZlpe = "Messdatenblatt ZLPE IK RISO";
         private const string SheetRpe = "Messdatenblatt RPE";
 
-        // ---- Erste Datenzeile je Blatt (1-basiert, wie in Excel) ----------
+        // ---- Erste Datenzeile je Blatt ----------------------------------------
         private const int ZlpeFirstDataRow = 11; // ZLPE: 2 Zeilen je Eintrag
         private const int RpeFirstDataRow = 8;    // RPE : 1 Zeile je Eintrag
 
@@ -38,7 +37,7 @@ namespace DGUV_Projekt.Services.Excel
         private const int ZlpeColCount = 27; // A..AA
         private const int RpeColCount = 12;  // A..L
 
-        // ---- Spaltenindizes (0-basiert) ZLPE ------------------------------
+        // ---- Spaltenindizes ZLPE -----------------------------------------------
         private const int ZColFunktion = 1;   // B  Zeile oben: (=)Funktion; Zeile unten: "-SchutzBMK +Ort"
         private const int ZColLoop = 2;       // C  Zusatzinfo / Loop-Nr.
         private const int ZColKabel = 3;      // D  Kabel (-) BMK
@@ -63,6 +62,7 @@ namespace DGUV_Projekt.Services.Excel
             new Dictionary<short, ICellStyle>();
 
         // ---- Spaltenindizes (0-basiert) RPE -------------------------------
+        // ---- Spaltenindizes RPE ------------------------------------------------
         private const int RColFunktion = 1;   // B  (=)Funktionsgruppe
         private const int RColBmk = 2;        // C  (-)BTMK
         private const int RColVonFunk = 6;    // G  von (=)
@@ -83,13 +83,13 @@ namespace DGUV_Projekt.Services.Excel
         }
 
         /// <summary>
-        /// Befuellt das ZLPE-Blatt mit den vom ZlpeBuilder erzeugten Eintraegen
+        /// Befüllt das ZLPE-Blatt mit den vom ZlpeBuilder erzeugten Einträgen
         /// (bereits nach Ort sortiert). Je Ort wird eine fett-zentrierte
-        /// Bannerzeile (ueber B..AA) eingeschoben. Je Eintrag:
+        /// Bannerzeile eingeschoben. Je Eintrag:
         ///   Zeile oben:  B=(=)Funktion, C=Loop, D=Kabel, G=Querschnitt,
         ///                H=Bauform, I=Nennstrom, J=Charakteristik, AA=Kommentar
         ///   Zeile unten: B="-SchutzBMK +Ort" (speisendes Schutzorgan)
-        /// Messwert-Spalten (K..N Ik/Z, O..X RISO, ...) bleiben leer.
+        /// Messwert-Spalten bleiben leer.
         /// </summary>
         public int FillZlpe(IList<ZlpeEintrag> rows)
         {
@@ -121,7 +121,7 @@ namespace DGUV_Projekt.Services.Excel
                 Set(rowA, ZColLoop, src.Loop);
                 Set(rowA, ZColKabel, src.Kabel);
                 Set(rowA, ZColQuerschnitt, src.Querschnitt);
-                // Kenngroesse/Nennstrom/Charakteristik werden bewusst nicht geschrieben.
+                // Kenngröße/Nennstrom/Charakteristik werden bewusst nicht geschrieben.
                 Set(rowA, ZColKommentar, src.Kommentar);
 
                 // Zeile unten: speisendes Schutzorgan "-QA1 +H011".
@@ -145,7 +145,7 @@ namespace DGUV_Projekt.Services.Excel
             return rows.Count;
         }
 
-        // Erzeugt eine fett-zentrierte Bannerzeile ueber B..AA (2 Zeilen hoch),
+        // Erzeugt eine fett-zentrierte Bannerzeile,
         // wie die Ort-Trenner im Originalprotokoll.
         private void WriteBanner(ISheet sheet, int top, string text, ICellStyle style)
         {
@@ -171,14 +171,14 @@ namespace DGUV_Projekt.Services.Excel
             ICell baseCell = proto != null ? proto.GetCell(1) : null;
             if (baseCell != null)
             {
-                style.CloneStyleFrom(baseCell.CellStyle); // Rahmen/Schriftfamilie uebernehmen
+                style.CloneStyleFrom(baseCell.CellStyle); // Rahmen/Schriftfamilie übernehmen
             }
             IFont bold = _wb.CreateFont();
             bold.IsBold = true;
             style.SetFont(bold);
             style.Alignment = HorizontalAlignment.Center;
             style.VerticalAlignment = VerticalAlignment.Center;
-            // Sauberer Rahmen ringsum (Basiszelle hat nur Teil-Rahmen).
+            // Sauberer Rahmen ringsum.
             style.BorderTop = BorderStyle.Thin;
             style.BorderBottom = BorderStyle.Thin;
             style.BorderLeft = BorderStyle.Thin;
@@ -186,7 +186,7 @@ namespace DGUV_Projekt.Services.Excel
             return style;
         }
 
-        /// <summary>Befuellt das RPE-Blatt aus den Erdungsverbindungen.</summary>
+        /// <summary>Befüllt das RPE-Blatt aus den Erdungsverbindungen.</summary>
         public int FillRpe(IList<GroundRow> rows)
         {
             ISheet sheet = RequireSheet(SheetRpe);
@@ -226,9 +226,9 @@ namespace DGUV_Projekt.Services.Excel
         // ---- Formatierungs-Vorlage eines Eintrags-Blocks ------------------
 
         /// <summary>
-        /// Faengt Stile, Zeilenhoehen und verbundene Zellen des ersten
-        /// Eintrags-Blocks ein und kann sie auf beliebige weitere Bloecke
-        /// uebertragen.
+        /// Fängt Stile, Zeilenhöhen und verbundene Zellen des ersten
+        /// Eintrags-Blocks ein und kann sie auf beliebige weitere Blöcke
+        /// übertragen.
         /// </summary>
         private class BlockTemplate
         {

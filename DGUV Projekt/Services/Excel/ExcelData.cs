@@ -1,11 +1,8 @@
 using System.Collections.Generic;
 
 namespace DGUV_Projekt.Services.Excel
-{
-    /// <summary>
-    /// Ein Leistungskabel (-WD*) aus der Kabeluebersicht. Quelle/Ziel sind die
-    /// vollen EPLAN-Bezeichnungen der beiden Kabelenden.
-    /// </summary>
+{   
+    // Daten aus der KabelListe
     public class KabelRow
     {
         public string Funktion { get; set; }   // (=) Stromkreis, z.B. =004VW_026
@@ -15,9 +12,7 @@ namespace DGUV_Projekt.Services.Excel
         public string Ziel { get; set; }       // volle Bezeichnung Kabelende
     }
 
-    /// <summary>
-    /// Ein Abgang aus der Loopliste: Schutzorgan mit Loop-Nr. und Kenndaten.
-    /// </summary>
+    // Daten aus der LoopListe
     public class LoopRow
     {
         public string Funktion { get; set; }       // (=) z.B. =000EEA507
@@ -30,11 +25,7 @@ namespace DGUV_Projekt.Services.Excel
         public string Kommentar { get; set; }
     }
 
-    /// <summary>
-    /// Ein fertiger Eintrag fuer das Blatt "Messdatenblatt ZLPE IK RISO":
-    /// ein Leistungskabel-Segment (oder ein Abgang ohne Kabel) mit dem
-    /// speisenden Schutzorgan und dessen Kenndaten.
-    /// </summary>
+    // Für die Daten in der ZLPE Tabelle
     public class ZlpeEintrag
     {
         public string Funktion { get; set; }       // Spalte B oben: (=) Stromkreis
@@ -58,10 +49,7 @@ namespace DGUV_Projekt.Services.Excel
         public bool MotorStromkreis { get; set; }
     }
 
-    /// <summary>
-    /// Eine Zeile aus den Erdungsverbindungen (Quelle fuer das Blatt
-    /// "Messdatenblatt RPE").
-    /// </summary>
+    // Für die Verbindungen aus den Erdungsverbindungen
     public class GroundRow
     {
         public string Funktionsgruppe { get; set; } // (=) BTM Kabel
@@ -74,9 +62,7 @@ namespace DGUV_Projekt.Services.Excel
         public string Kommentar { get; set; }
     }
 
-    /// <summary>
-    /// Ergebnis eines Ausfuell-Vorgangs (fuer die Statusmeldung).
-    /// </summary>
+    // Ergebnis eines Ausfüll-Vorgangs (für die Statusmeldung).
     public class FillResult
     {
         public int ZlpeRows { get; set; } = -1; // -1 = nicht ausgefuehrt
