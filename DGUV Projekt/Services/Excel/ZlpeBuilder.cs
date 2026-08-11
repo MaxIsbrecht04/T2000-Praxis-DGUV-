@@ -32,35 +32,10 @@ namespace DGUV_Projekt.Services.Excel
         private static readonly Regex TopSchutzRegex = new Regex(
             @"^-(QA|QB|FC)\d+$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        // Geraeteklasse aus einem Ziel-BMK ableiten: "-MA1" -> "MA", "-XD0" -> "XD".
-        private static readonly Regex GeraeteklasseRegex = new Regex(
-            @"^-([A-Za-z]+)", RegexOptions.Compiled);
-
-        // Verbrauchertypen, die als Motor-/Antriebsstromkreis gelten (steuert das
-        // Ausgrauen der Schleifenimpedanz-/Kenngroessen-Spalten).
-        private static readonly HashSet<string> MotorTypen = new HashSet<string>
-        {
-            "Motor", "FU-gesteuerter Motor", "Bremswiderstand"
-        };
-
         private class Node
         {
             public string Fg;
             public string Ort;
-        }
-
-        /// <summary>
-        /// Aus den Kabeln einer Funktionsgruppe gesammelte Merkmale zur
-        /// Bestimmung des Verbrauchertyps: die an den Kabelenden vorkommenden
-        /// Geraeteklassen (z.B. MA=Motor, TA=Antrieb/Umrichter, XD/XG/XE=Klemme)
-        /// sowie Hinweise aus dem Kabeltyp (MOTOR-/BREMS-Leitung).
-        /// </summary>
-        private class FunktionsInfo
-        {
-            public readonly HashSet<string> Klassen =
-                new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            public bool MotorLeitung;
-            public bool BremsLeitung;
         }
 
         public IList<ZlpeEintrag> Build(IList<KabelRow> kabel, IList<LoopRow> loops)
@@ -86,20 +61,6 @@ namespace DGUV_Projekt.Services.Excel
                 }
             }
 
-            // Merkmale je Funktionsgruppe sammeln (fuer die Verbrauchertyp-Bestimmung).
-            var infoByFg = new Dictionary<string, FunktionsInfo>(StringComparer.OrdinalIgnoreCase);
-            foreach (KabelRow k in kabel)
-            {
-                if (string.IsNullOrEmpty(k.Funktion)) continue;
-                FunktionsInfo info;
-                if (!infoByFg.TryGetValue(k.Funktion, out info))
-                    infoByFg[k.Funktion] = info = new FunktionsInfo();
-                foreach (string cls in Geraeteklassen(k)) info.Klassen.Add(cls);
-                string typ = (k.Typ ?? string.Empty).ToUpperInvariant();
-                if (typ.Contains("MOTOR")) info.MotorLeitung = true;
-                if (typ.Contains("BREMS")) info.BremsLeitung = true;
-            }
-
             var result = new List<ZlpeEintrag>();
 
             // 1) Jedes Leistungskabel wird ein Eintrag.
@@ -110,8 +71,6 @@ namespace DGUV_Projekt.Services.Excel
                 LoopRow loop = null;
                 if (feed != null && feed.Fg != null) loopByFg.TryGetValue(feed.Fg, out loop);
                 if (loop == null) loopByFg.TryGetValue(k.Funktion, out loop);
-
-                string typ = Verbrauchertyp(k.Funktion, infoByFg);
 
                 result.Add(new ZlpeEintrag
                 {
@@ -124,8 +83,7 @@ namespace DGUV_Projekt.Services.Excel
                     Nennstrom = loop != null ? StripAmpere(loop.Nennstrom) : null,
                     Charakteristik = loop != null ? loop.Charakteristik : null,
                     Querschnitt = ParseQuerschnitt(k.Typ),
-                    Kommentar = typ,
-                    MotorStromkreis = MotorTypen.Contains(typ)
+                    Kommentar = loop != null ? loop.Kommentar : null
                 });
             }
 
@@ -143,8 +101,6 @@ namespace DGUV_Projekt.Services.Excel
                 if (string.IsNullOrEmpty(l.Bmk) || !TopSchutzRegex.IsMatch(l.Bmk)) continue;
                 if (!seenAbgang.Add(l.Funktion + "|" + l.Bmk)) continue;
 
-                string typ = Verbrauchertyp(l.Funktion, infoByFg);
-
                 result.Add(new ZlpeEintrag
                 {
                     Funktion = l.Funktion,
@@ -153,8 +109,7 @@ namespace DGUV_Projekt.Services.Excel
                     Loop = l.Loop,
                     SchutzBmk = l.Bmk,
                     Querschnitt = null,
-                    Kommentar = typ,
-                    MotorStromkreis = MotorTypen.Contains(typ)
+                    Kommentar = l.Kommentar
                 });
             }
 
@@ -220,47 +175,6 @@ namespace DGUV_Projekt.Services.Excel
                 }
             }
             return null;
-        }
-
-        /// <summary>
-        /// Bestimmt aus den gesammelten Merkmalen einer Funktionsgruppe einen
-        /// sprechenden Verbrauchertyp fuer die Kommentar-Spalte. Dieser ersetzt
-        /// den frueheren, wenig aussagekraeftigen Loop-Kommentar ("400V AC
-        /// Versorgung Energiebus") und ist zugleich Grundlage fuer das Ausgrauen
-        /// nicht zu messender Spalten.
-        /// </summary>
-        private static string Verbrauchertyp(string fg, Dictionary<string, FunktionsInfo> infoByFg)
-        {
-            FunktionsInfo info;
-            if (fg == null || !infoByFg.TryGetValue(fg, out info))
-            {
-                return "400-V-Stromkreis";
-            }
-
-            bool motor = info.MotorLeitung || info.Klassen.Contains("MA");
-            bool umrichter = info.Klassen.Contains("TA");
-
-            if (info.BremsLeitung) return "Bremswiderstand";
-            if (motor && umrichter) return "FU-gesteuerter Motor";
-            if (motor) return "Motor";
-            if (umrichter) return "Frequenzumrichter";
-            if (info.Klassen.Contains("XD") || info.Klassen.Contains("XG") ||
-                info.Klassen.Contains("XE"))
-            {
-                return "Schaltschrank / Verteiler";
-            }
-            return "400-V-Stromkreis";
-        }
-
-        // Geraeteklassen an den Kabelenden (aus dem BMK-Teil der Quelle/Ziel-Knoten).
-        private static IEnumerable<string> Geraeteklassen(KabelRow k)
-        {
-            foreach (Match m in AllNodes(k))
-            {
-                if (!m.Groups[3].Success) continue;
-                Match c = GeraeteklasseRegex.Match(m.Groups[3].Value);
-                if (c.Success) yield return c.Groups[1].Value.ToUpperInvariant();
-            }
         }
 
         private static IEnumerable<Match> AllNodes(KabelRow k)

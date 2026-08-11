@@ -47,17 +47,8 @@ namespace DGUV_Projekt.Services.Excel
         private const int ZColCharakt = 9;    // J  Betriebsklasse / Charakteristik
         private const int ZColKommentar = 26; // AA Kommentar
 
-        // ---- Auszugrauende Spalten (nicht zu messende Felder) --------------
-        // Schaltschrank/Verteiler & normaler 400-V-Stromkreis: nur die Spalten
-        // "Isolationswiderstand / Zusaetzliche Anforderungen" (O..T) entfallen.
-        private static readonly int[] GreyStandard = { 14, 15, 16, 17, 18, 19 }; // O..T
-        // Motor-/Antriebsstromkreis (Motor, FU-gesteuerter Motor, Bremswiderstand):
-        // zusaetzlich entfallen die Kenngroessen- und Schleifenimpedanz-Spalten
-        // (H..N) sowie die Standard-Isolationsmessung Spalte X.
-        private static readonly int[] GreyMotor =
-            { 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 23 }; // H..T + X
-
-        // Zwischenspeicher fuer die ausgegrauten Zellstil-Varianten (je Basisstil).
+        // Zwischenspeicher fuer die ausgegrauten Zellstil-Varianten (je Basisstil),
+        // um Excels Grenze von ~64.000 Zellstilen nicht zu sprengen.
         private readonly Dictionary<short, ICellStyle> _greyCache =
             new Dictionary<short, ICellStyle>();
 
@@ -131,13 +122,9 @@ namespace DGUV_Projekt.Services.Excel
                     Set(rowB, ZColFunktion, Join(src.SchutzBmk, ortToken));
                 }
 
-                // Nicht zu messende Felder ausgrauen (je nach Verbrauchertyp).
-                int[] greyCols = src.MotorStromkreis ? GreyMotor : GreyStandard;
-                foreach (int c in greyCols)
-                {
-                    GreyCell(rowA, c);
-                    GreyCell(rowB, c);
-                }
+                // Alle nicht befuellten Felder des Rasters ausgrauen.
+                GreyEmptyCells(rowA, ZlpeColCount);
+                GreyEmptyCells(rowB, ZlpeColCount);
 
                 cursor += ZlpeBlockHeight;
             }
@@ -211,6 +198,9 @@ namespace DGUV_Projekt.Services.Excel
                 Set(row, RColNachFunk, src.NachFunktion);
                 Set(row, RColNachOrt, src.NachOrt);
                 Set(row, RColKommentar, src.Kommentar);
+
+                // Alle nicht befuellten Felder des Rasters ausgrauen.
+                GreyEmptyCells(row, RpeColCount);
             }
             return rows.Count;
         }
@@ -330,14 +320,27 @@ namespace DGUV_Projekt.Services.Excel
             }
         }
 
-        // Graut eine Zelle aus (grauer Fuellhintergrund), ohne die uebrigen
-        // Formatierungen (Rahmen, Schrift) zu verlieren. Die abgeleiteten Stile
-        // werden je Basisstil zwischengespeichert, um die 64.000-Stil-Grenze von
-        // Excel nicht zu sprengen.
-        private void GreyCell(IRow row, int col)
+        // Graut alle leeren Zellen einer Zeile aus, die zum gedruckten Raster
+        // gehoeren (also einen Rahmen tragen). So werden nicht nur die Messfelder,
+        // sondern saemtliche nicht befuellten Felder der Vorlage grau hinterlegt.
+        private void GreyEmptyCells(IRow row, int colCount)
         {
             if (row == null) return;
-            ICell cell = row.GetCell(col) ?? row.CreateCell(col);
+            for (int c = 0; c < colCount; c++)
+            {
+                ICell cell = row.GetCell(c);
+                if (cell == null) continue;          // ausserhalb des Rasters
+                if (!IsEmpty(cell)) continue;         // befuellt -> bleibt weiss
+                if (!HasBorder(cell.CellStyle)) continue; // nur Raster-Zellen
+                GreyCell(cell);
+            }
+        }
+
+        // Graut eine einzelne Zelle aus (grauer Fuellhintergrund), ohne die
+        // uebrigen Formatierungen (Rahmen, Schrift) zu verlieren. Die abgeleiteten
+        // Stile werden je Basisstil zwischengespeichert.
+        private void GreyCell(ICell cell)
+        {
             ICellStyle baseStyle = cell.CellStyle;
             short key = baseStyle != null ? baseStyle.Index : (short)-1;
 
@@ -351,6 +354,24 @@ namespace DGUV_Projekt.Services.Excel
                 _greyCache[key] = grey;
             }
             cell.CellStyle = grey;
+        }
+
+        private static bool IsEmpty(ICell cell)
+        {
+            switch (cell.CellType)
+            {
+                case CellType.Blank: return true;
+                case CellType.String: return string.IsNullOrEmpty(cell.StringCellValue);
+                default: return false;
+            }
+        }
+
+        private static bool HasBorder(ICellStyle s)
+        {
+            return s != null && (s.BorderTop != BorderStyle.None
+                || s.BorderBottom != BorderStyle.None
+                || s.BorderLeft != BorderStyle.None
+                || s.BorderRight != BorderStyle.None);
         }
 
         private static void Set(IRow row, int col, string value)
