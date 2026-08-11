@@ -38,15 +38,6 @@ namespace DGUV_Projekt.Services.Excel
         public string Charakteristik { get; set; } // Spalte J
         public string Querschnitt { get; set; }    // Spalte G (nur wenn sicher aus Typ ableitbar)
         public string Kommentar { get; set; }      // Spalte AA
-
-        /// <summary>
-        /// true, wenn der Eintrag ein Motor-/Antriebs-Stromkreis ist (Motor, FU-
-        /// gesteuerter Motor, Bremswiderstand). Steuert das Ausgrauen der nicht
-        /// zu messenden Spalten: Motorstromkreise grauen zusaetzlich die Schutz-
-        /// leiter-Spalten (H..N) aus, bei einem Schaltschrank/Verteiler bleiben
-        /// diese messrelevant.
-        /// </summary>
-        public bool MotorStromkreis { get; set; }
     }
 
     // Für die Verbindungen aus den Erdungsverbindungen
