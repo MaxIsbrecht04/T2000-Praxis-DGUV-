@@ -1,0 +1,1096 @@
+<title>Grundlagenkatalog PK5</title>
+<style>
+  :root{
+    --ground:#EEF1F3; --surface:#FFFFFF; --surface-2:#F6F9FA; --surface-3:#EAEFF1;
+    --ink:#121A1F; --ink-2:#3C4A52; --ink-3:#67767F;
+    --rule:#D2DADF; --rule-2:#B3C0C6;
+    --accent:#0B6E6E; --accent-2:#095857; --accent-soft:#DDEDED;
+    --k1:#B03227; --k1-soft:#FAE7E4;
+    --k2:#A0600F; --k2-soft:#FAEEDA;
+    --k3:#0B6E6E; --k3-soft:#DDEDED;
+    --k4:#68787F; --k4-soft:#E7ECEE;
+    --gap:#7B4A9C; --gap-soft:#F0E8F6;
+    --pe-g:#5C9B2A; --pe-y:#DAC81C;
+    --shadow:0 1px 2px rgba(18,26,31,.05), 0 6px 20px -12px rgba(18,26,31,.22);
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --serif:Charter,"Bitstream Charter","Iowan Old Style","Source Serif Pro",Georgia,serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#0D1316; --surface:#151D21; --surface-2:#1A252A; --surface-3:#202D33;
+      --ink:#E9EFF1; --ink-2:#B2C0C7; --ink-3:#83949C;
+      --rule:#28353B; --rule-2:#3A4A51;
+      --accent:#54C6C0; --accent-2:#7BD8D2; --accent-soft:#10312F;
+      --k1:#F0897C; --k1-soft:#341916;
+      --k2:#E0A855; --k2-soft:#33240F;
+      --k3:#54C6C0; --k3-soft:#10312F;
+      --k4:#93A3AA; --k4-soft:#222E33;
+      --gap:#BE94D9; --gap-soft:#251A2E;
+      --pe-g:#7CBF45; --pe-y:#E4D648;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 20px -12px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0D1316; --surface:#151D21; --surface-2:#1A252A; --surface-3:#202D33;
+    --ink:#E9EFF1; --ink-2:#B2C0C7; --ink-3:#83949C;
+    --rule:#28353B; --rule-2:#3A4A51;
+    --accent:#54C6C0; --accent-2:#7BD8D2; --accent-soft:#10312F;
+    --k1:#F0897C; --k1-soft:#341916;
+    --k2:#E0A855; --k2-soft:#33240F;
+    --k3:#54C6C0; --k3-soft:#10312F;
+    --k4:#93A3AA; --k4-soft:#222E33;
+    --gap:#BE94D9; --gap-soft:#251A2E;
+    --pe-g:#7CBF45; --pe-y:#E4D648;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 20px -12px rgba(0,0,0,.7);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:var(--serif); font-size:16.5px; line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:var(--sans); text-wrap:balance; margin:0}
+  a{color:var(--accent); text-underline-offset:2px}
+  a:focus-visible,summary:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+  code,.mono{font-family:var(--mono); font-size:.87em}
+  code{background:var(--surface-3); padding:.08em .34em; border-radius:3px; color:var(--ink-2)}
+
+  /* ---- masthead ---- */
+  .top{background:var(--surface); border-bottom:1px solid var(--rule)}
+  .pe-bar{height:5px; background:repeating-linear-gradient(115deg,var(--pe-g) 0 14px,var(--pe-y) 14px 28px)}
+  .top-in{max-width:1220px; margin:0 auto; padding:30px 26px 26px; display:flex; flex-wrap:wrap; gap:26px; align-items:flex-end; justify-content:space-between}
+  .eyebrow{font-family:var(--sans); font-size:11px; font-weight:650; letter-spacing:.15em; text-transform:uppercase; color:var(--ink-3)}
+  h1{font-size:clamp(30px,4.4vw,46px); font-weight:760; letter-spacing:-.026em; line-height:1.02; margin:9px 0 10px}
+  .dek{font-size:16px; color:var(--ink-2); max-width:56ch; margin:0}
+  .facts{font-family:var(--mono); font-size:12px; color:var(--ink-2); display:grid; gap:4px; border-left:2px solid var(--accent); padding-left:13px}
+  .facts b{color:var(--ink); font-weight:600}
+
+  /* ---- shell ---- */
+  .shell{max-width:1220px; margin:0 auto; padding:32px 26px 88px; display:grid; gap:38px; grid-template-columns:1fr}
+  @media(min-width:1040px){ .shell{grid-template-columns:222px minmax(0,1fr); gap:52px; align-items:start} }
+
+  nav.rail{position:relative}
+  @media(min-width:1040px){ nav.rail{position:sticky; top:22px; max-height:calc(100vh - 44px); overflow-y:auto} }
+  .rail h4{font-family:var(--sans); font-size:10.5px; letter-spacing:.15em; text-transform:uppercase; color:var(--ink-3); font-weight:650; margin:0 0 9px}
+  .rail ol{list-style:none; margin:0 0 22px; padding:0; display:grid; gap:1px}
+  .rail a{display:block; font-family:var(--sans); font-size:13.5px; text-decoration:none; color:var(--ink-2); padding:5px 9px; border-radius:4px; border-left:2px solid transparent; line-height:1.34}
+  .rail a:hover{background:var(--surface); color:var(--ink); border-left-color:var(--accent)}
+
+  main{min-width:0; display:grid; gap:44px}
+  section{scroll-margin-top:20px}
+  .sec-head{border-top:2px solid var(--ink); padding-top:11px; margin-bottom:20px}
+  h2{font-size:clamp(21px,2.6vw,27px); font-weight:720; letter-spacing:-.02em; margin:5px 0 8px}
+  .sec-head p{margin:0; color:var(--ink-2); font-size:15px; max-width:66ch}
+
+  /* ---- level chips ---- */
+  .chip{display:inline-flex; align-items:center; gap:6px; font-family:var(--sans); font-size:10.5px; font-weight:660; letter-spacing:.085em; text-transform:uppercase; padding:3.5px 9px; border-radius:3px; white-space:nowrap}
+  .chip::before{content:""; width:6px; height:6px; border-radius:50%; background:currentColor; flex:none}
+  .l1{color:var(--k1); background:var(--k1-soft)}
+  .l2{color:var(--k2); background:var(--k2-soft)}
+  .l3{color:var(--k3); background:var(--k3-soft)}
+  .l4{color:var(--k4); background:var(--k4-soft)}
+  .lg{color:var(--gap); background:var(--gap-soft)}
+
+  /* ---- Prüfblock ---- */
+  .blocks{display:grid; gap:18px}
+  .blk{background:var(--surface); border:1px solid var(--rule); border-left:4px solid var(--k4); border-radius:5px; box-shadow:var(--shadow); overflow:hidden}
+  .blk.v1{border-left-color:var(--k1)} .blk.v2{border-left-color:var(--k2)}
+  .blk.v3{border-left-color:var(--k3)} .blk.v4{border-left-color:var(--k4)}
+  .blk-h{display:flex; flex-wrap:wrap; gap:10px 16px; align-items:baseline; justify-content:space-between; padding:15px 20px; background:var(--surface-2); border-bottom:1px solid var(--rule)}
+  .blk-h h3{font-size:17px; font-weight:680; letter-spacing:-.012em; margin:0; flex:1 1 300px}
+  .tag{font-family:var(--mono); font-size:11px; color:var(--ink-3); letter-spacing:.03em}
+  .blk-b{padding:17px 20px 19px; display:grid; gap:15px}
+  .lab{font-family:var(--sans); font-size:10.5px; font-weight:650; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); margin:0 0 7px}
+  .know{margin:0; padding-left:19px; display:grid; gap:5px}
+  .know li{padding-left:2px}
+  .know li::marker{color:var(--accent)}
+  .qs{list-style:none; margin:0; padding:0; display:grid; gap:9px}
+  .qs li{padding-left:20px; position:relative}
+  .qs li::before{content:"?"; position:absolute; left:0; top:0; font-family:var(--sans); font-weight:700; color:var(--accent); font-size:14px}
+  .qs q{quotes:"„" """ "‚" "'"; font-style:normal}
+  .ans{display:block; font-family:var(--mono); font-size:12.5px; line-height:1.55; color:var(--ink-2); margin-top:3px; padding-left:11px; border-left:2px solid var(--rule-2)}
+
+  /* ---- gap / greyed cell motif ---- */
+  .gapbox{background:
+      repeating-linear-gradient(45deg,transparent 0 6px,color-mix(in srgb,var(--ink-3) 9%,transparent) 6px 7px),
+      var(--surface-3);
+    border:1px dashed var(--rule-2); border-radius:4px; padding:13px 16px}
+  .gapbox .lab{color:var(--gap)}
+  .gapbox p{margin:0; font-size:15px; color:var(--ink-2)}
+  .gapbox p + p{margin-top:7px}
+
+  /* ---- callout ---- */
+  .warn{background:var(--k1-soft); border:1px solid color-mix(in srgb,var(--k1) 32%,transparent); border-radius:4px; padding:13px 16px}
+  .warn .lab{color:var(--k1)}
+  .warn p{margin:0; font-size:15px}
+  .warn p + p{margin-top:7px}
+  .note{background:var(--accent-soft); border:1px solid color-mix(in srgb,var(--accent) 30%,transparent); border-radius:4px; padding:13px 16px}
+  .note .lab{color:var(--accent)}
+  .note p{margin:0; font-size:15px} .note p + p{margin-top:7px}
+
+  /* ---- tables ---- */
+  .tw{overflow-x:auto; border:1px solid var(--rule); border-radius:5px; background:var(--surface)}
+  table{border-collapse:collapse; width:100%; font-size:14.5px; min-width:520px}
+  th,td{text-align:left; padding:9px 14px; border-bottom:1px solid var(--rule); vertical-align:top}
+  th{font-family:var(--sans); font-size:11px; font-weight:650; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); background:var(--surface-2); white-space:nowrap}
+  tr:last-child td{border-bottom:0}
+  td.num{font-family:var(--mono); font-variant-numeric:tabular-nums; white-space:nowrap}
+
+  /* ---- people ---- */
+  .people{display:grid; gap:14px}
+  @media(min-width:700px){ .people{grid-template-columns:1fr 1fr} }
+  .p-card{background:var(--surface); border:1px solid var(--rule); border-radius:5px; padding:15px 17px; box-shadow:var(--shadow)}
+  .p-card h4{font-size:15.5px; font-weight:680; margin:0 0 2px}
+  .p-role{font-family:var(--mono); font-size:11.5px; color:var(--accent); letter-spacing:.02em; margin:0 0 9px}
+  .p-card p{margin:0; font-size:14.5px; color:var(--ink-2)}
+  .p-card p + p{margin-top:7px}
+  .p-card .verdict{margin-top:10px; padding-top:9px; border-top:1px solid var(--rule); font-family:var(--sans); font-size:13px; color:var(--ink)}
+  .unk{border-style:dashed}
+
+  /* ---- key questions ---- */
+  details{background:var(--surface); border:1px solid var(--rule); border-radius:5px; overflow:hidden}
+  details + details{margin-top:9px}
+  summary{cursor:pointer; padding:13px 17px; font-family:var(--sans); font-weight:590; font-size:15.5px; list-style:none; display:flex; gap:11px; align-items:flex-start}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"+"; font-family:var(--mono); color:var(--accent); font-weight:700; flex:none; line-height:1.4}
+  details[open] summary::before{content:"−"}
+  details[open] summary{border-bottom:1px solid var(--rule); background:var(--surface-2)}
+  .d-b{padding:14px 17px 16px 17px; font-size:15px}
+  .d-b p{margin:0} .d-b p + p{margin-top:8px}
+  .d-b ul{margin:8px 0 0; padding-left:19px; display:grid; gap:4px}
+
+  footer{max-width:1220px; margin:0 auto; padding:0 26px 60px; color:var(--ink-3); font-size:13.5px}
+  footer h4{font-family:var(--sans); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; margin:0 0 9px; color:var(--ink-3)}
+  footer ul{margin:0; padding-left:18px; display:grid; gap:4px}
+  hr.rule{border:0; border-top:1px solid var(--rule); margin:0 0 22px}
+  .legend{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+
+<header class="top">
+  <div class="pe-bar"></div>
+  <div class="top-in">
+    <div>
+      <div class="eyebrow">DHBW Stuttgart · TES24 · Mündliche Prüfung</div>
+      <h1>Grundlagenkatalog PK5</h1>
+      <p class="dek">Alle Grundlagen aus beiden T2000-Arbeiten, sortiert nach Prüfungswahrscheinlichkeit — plus die Stellen, an denen die Kommission bohren wird.</p>
+      <div class="legend">
+        <span class="chip l1">Kern · fast sicher</span>
+        <span class="chip l2">Hoch</span>
+        <span class="chip l3">Mittel</span>
+        <span class="chip l4">Randthema</span>
+        <span class="chip lg">Lücke in der Arbeit</span>
+      </div>
+    </div>
+    <div class="facts">
+      <div><b>Freitag, 25.09.2026</b></div>
+      <div>Hörsaal A.209, Lerchenstr. 1</div>
+      <div>12 min Referat · <b>18 min Fragen</b></div>
+      <div>Referat 30 % · Mündlich <b>70 %</b></div>
+      <div>Prüfbar: <b>beide</b> Arbeiten</div>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="rail" aria-label="Inhalt">
+    <h4>Inhalt</h4>
+    <ol>
+      <li><a href="#rahmen">0 · Prüfungsrahmen</a></li>
+      <li><a href="#kommission">1 · Kommission PK5</a></li>
+      <li><a href="#dguv">2 · Arbeit A — DGUV V3</a></li>
+      <li><a href="#profinet">3 · Arbeit B — PROFINET</a></li>
+      <li><a href="#quer">4 · Querschnitt (beide)</a></li>
+      <li><a href="#luecken">5 · Lücken schließen</a></li>
+      <li><a href="#angriff">6 · Angriffsflächen</a></li>
+      <li><a href="#sicher">7 · Fast sichere Fragen</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+  <!-- ============ 0 ============ -->
+  <section id="rahmen">
+    <div class="sec-head">
+      <div class="eyebrow">Teil 0</div>
+      <h2>Was die 18 Minuten wirklich abfragen</h2>
+      <p>Die Prüfungsordnung sagt: „Fragen beziehen sich auf den Themenkomplex der Projektarbeit(en) <em>einschließlich der zugehörigen Grundlagen</em>." Zwei Konsequenzen, die viele unterschätzen.</p>
+    </div>
+
+    <div class="blocks">
+      <div class="blk v1">
+        <div class="blk-h"><h3>Beide Arbeiten sind im Spiel — auch die, über die du nicht redest</h3><span class="chip l1">Kern</span></div>
+        <div class="blk-b">
+          <p style="margin:0">Dein Referat läuft über <em>ein</em> Thema (P3 oder P4 oder P3/4). Der Fragenteil nicht. Wenn du 12 Minuten über die DGUV-Arbeit sprichst, ist die PROFINET-Arbeit der naheliegendste Ort für die erste Frage — sie ist inhaltlich „unverbraucht" und die Kommission hat sie gelesen. Rechne fest damit, dass etwa die Hälfte der Zeit auf die nicht-präsentierte Arbeit entfällt.</p>
+        </div>
+      </div>
+
+      <div class="blk v1">
+        <div class="blk-h"><h3>„Grundlagen" heißt: das Kapitel 2, nicht dein Code</h3><span class="chip l1">Kern</span></div>
+        <div class="blk-b">
+          <p style="margin:0">Alles, was du in Kapitel 2 geschrieben hast, hast du damit als „beherrscht" deklariert. Das ist der schärfste Hebel der Prüfer: Sie müssen sich keine Fragen ausdenken — sie lesen dein Grundlagenkapitel und fragen es ab. In deinen beiden Arbeiten stehen dort u. a. OSI-Modell, UART/RS-232, Mealy- und Moore-Automaten, CLR/JIT, Schleifenimpedanz, IRT-Jitter. <strong>Auch das, was du am Ende nicht gebraucht hast.</strong></p>
+        </div>
+      </div>
+
+      <div class="blk v2">
+        <div class="blk-h"><h3>Die Referatskriterien verraten die Fragerichtung</h3><span class="chip l2">Hoch</span></div>
+        <div class="blk-b">
+          <p style="margin:0 0 11px">Die vier Bewertungsachsen des Referats sind gleichzeitig die vier Fragerichtungen im mündlichen Teil:</p>
+          <div class="tw"><table>
+            <thead><tr><th>Kriterium</th><th class="num">Punkte</th><th>Die Frage dahinter</th></tr></thead>
+            <tbody>
+              <tr><td>Thema / Klarheit der Aufgabe</td><td class="num">0–4</td><td>„Was genau war die Aufgabe — und wer hat sie gestellt?"</td></tr>
+              <tr><td><strong>Kern: Lösungsweg, Alternativen, Schwierigkeitsgrad, Eigenanteil, Ergebnis</strong></td><td class="num">0–14</td><td>„Welche Alternative hatten Sie? Warum diese? Was war <em>Ihr</em> Anteil?"</td></tr>
+              <tr><td>Kritische Würdigung und Ausblick</td><td class="num">0–4</td><td>„Was würden Sie heute anders machen?"</td></tr>
+              <tr><td>Präsentation</td><td class="num">0–8</td><td>Stil, Zeit, Verständlichkeit</td></tr>
+            </tbody>
+          </table></div>
+          <p style="margin:11px 0 0">Mit 14 von 30 Punkten ist „<strong>Alternativen, Schwierigkeitsgrad, Eigenanteil</strong>" die mit Abstand schwerste Achse. Genau dort setzen die Fachexperten der Dualen Partner an — nicht bei Definitionen, sondern bei Entscheidungen.</p>
+        </div>
+      </div>
+
+      <div class="blk v3">
+        <div class="blk-h"><h3>Notenskala</h3><span class="chip l3">Kontext</span></div>
+        <div class="blk-b">
+          <p style="margin:0">1,0 = 100 %, 4,0 = 50 %. Zwischen 4,0 und 1,0 liegen also 50 Prozentpunkte — die mündlichen 70 % entscheiden die Note praktisch allein. Ein souverän beantworteter Grundlagenblock ist mehr wert als eine schönere Folie.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 1 ============ -->
+  <section id="kommission">
+    <div class="sec-head">
+      <div class="eyebrow">Teil 1</div>
+      <h2>Prüfungskommission PK5</h2>
+      <p>Was sich öffentlich belegen lässt — und was nicht. Ich habe die drei Fachexperten der Dualen Partner nicht zweifelsfrei identifizieren können; wo ich rate, steht es dabei.</p>
+    </div>
+
+    <div class="people">
+      <div class="p-card">
+        <h4>Prof. Dr. Katharina Nerz</h4>
+        <p class="p-role">Vorsitz · bestätigt</p>
+        <p>Professorin für <strong>Embedded Systems</strong> an der DHBW Stuttgart (Lerchenstr. 1, Raum B1.26). Engagiert im <strong>Quantum Technology Lab</strong> der Hochschule, das Experimente zur Quantentechnologie für Embedded Systems, Informatik und Elektrotechnik bereitstellt; Quantentechnologien in Forschung und Lehre sind ihr Feld.</p>
+        <p class="verdict">→ Als Vorsitzende moderiert sie und achtet auf Fairness. Ihre eigenen Fragen kommen am ehesten aus der <strong>Embedded-/Informatik-Ecke</strong>: OSI-Modell, Zustandsautomaten, serielle Übertragung, Algorithmen und Komplexität, Software-Architektur. Quantentechnologie ist themenfremd — damit rechne nicht.</p>
+      </div>
+
+      <div class="p-card">
+        <h4>Prof. Dr.-Ing. Helene Kasjanow</h4>
+        <p class="p-role">Vertretung Vorsitz · bestätigt</p>
+        <p>Studiengangsleiterin <strong>Elektrotechnik und Informationstechnik</strong> an der DHBW Stuttgart. Dipl.-Ing. Elektrotechnik mit Schwerpunkt <strong>Energieversorgung und Hochspannungstechnik</strong> (Leibniz Universität Hannover, 1997–2002), zuvor Bosch Engineering GmbH.</p>
+        <p class="verdict">→ Sie ist nur <em>Vertretung</em>. Aber wenn sie einspringt, wird der elektrotechnische Teil deiner DGUV-Arbeit deutlich schärfer geprüft: <strong>Netzformen, Schleifenimpedanz, Abschaltbedingungen, Grenzwerte</strong>. Bereite diesen Block so vor, als säße sie im Raum.</p>
+      </div>
+
+      <div class="p-card unk">
+        <h4>Marius Maier, B. Eng.</h4>
+        <p class="p-role">Prüfer · Fachexperte Dualer Partner · nicht identifiziert</p>
+        <p>Zu häufiger Name; keine belastbare Zuordnung gefunden. Der Titel <strong>B. Eng.</strong> deutet auf einen selbst dual ausgebildeten, eher jüngeren Praktiker hin — also jemand, der denselben Studiengang durchlaufen hat und weiß, wie eine T2000 entsteht.</p>
+        <p class="verdict">→ Erwarte <strong>Umsetzungsfragen</strong>: „Wie haben Sie das getestet?", „Wie lange läuft das?", „Was passiert bei fehlerhaften Exportdaten?"</p>
+      </div>
+
+      <div class="p-card unk">
+        <h4>Dipl.-Ing. (FH) Andreas Heid</h4>
+        <p class="p-role">Prüfer · Fachexperte Dualer Partner · nicht identifiziert</p>
+        <p>Keine belastbare Zuordnung gefunden. Der Abschluss <strong>Dipl.-Ing. (FH)</strong> ist ein vor 2010er-Umstellung erworbener Grad — also mit hoher Wahrscheinlichkeit der erfahrenste Praktiker in der Runde, mit 15+ Jahren Anlagenerfahrung.</p>
+        <p class="verdict">→ Das ist der gefährlichste Fragesteller für die <strong>DGUV-Arbeit</strong>. Jemand mit dieser Vita hat selbst Anlagen geprüft und abgenommen. Er fragt nicht nach Definitionen, sondern: „Wer unterschreibt das Protokoll?", „Was machen Sie, wenn der Messwert knapp über dem Grenzwert liegt?"</p>
+      </div>
+
+      <div class="p-card unk">
+        <h4>Manuel Mukkenfuß, M.Sc.</h4>
+        <p class="p-role">Prüfer · Fachexperte Dualer Partner · unsicher</p>
+        <p>Es gibt einen öffentlich auffindbaren Manuel Mukkenfuß im Umfeld <strong>EnBW / Digitalisierung in der Bildung</strong> mit DHBW-Bezug — ob das dieselbe Person ist, konnte ich <strong>nicht verifizieren</strong>. Baue keine Strategie darauf.</p>
+        <p class="verdict">→ Behandle ihn wie die anderen Dualen Partner: praxisnahe Fragen zu Nutzen, Übertragbarkeit und Wirtschaftlichkeit deiner Tools.</p>
+      </div>
+
+      <div class="p-card unk">
+        <h4>Jonas Weihing, M.Sc.</h4>
+        <p class="p-role">Vertretung Prüfende · teilbestätigt</p>
+        <p>Im Ansprechpersonenverzeichnis der DHBW Stuttgart geführt (<span class="mono">jonas.weihing@dhbw-stuttgart.de</span>). Fachgebiet ließ sich nicht ermitteln — die Hochschulseiten waren aus dieser Umgebung nicht abrufbar.</p>
+        <p class="verdict">→ Nur Vertretung. Niedrige Priorität.</p>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:18px">
+      <p class="lab">Was die Zusammensetzung dir sagt</p>
+      <p>Eine Embedded-Systems-Professorin im Vorsitz und drei Praktiker aus der Industrie. Das heißt: <strong>die Theoriefragen kommen aus der Informatik-/Embedded-Richtung, die Härte aus der Praxis.</strong> Deine DGUV-Arbeit ist elektrotechnisch, deine PROFINET-Arbeit informationstechnisch — die Kommission deckt beides ab, und keine der beiden Arbeiten hat einen „blinden Fleck", in dem du dich verstecken könntest.</p>
+    </div>
+  </section>
+
+  <!-- ============ 2 ============ -->
+  <section id="dguv">
+    <div class="sec-head">
+      <div class="eyebrow">Teil 2 · Arbeit A</div>
+      <h2>Teilautomatisiertes DGUV-V3-Prüfkonzept</h2>
+      <p>Acht Grundlagenblöcke. Die drei elektrotechnischen zuerst — dort ist die Prüfungswahrscheinlichkeit am höchsten, weil sie fachlich am eindeutigsten abfragbar sind.</p>
+    </div>
+
+    <div class="blocks">
+
+      <!-- A1 -->
+      <div class="blk v1">
+        <div class="blk-h"><h3>A1 · DGUV Vorschrift 3 — Rechtsrahmen und Prüfpflichten</h3><span class="chip l1">Kern</span></div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>§ 3 DGUV V3:</strong> Der Unternehmer muss den ordnungsgemäßen Zustand elektrischer Anlagen und Betriebsmittel gewährleisten. Errichtung, Änderung und Instandhaltung nur durch eine <strong>Elektrofachkraft</strong> oder unter deren fachlicher Leitung und Aufsicht.</li>
+              <li><strong>§ 5 DGUV V3:</strong> Prüfung vor der ersten Inbetriebnahme, nach Änderung und Instandsetzung, sowie in <strong>wiederkehrenden Zeitabständen</strong>.</li>
+              <li><strong>Fristen kommen nicht aus der DGUV V3 allein</strong>, sondern aus der <strong>Gefährdungsbeurteilung nach § 3 BetrSichV</strong>. Die Durchführungsanweisung zur DGUV V3 liefert nur Richtwerte.</li>
+              <li>Ortsfeste elektrische Anlagen (dein Fall: Förderanlagen): <strong>4 Jahre</strong>. Anlagen besonderer Art nach <strong>DIN VDE 0100 Gruppe 700</strong>: 1 Jahr.</li>
+              <li><strong>Dokumentation:</strong> § 5 DGUV V3 + § 14 BetrSichV. Zweck ist der <strong>Entlastungsbeweis</strong> des Unternehmers im Schadensfall — deshalb ist die Datenintegrität deines Protokolls kein Komfort-, sondern ein Haftungsthema.</li>
+              <li>Pflichtbestandteile eines normkonformen Protokolls: Identifikation des Prüflings (BMK), Prüfumfang, Messverfahren, Messwerte <em>mit</em> Grenzwerten, gutachterliche Bewertung durch die verantwortliche Elektrofachkraft.</li>
+              <li><strong>DGUV Information 203-071</strong> („Wiederkehrende Prüfungen elektrischer Anlagen und Betriebsmittel") ist deine Quelle für die Protokollanforderungen — kenne den Titel.</li>
+            </ul>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Wer legt die Prüffrist fest — die DGUV?</q><span class="ans">Nein. Der Unternehmer über die Gefährdungsbeurteilung nach § 3 BetrSichV. Die DGUV V3 gibt in der Durchführungsanweisung Richtwerte (4 Jahre), von denen begründet abgewichen werden darf — nach oben wie nach unten.</span></li>
+              <li><q>Was ist eine Elektrofachkraft?</q><span class="ans">Wer aufgrund fachlicher Ausbildung, Kenntnisse und Erfahrung sowie Kenntnis der einschlägigen Normen die übertragenen Arbeiten beurteilen und mögliche Gefahren erkennen kann. Definition steht in § 2 DGUV V3.</span></li>
+              <li><q>Warum ist Ihr Tool haftungsrelevant?</q><span class="ans">Weil das Protokoll der Entlastungsbeweis ist. Ein Zahlendreher entwertet ihn. Mein Tool eliminiert genau den Übertragungsschritt, der diesen Fehler erzeugt.</span></li>
+              <li><q>Ihr Tool füllt das Protokoll vor. Wer haftet, wenn die EPLAN-Daten falsch waren?</q><span class="ans">Die prüfende Elektrofachkraft — sie bewertet und unterschreibt. Mein Tool ist Vorbereitungshilfe, keine Prüfinstanz; deshalb bleiben alle messwertführenden Spalten leer und werden ausgegraut.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- A2 -->
+      <div class="blk v1">
+        <div class="blk-h"><h3>A2 · Schutzleiterwiderstand R<sub>SL</sub></h3><span class="chip l1">Kern</span></div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li>Der PE verbindet alle berührbaren leitfähigen Gehäuseteile mit Erdpotenzial. Bei einem Isolationsdefekt (Körperschluss) entsteht ein <strong>geschlossener Fehlerstromkreis</strong>.</li>
+              <li><strong>FI (RCD):</strong> Personenschutz. Vergleicht Hin- und Rückstrom, löst bei Differenzströmen ab typ. <strong>30 mA</strong> aus (Zusatzschutz). <strong>LS (MCB):</strong> Leitungs- und Kurzschlussschutz, braucht einen <em>hohen</em> Strom für die magnetische Schnellauslösung.</li>
+              <li><strong>Schleifenimpedanz Z<sub>S</sub></strong> = gesamter Wechselstromwiderstand des Fehlerkreises: Quelle → Außenleiter → Fehlerstelle → PE → zurück. Nur bei kleinem Z<sub>S</sub> wird der Strom groß genug zum Auslösen. R<sub>SL</sub> ist ein <em>Anteil</em> davon.</li>
+              <li><strong>Leiterwiderstand:</strong> <span class="mono">R = l / (κ · A)</span> mit κ<sub>Cu</sub> ≈ <strong>56 m/(Ω·mm²)</strong>. Umgekehrt: ρ = 1/κ ≈ 0,0178 Ω·mm²/m.</li>
+              <li><strong>Messung:</strong> im <strong>spannungsfreien</strong> Zustand, mit definiertem Prüfstrom. Klemme an Referenzpunkt (PE-Schiene), mit der Prüfspitze die leitfähigen Stellen abtasten.</li>
+            </ul>
+          </div>
+          <div class="gapbox">
+            <p class="lab">Nicht in deiner Arbeit — aber sicher gefragt</p>
+            <p><strong>Prüfstrom und Grenzwerte.</strong> Du schreibst nur „definierter Prüfstrom". Nach DIN VDE 0701-0702 (ortsveränderliche Betriebsmittel): mind. <span class="mono">200 mA</span>, Grenzwert <span class="mono">0,3 Ω</span> bis 5 m Leitungslänge, <span class="mono">+0,1 Ω</span> je weitere 7,5 m, max. <span class="mono">1 Ω</span>. Bei ortsfesten Anlagen (dein Fall) wird stattdessen die <strong>Durchgängigkeit</strong> geprüft und über die <strong>Abschaltbedingung</strong> bewertet — deshalb rechnest du den Sollwert aus l und A.</p>
+            <p><strong>Abschaltbedingung im TN-System:</strong> <span class="mono">Z<sub>S</sub> · I<sub>a</sub> ≤ U<sub>0</sub></span>. Abschaltzeiten nach DIN VDE 0100-410: <span class="mono">≤ 0,4 s</span> für Endstromkreise bis 32 A bei 230 V, <span class="mono">≤ 5 s</span> für Verteilungsstromkreise.</p>
+            <p><strong>Netzformen:</strong> TN-S, TN-C, TN-C-S, TT, IT. Kommen in deiner Arbeit gar nicht vor, sind aber die Voraussetzung dafür, überhaupt über Schutzmaßnahmen zu reden. → siehe Teil 5.</p>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Rechnen Sie mir den Sollwert für 40 m Kupferleitung mit 4 mm² vor.</q><span class="ans">R = l/(κ·A) = 40 / (56 · 4) = 40/224 ≈ <strong>0,179 Ω</strong>, also rund 179 mΩ. Übe das mit zwei, drei Zahlenpaaren — das ist die klassische Rechenfrage.</span></li>
+              <li><q>Warum messen Sie spannungsfrei?</q><span class="ans">Sonst überlagert die Betriebsspannung die Messung, das Messgerät wird zerstört und es besteht Lebensgefahr. Fünf Sicherheitsregeln: freischalten, gegen Wiedereinschalten sichern, Spannungsfreiheit feststellen, erden und kurzschließen, benachbarte unter Spannung stehende Teile abdecken.</span></li>
+              <li><q>Warum reicht ein FI nicht aus, wenn der Schutzleiter unterbrochen ist?</q><span class="ans">Bei unterbrochenem PE fließt beim Körperschluss zunächst gar kein Fehlerstrom — das Gehäuse steht unter Spannung, ohne dass etwas auslöst. Erst wenn ein Mensch es berührt, entsteht der Differenzstrom. Der FI schützt dann noch, aber die Berührung ist bereits passiert. Deshalb wird R<sub>SL</sub> überhaupt gemessen.</span></li>
+              <li><q>Warum interessiert Sie der Querschnitt aus EPLAN so sehr?</q><span class="ans">Weil der zulässige Grenzwert direkt aus l und A folgt. Ein falsch abgetippter Querschnitt erzeugt einen falschen Grenzwert — und damit eine Prüfung, die formal bestanden ist, obwohl sie es nicht sein dürfte.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- A3 -->
+      <div class="blk v1">
+        <div class="blk-h"><h3>A3 · Isolationswiderstand R<sub>ISO</sub></h3><span class="chip l1">Kern</span></div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li>R<sub>ISO</sub> ist der ohmsche Widerstand des <strong>Dielektrikums</strong> zwischen aktiven Leitern und PE. Funktion: hochohmige Barriere, die den Elektronenfluss auf den vorgesehenen Pfad zwingt.</li>
+              <li>Degradation durch <strong>thermische Überlastung, mechanische Reibung</strong> (an der Förderstrecke!) und <strong>Feuchtigkeit</strong>. Folge: Kriech-/Fehlerströme → Verlustleistung → lokale Erwärmung → Brandgefahr.</li>
+              <li><strong>Ablauf:</strong> vom Netz trennen → Spannungsfreiheit feststellen → <strong>überspannungsempfindliche Komponenten</strong> (Frequenzumrichter, Elektronik) abklemmen oder Anschlüsse kurzschließen → messen zwischen den verbundenen aktiven Leitern und dem PE.</li>
+              <li>Prüfgerät legt <strong>Gleichspannung ≥ 500 V</strong> an, misst den Leckstrom, rechnet daraus R<sub>ISO</sub>.</li>
+            </ul>
+          </div>
+          <div class="gapbox">
+            <p class="lab">Nicht in deiner Arbeit — aber sicher gefragt</p>
+            <p><strong>Die Grenzwerte nach DIN VDE 0100-600:</strong> SELV/PELV → 250 V DC, ≥ <span class="mono">0,5 MΩ</span>. Bis 500 V Nennspannung (Normalfall) → 500 V DC, ≥ <span class="mono">1,0 MΩ</span>. Über 500 V → 1000 V DC, ≥ <span class="mono">1,0 MΩ</span>.</p>
+            <p><strong>Warum Gleichspannung und nicht Wechselspannung?</strong> Bei AC würden kapazitive Blindströme über die Leitungskapazität den echten Isolationsfehler überdecken. DC misst rein den ohmschen Anteil.</p>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Warum müssen Frequenzumrichter abgeklemmt werden?</q><span class="ans">Sie enthalten Halbleiter und Y-Kondensatoren gegen PE. 500 V DC zerstören die Halbleiter, und die Kondensatoren würden ohnehin einen zu niedrigen Widerstand vortäuschen. Alternativ: Ein- und Ausgänge kurzschließen, damit keine Spannungsdifferenz über den Bauteilen abfällt.</span></li>
+              <li><q>Ihr Messwert ist 0,8 MΩ. Bestanden?</q><span class="ans">Bei 500 V Nennspannung: nein — der Grenzwert ist 1,0 MΩ. Bei SELV/PELV mit 0,5 MΩ Grenzwert: ja. Die Antwort hängt vom Stromkreistyp ab, und genau deshalb muss der Prüfling im Protokoll eindeutig identifiziert sein.</span></li>
+              <li><q>Warum sinkt R<sub>ISO</sub> an einer Förderanlage stärker als in einem Büro?</q><span class="ans">Dauerhafte mechanische Bewegung und Reibung an Schleppketten und Energieführungen, thermische Zyklen durch Anlauf-/Bremsvorgänge, und in Lackier- oder Waschbereichen Feuchtigkeit. Das rechtfertigt auch die Prüfintervalle.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- A4 -->
+      <div class="blk v2">
+        <div class="blk-h"><h3>A4 · CAE-Datenmodellierung und EPLAN Electric P8</h3><span class="chip l2">Hoch</span></div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li>CAE-Systeme sind <strong>Datenbanken</strong>, keine Zeichenprogramme. Grundprinzip von EPLAN P8: <strong>strikte Trennung von grafischer Darstellung und dahinterliegender Datenbank</strong>.</li>
+              <li>Jedes physische Betriebsmittel ist ein <strong>Objekt mit Attributen</strong>: BMK, Montageort, Funktionsgruppe, Leiterquerschnitt, Leitungslänge.</li>
+              <li><strong>Exportwege:</strong> AML (XML-basiert, bidirektional, komplex) für vollständigen Datenaustausch; flache tabellarische Formate (CSV/Excel) für reine Attributlisten. Beim Export werden Objektbeziehungen in eine zweidimensionale Tabelle plattgedrückt — das ist die Ursache deines Zuordnungsproblems.</li>
+              <li>Dein fachlicher Primärschlüssel: <span class="mono">= Funktionsgruppe</span>, <span class="mono">+ Ortskennzeichen</span>, <span class="mono">- Betriebsmittelkennzeichen</span>. Beispiel: <span class="mono">==133_32_K17=004RF_024-WD1</span>.</li>
+            </ul>
+          </div>
+          <div class="warn">
+            <p class="lab">Die Frage, die du nicht verpatzen darfst</p>
+            <p>„Woher kommt die Systematik mit =, + und −?" → Aus <strong>DIN EN 81346-2</strong> (Klassifizierung und Kennzeichnung von Objekten; früher DIN EN 61346, davor DIN 40719). <span class="mono">=</span> Funktionsaspekt, <span class="mono">+</span> Ortsaspekt, <span class="mono">−</span> Produktaspekt. <strong>Die Norm steht nicht in deiner Arbeit</strong>, obwohl dein ganzer Algorithmus darauf aufbaut. Lern den Namen.</p>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Warum haben Sie Excel exportiert und nicht AML genommen?</q><span class="ans">AML transportiert Geometrie, Kinematik und Logik und ist tief verschachtelt. Ich brauche eine flache Attributliste — Kabelübersicht, Loopliste, Erdungsverbindungen. Der Beschriftungsexport liefert genau das, ist vom Anwender selbst konfigurierbar und erfordert keine AML-Toolchain. Für Modul 1 ist AML Overhead ohne Nutzen.</span></li>
+              <li><q>Was passiert, wenn EPLAN das Exportschema ändert?</q><span class="ans">Dann ist nur der jeweilige SourceReader betroffen. Genau dafür ist die Datenzugriffsschicht gekapselt — die fachliche Ableitungslogik im ZlpeBuilder bleibt unberührt.</span></li>
+              <li><q>Sie ziehen den Querschnitt aus der Typnummer. Was, wenn das nicht geht?</q><span class="ans">Dann bleibt das Feld leer und wird grau hinterlegt — bei Sonder- und Systemleitungen ist das der Fall. Lieber eine erkennbar offene Zelle als ein geratener Wert, weil daraus ein falscher Grenzwert würde.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- A5 -->
+      <div class="blk v2">
+        <div class="blk-h"><h3>A5 · Geräteschnittstellen, OSI und asynchrone serielle Übertragung</h3><span class="chip l2">Hoch</span></div>
+        <div class="blk-b">
+          <div class="warn">
+            <p class="lab">Achtung — hier liegt die Falle</p>
+            <p>Dieses Grundlagenkapitel gehört zu <strong>Modul 2, das du nicht umgesetzt hast</strong>. Ein aufmerksamer Prüfer fragt genau deshalb: „Sie schreiben zehn Seiten über UART, RS-232 und ASCII-Protokolle — und setzen es dann nicht um?" Antwort siehe Teil 6. Aber <strong>fachlich musst du es trotzdem können</strong>, denn du hast es als Grundlage deklariert.</p>
+          </div>
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>OSI:</strong> 7 Schichten, definiert von der ISO. Kein Protokoll, sondern ein <strong>Ordnungsrahmen</strong>. Jede Schicht bietet der darüberliegenden Dienste an und verbirgt die Details der darunterliegenden. Von unten: Bitübertragung, Sicherung, Vermittlung, Transport, Sitzung, Darstellung, Anwendung.</li>
+              <li>In deiner Arbeit relevant: <strong>Schicht 1 und 2</strong> (asynchron seriell) und <strong>Schicht 7</strong> (Bedeutung des Datenstroms). 3–6 entfallen, weil es eine <strong>Punkt-zu-Punkt-Verbindung ohne Netz- und Sitzungsverwaltung</strong> ist.</li>
+              <li><strong>Asynchron</strong> = kein gemeinsames Taktsignal. Sender und Empfänger müssen vorab identisch parametriert sein. Der Empfänger erkennt den Zeichenbeginn am <strong>Startbit</strong>, tastet die Datenbits <strong>in der Bitmitte</strong> ab, erkennt das Ende an Stoppbit(s). Optionales Paritätsbit für einfache Fehlererkennung.</li>
+              <li><strong>8N1</strong> = 8 Datenbits, keine Parität, 1 Stoppbit. Mit Startbit sind das <strong>10 Bit pro Zeichen</strong>.</li>
+              <li><strong>UART</strong> setzt das hardwareseitig um. Physikalisch: <strong>RS-232</strong> (unsymmetrisch, ±3…15 V, Punkt-zu-Punkt, ~15 m) vs. <strong>RS-485</strong> (differenziell, busfähig, bis 1200 m, störfester). Moderne Rechner: USB-Adapter mit <strong>virtuellem COM-Port</strong>.</li>
+              <li><strong>Anwendungsschicht:</strong> Messgeräte senden ASCII-Datenströme, terminiert mit <span class="mono">\r\n</span>, meist mit Kennung der Messgröße, Einheit und Status. <strong>Kein einheitlicher Standard</strong> — jeder Hersteller kocht sein eigenes, teils undokumentiertes Format. Das ist dein zentrales Argument gegen Modul 2.</li>
+            </ul>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Wie lange dauert die Übertragung eines 20-Zeichen-Strings bei 9600 Baud, 8N1?</q><span class="ans">20 Zeichen · 10 Bit = 200 Bit; 200 / 9600 ≈ <strong>20,8 ms</strong>. Die Rechnung ist der Klassiker — 8N1 heißt 10 Bit pro Zeichen, nicht 8.</span></li>
+              <li><q>Warum tastet der Empfänger in der Bitmitte ab?</q><span class="ans">Weil an den Flanken die Signalpegel unsicher sind und sich Taktabweichungen zwischen Sender und Empfänger dort am stärksten auswirken. In der Bitmitte ist die Toleranz gegen Drift am größten — typisch wird 16-fach überabgetastet.</span></li>
+              <li><q>RS-232 oder RS-485 für eine Förderanlage — was nehmen Sie?</q><span class="ans">RS-485. Differenzielle Übertragung ist gegen die Gleichtaktstörungen im Umfeld von Frequenzumrichtern deutlich unempfindlicher, die Reichweite passt zur Anlagengröße, und mehrere Teilnehmer sind an einem Bus möglich.</span></li>
+              <li><q>Wozu die Parität, wenn sie nur ein Bit ist?</q><span class="ans">Sie erkennt eine ungerade Anzahl gekippter Bits — bei einem Bitfehler also zuverlässig, bei zwei nicht. Sie kann nicht korrigieren. Für echte Sicherung braucht es CRC auf Schicht 2.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- A6 -->
+      <div class="blk v2">
+        <div class="blk-h"><h3>A6 · Softwaretechnische Grundlagen: C#, Asynchronität, Zustandsautomaten</h3><span class="chip l2">Hoch</span></div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>C#</strong> ist statisch typisiert und streng objektorientiert. Quellcode wird <strong>nicht</strong> direkt in Maschinencode übersetzt, sondern in eine <strong>Zwischensprache (IL)</strong>. Zur Laufzeit macht die <strong>CLR</strong> daraus per <strong>JIT</strong> nativen Code.</li>
+              <li>Vorteile im Industrieumfeld: statische Typisierung fängt Fehler zur <strong>Übersetzungszeit</strong>; der <strong>Garbage Collector</strong> verhindert Speicherlecks im Dauerbetrieb.</li>
+              <li><strong>Ereignissteuerung:</strong> Ein synchroner Programmablauf, der aktiv auf Peripheriedaten wartet, blockiert den Hauptthread. Stattdessen registriert man <strong>Event-Handler</strong>, die asynchron aufgerufen werden, wenn das Ereignis eintritt.</li>
+              <li><strong>Zustandsautomat:</strong> System ist zu jedem Zeitpunkt in genau einem definierten Zustand; Übergänge nur durch vordefinierte Ereignisse. Verhindert undefiniertes Systemverhalten. Darstellung als Zustandsübergangsdiagramm nach <strong>UML</strong>.</li>
+              <li><strong>Moore:</strong> Ausgabe hängt nur vom Zustand ab, <span class="mono">z<sub>t</sub> = f(s<sub>t</sub>)</span>, Notation <em>am Zustand</em>. <strong>Mealy:</strong> Ausgabe hängt zusätzlich vom Eingabevektor ab, <span class="mono">z<sub>t</sub> = f(x<sub>t</sub>, s<sub>t</sub>)</span>, Notation <em>am Übergang</em>. Mealy reagiert schneller (noch im selben Takt), Moore ist zustandsorientiert und stabiler. <strong>Ineinander überführbar, gleich ausdrucksmächtig.</strong></li>
+            </ul>
+          </div>
+          <div class="warn">
+            <p class="lab">Zweite Falle</p>
+            <p>Mealy und Moore stehen in deinem Grundlagenkapitel — <strong>und werden in der Arbeit nirgends angewendet</strong>. Das ist die zweitwahrscheinlichste „Warum steht das da?"-Frage nach Modul 2. Halte eine ehrliche Antwort bereit (Teil 6).</p>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Erklären Sie den Unterschied zwischen Mealy und Moore an einem Beispiel.</q><span class="ans">Ampel = Moore: die Lampe hängt nur vom Zustand ab. Getränkeautomat = Mealy: dieselbe Münze löst je nach bisherigem Guthaben eine andere Ausgabe aus. Mealy braucht meist weniger Zustände, kann aber bei asynchronen Eingängen Glitches zeigen.</span></li>
+              <li><q>Warum blockiert Ihre Oberfläche nicht, obwohl die Verarbeitung Sekunden dauert?</q><span class="ans">Die Verarbeitung läuft auf einem Hintergrund-Thread. Die Statusmeldungen stammen daher aus einem anderen Thread als die UI — deshalb marshalle ich sie über einen Invoke-Aufruf in den Kontext des UI-Threads zurück. Windows Forms erlaubt Zugriff auf Steuerelemente nur aus dem erzeugenden Thread.</span></li>
+              <li><q>Was macht der JIT-Compiler und was kostet er?</q><span class="ans">Er übersetzt IL beim ersten Aufruf einer Methode in nativen Code und cacht das Ergebnis. Kosten: Verzögerung beim Kaltstart. Nutzen: plattformspezifische Optimierung zur Laufzeit. Für ein Desktop-Werkzeug ist der Kaltstart-Overhead irrelevant.</span></li>
+              <li><q>Was ist der Unterschied zwischen Nebenläufigkeit und Parallelität?</q><span class="ans">Nebenläufigkeit ist das Strukturieren eines Programms in unabhängig fortschreitende Abläufe — geht auch auf einem Kern. Parallelität ist die echte gleichzeitige Ausführung auf mehreren Kernen. Mein Fall ist Nebenläufigkeit: ein Hintergrund-Thread, damit die UI reaktiv bleibt.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- A7 -->
+      <div class="blk v2">
+        <div class="blk-h"><h3>A7 · Architektur und Algorithmik deiner Umsetzung</h3><span class="chip l2">Hoch</span></div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>EVA-Prinzip</strong> (Eingabe–Verarbeitung–Ausgabe) als Ablaufgerüst, <strong>Drei-Schichten-Architektur</strong> (Präsentation / Verarbeitung / Datenzugriff) als Strukturgerüst. Zweck: <strong>Trennung der Zuständigkeiten</strong> → Änderungen an einem Exportformat treffen nur eine Komponente.</li>
+              <li>Komponenten: <span class="mono">Form1</span> (Präsentation), <span class="mono">SourceReaders</span> / <span class="mono">ExcelData</span> / <span class="mono">ZlpeBuilder</span> (Verarbeitung), <span class="mono">ProtokollFiller</span> (Datenzugriff).</li>
+              <li><strong>NPOI</strong> statt Office-Interop: unterstützt .xls/.xlsx/.xlsm <strong>ohne installiertes Office</strong>, deutlich schneller, keine COM-Abhängigkeit und keine hängenden Excel-Prozesse.</li>
+              <li><strong>Fachliche Kernerkenntnis:</strong> Ein Messpunkt im Blatt „ZLPE IK RISO" entspricht <strong>nicht einem Betriebsmittel</strong>, sondern einem <strong>Leistungskabel-Segment eines Stromkreises</strong>. Das ist dein eigentlicher Modellierungsbeitrag.</li>
+              <li><strong>Kettenverfolgung als Wegfindung im Verbindungsgraphen:</strong> rekursiv vom Kabel über gemeinsame Anschlussknoten rückwärts, bis ein Schaltschrank-Knoten oder eine bekannte Loopliste-Funktionsgruppe erreicht ist. Abbruch über <strong>Suchtiefe 8</strong> und ein <strong>Visited-Set</strong> gegen Zyklen.</li>
+              <li><strong>Dreistufige Ordnung:</strong> Ortskennzeichen (Schrank) → speisendes Schutzorgan → Position entlang des Energiebusses. Das Schutzorgan bekommt Busposition 0 und steht damit an erster Stelle seiner Gruppe. Ziel: der Prüfer arbeitet das Protokoll in der Reihenfolge ab, in der er die Anlage abschreitet.</li>
+              <li><strong>Formaterhaltendes Schreiben:</strong> Vorlage wird befüllt, nicht neu erzeugt. Format des ersten Datenblocks wird einmalig erfasst und auf jede neue Zeile angewandt. Ausgegraut wird jede leere Zelle mit gesetztem Rahmen. Je Basisstil nur <em>eine</em> graue Variante, zwischengespeichert — wegen der Excel-Obergrenze von rund 64.000 Zellformaten.</li>
+            </ul>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Warum Suchtiefe 8? Warum nicht 5 oder 50?</q><span class="ans">Sei ehrlich: empirisch aus den realen Kabelketten der Anlage abgeleitet — die längste beobachtete Kette war deutlich kürzer. Die Grenze ist eine Schutzmaßnahme gegen Endlosrekursion, kein fachlicher Wert. Sauberer wäre, sie als Konfigurationsparameter zu führen und bei Erreichen eine Warnung ins Live-Protokoll zu schreiben, statt still <span class="mono">null</span> zurückzugeben.</span></li>
+              <li><q>Warum rekursiv und nicht iterativ?</q><span class="ans">Die Wegfindung ist eine Tiefensuche; rekursiv ist sie am direktesten lesbar. Iterativ mit eigenem Stack wäre äquivalent und stack-sicher — bei Tiefe 8 aber unnötig. Bei unbegrenzter Tiefe würde ich iterativ arbeiten.</span></li>
+              <li><q>Was passiert, wenn zwei Kabel sich gegenseitig referenzieren?</q><span class="ans">Das <span class="mono">visited</span>-HashSet fängt das ab: <span class="mono">visited.Add(k)</span> liefert <span class="mono">false</span>, wenn das Kabel schon besucht wurde, und die Rekursion bricht ab. Ohne das Set würde ein Ring zur Endlosschleife.</span></li>
+              <li><q>Warum nur „-FC1" je Stromkreis?</q><span class="ans">Weil je Abgang genau ein Überstromschutzorgan die Prüfstelle definiert. Höhere FC-Nummern sind nachgelagerte Absicherungen innerhalb desselben Kreises und würden Doppeleinträge im Protokoll erzeugen. Dasselbe Prinzip hinter dem Filter für verschachtelte Sub-Sicherungen wie <span class="mono">-KF037-1FC1</span>.</span></li>
+              <li><q>Wie skaliert Ihr Verfahren?</q><span class="ans">Der Aufbau der Knotenindizes ist linear. Die Kettenverfolgung ist durch die Tiefengrenze beschränkt. Kritisch wäre nur, wenn sehr viele Kabel an einem gemeinsamen Knoten hängen — dann wächst der Verzweigungsgrad. In der geprüften Anlage mit mehreren hundert Einträgen liegt die Laufzeit im Sekundenbereich.</span></li>
+              <li><q>Warum grauen Sie leere Felder aus?</q><span class="ans">Damit der Prüfer vor Ort auf einen Blick sieht, was automatisch übernommen wurde und was er noch erfassen muss. Es macht den Automatisierungsgrad im Dokument selbst sichtbar — und verhindert, dass eine vergessene Zelle unbemerkt bleibt.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- A8 -->
+      <div class="blk v3">
+        <div class="blk-h"><h3>A8 · Erdung: POT → MESH-BN</h3><span class="chip l3">Mittel</span></div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li>Der EPLAN-Export nennt die Erdungsklasse <span class="mono">POT</span>, das Prüfprotokoll erwartet <span class="mono">MESH-BN</span>. Du hast das als <strong>zentrale Übersetzungsvorschrift</strong> hinterlegt, damit abweichende Anlagenkonventionen ergänzt werden können, ohne die Verarbeitungslogik anzufassen.</li>
+              <li><strong>MESH-BN</strong> = <em>Meshed Bonding Network</em>, ein vermaschtes Potentialausgleichsnetz. Der Begriff stammt aus <strong>EN 50310</strong> (Erdung und Potentialausgleich in Gebäuden mit informationstechnischen Einrichtungen), die auch CBN und IBN definiert.</li>
+              <li>Das Messdatenblatt „RPE" wird auf einem <strong>eigenen, direkten Ableitungsweg</strong> aus den Erdungsverbindungen befüllt — eine Zeile je Eintrag statt zwei.</li>
+            </ul>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Was ist ein vermaschtes Potentialausgleichsnetz und wozu?</q><span class="ans">Mehrfach verbundene Erdungsstruktur statt sternförmiger Einzelanbindung. Vorteil: niedrige Impedanz auch bei hohen Frequenzen, damit weniger Potentialdifferenzen zwischen Anlagenteilen — wichtig für EMV in einer Anlage voller Frequenzumrichter.</span></li>
+              <li><q>Warum eine Übersetzungstabelle statt einfach umzubenennen?</q><span class="ans">Weil die Benennung eine Anlagenkonvention ist, keine Eigenschaft der Software. Zentral hinterlegt lässt sich das Werkzeug auf andere Werke übertragen, indem man die Tabelle erweitert — nicht den Code.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ 3 ============ -->
+  <section id="profinet">
+    <div class="sec-head">
+      <div class="eyebrow">Teil 3 · Arbeit B</div>
+      <h2>PROFINET-Topologievergleich EPLAN ↔ TIA Portal</h2>
+      <p>Diese Arbeit ist abgeschlossen und vollständig — damit ist sie die bessere Angriffsfläche für Detailfragen. Zehn Blöcke.</p>
+    </div>
+
+    <div class="blocks">
+
+      <div class="blk v2">
+        <div class="blk-h"><h3>B1 · Industrielle Kommunikation und Automatisierungspyramide</h3><span class="chip l2">Hoch</span></div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>IT</strong> optimiert auf Datendurchsatz, <strong>OT</strong> auf <strong>Echtzeitfähigkeit und Verfügbarkeit</strong>. Das ist der Kerngegensatz.</li>
+              <li>Automatisierungspyramide von unten: Fertigungs-/Prozessebene → Feldebene (Sensoren/Aktoren) → Steuerungsebene (SPS) → Leitebene → Unternehmensebene (ERP).</li>
+              <li>Historisch Feldbusse (PROFIBUS, CAN) — limitiert in Bandbreite und Durchgängigkeit. Trend: <strong>Industrial Ethernet</strong>, nutzt die physikalischen Schichten von Standard-Ethernet, erreicht Echtzeit über spezielle Protokolle. Die Ebenen der Pyramide <strong>verschmelzen</strong> zunehmend.</li>
+              <li><strong>Echtzeit heißt nicht schnell, sondern deterministisch</strong> — garantierte maximale Reaktionszeit. Das ist die Standardnachfrage.</li>
+            </ul>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Was bedeutet „echtzeitfähig"?</q><span class="ans">Dass eine Reaktion innerhalb einer garantierten Zeitschranke erfolgt — nicht, dass sie schnell ist. Harte Echtzeit: Überschreitung ist ein Systemfehler. Weiche Echtzeit: Überschreitung mindert nur die Qualität.</span></li>
+              <li><q>Warum löst Industrial Ethernet den Feldbus ab?</q><span class="ans">Höhere Bandbreite, durchgängige Adressierung von der Feldebene bis zur Cloud, Standard-Hardware, und Diagnose über etablierte IT-Werkzeuge. Der Feldbus brauchte an jeder Ebenengrenze ein Gateway — genau der Medienbruch, den Industrie 4.0 auflösen will.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="blk v1">
+        <div class="blk-h"><h3>B2 · PROFINET-Architektur, OSI-Einordnung und Echtzeitklassen</h3><span class="chip l1">Kern</span></div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li>PROFINET ist der offene Industrial-Ethernet-Standard der Nutzerorganisation <strong>PROFIBUS &amp; PROFINET International (PI)</strong>. Nutzt IT-Standards (TCP/IP) und erweitert sie um harte Echtzeit.</li>
+              <li><strong>Schicht 1+2:</strong> Standard-Ethernet nach <strong>IEEE 802.3</strong>.</li>
+              <li><strong>NRT</strong> (TCP/IP, UDP/IP): Parameter-Download beim Hochlauf, Diagnose. Keine garantierten Antwortzeiten („Best Effort").</li>
+              <li><strong>RT:</strong> zyklische Prozessdaten und Alarme. <strong>Umgeht Schicht 3 und 4</strong> und sitzt direkt auf Ethernet (Schicht 2) → weniger Protokoll-Overhead, geringere Latenz. Priorisierung über <strong>VLAN-Tags nach IEEE 802.1Q</strong>, damit Switches diese Pakete bevorzugen. Typische Zykluszeiten <strong>1–10 ms</strong>.</li>
+              <li><strong>IRT:</strong> für Achsensynchronisation u. ä. Der Buszyklus wird in <strong>feste Zeitintervalle</strong> geteilt (reservierte Bandbreite), Jitter <strong>&lt; 1 µs</strong>.</li>
+              <li>VLAN trennt logisch zeitkritischen PROFINET-Verkehr von regulären IT-Daten auf demselben physischen Netz.</li>
+            </ul>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Warum umgeht RT die Schichten 3 und 4?</q><span class="ans">IP- und TCP-Header kosten zusammen 40 Byte und, wichtiger, Verarbeitungszeit im Stack. Bei zyklischen Prozessdaten von wenigen Byte ist der Overhead unverhältnismäßig, und TCP-Mechanismen wie Retransmission sind kontraproduktiv: ein wiederholtes Prozessdatum wäre veraltet. Stattdessen wird zyklisch neu gesendet.</span></li>
+              <li><q>Wie garantiert IRT den Jitter, wenn RT das nicht kann?</q><span class="ans">Durch Zeitschlitzverfahren: Der Buszyklus wird geplant in einen reservierten IRT-Bereich und einen offenen Bereich geteilt. Im reservierten Fenster darf nichts anderes senden. Das setzt aber synchronisierte Switches und eine projektierte Topologie voraus — RT arbeitet mit Standard-Switches, IRT nicht.</span></li>
+              <li><q>Was passiert, wenn ein RT-Paket verloren geht?</q><span class="ans">Nichts Dramatisches — das nächste Zyklustelegramm kommt in wenigen Millisekunden. Bleiben mehrere aus (Watchdog, typisch das Dreifache der Aktualisierungszeit), geht das Device in den Fehlerzustand und der Controller meldet Stationsausfall.</span></li>
+            </ul>
+          </div>
+          <div class="gapbox">
+            <p class="lab">Nicht in deiner Arbeit — hohe Nachfragewahrscheinlichkeit</p>
+            <p><strong>Die drei Geräterollen:</strong> <em>IO-Controller</em> (die SPS, führt den Datenaustausch), <em>IO-Device</em> (dezentrales Feldgerät), <em>IO-Supervisor</em> (PG/PC für Inbetriebnahme und Diagnose). Diese Begriffe fehlen in deiner Arbeit vollständig — sie sind aber das PROFINET-Vokabular schlechthin.</p>
+            <p><strong>Conformance Classes:</strong> CC-A (RT, keine Topologieanforderung, WLAN möglich), CC-B (zusätzlich Netzwerkdiagnose und Topologie über SNMP/LLDP, Gerätetausch ohne Engineering-Tool), CC-C (zusätzlich IRT mit geplanter Bandbreitenreservierung). <strong>Dein Gerätetausch-Szenario setzt mindestens CC-B voraus</strong> — ein starker Punkt, wenn du ihn von selbst nennst.</p>
+            <p><strong>PROFINET vs. PROFIBUS:</strong> Ethernet statt RS-485, Provider/Consumer statt Master/Slave, kein Terminierungswiderstand, deutlich höhere Teilnehmerzahl und Bandbreite.</p>
+            <p><strong>EtherType von PROFINET RT:</strong> <span class="mono">0x8892</span>. Nice-to-know, wirkt aber souverän.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="blk v1">
+        <div class="blk-h"><h3>B3 · LLDP, DCP und der automatisierte Gerätetausch</h3><span class="chip l1">Kern</span></div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>LLDP</strong> (Link Layer Discovery Protocol, <strong>IEEE 802.1AB</strong>): Jedes PROFINET-Gerät tauscht zyklisch mit seinen <strong>direkten Nachbarn</strong> Identifikationsdaten aus — eigene Geräte-ID und die exakte Portnummer. Damit weiß jedes Gerät, wer an welchem seiner Ports hängt. <strong>Das ist die technische Grundlage jeder Topologieerkennung — und damit deiner ganzen Arbeit.</strong></li>
+              <li><strong>DCP</strong> (Discovery and Configuration Protocol): Layer-2-Protokoll zur Vergabe und Abfrage von PROFINET-Gerätename und IP-Adresse. PRONETA nutzt DCP + LLDP zum Scannen.</li>
+              <li><strong>Gerätetausch ohne Wechselmedium:</strong> Dem IO-Controller ist die Soll-Topologie bekannt. Wird ein defektes Gerät durch ein Ersatzgerät <em>ohne PROFINET-Namen</em> ersetzt, meldet der Nachbar per LLDP, dass an seinem Port ein neuer Teilnehmer hängt. Der Controller vergleicht die Positionsinformation mit der Soll-Topologie, identifiziert das Gerät <strong>topologisch eindeutig</strong>, vergibt per DCP den Namen und parametriert es automatisch.</li>
+              <li>Deshalb ist eine gepflegte Topologie kein Dokumentationsluxus, sondern <strong>Funktionsvoraussetzung</strong>. Das ist die Kernbegründung deiner Arbeit.</li>
+            </ul>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Warum ist eine falsche Topologie überhaupt ein Problem, wenn die Anlage läuft?</q><span class="ans">Weil zwei Funktionen kippen: der automatische Gerätetausch findet das Ersatzgerät nicht mehr topologisch eindeutig, und die Diagnose zeigt im Störungsfall den falschen Ort. Der Betrieb läuft — bis er es nicht mehr tut, und dann kostet die Fehlersuche Stillstand. Genau das ist der wirtschaftliche Hebel meines Tools.</span></li>
+              <li><q>Auf welcher OSI-Schicht arbeitet LLDP?</q><span class="ans">Schicht 2. Es wird nicht geroutet und bleibt bewusst auf das direkte Segment beschränkt — deshalb kennt jedes Gerät nur seine unmittelbaren Nachbarn, und daraus setzt sich die Gesamttopologie erst zusammen.</span></li>
+              <li><q>Sie lesen die Topologie aus dem TIA Portal. Ist das die reale Anlage?</q><span class="ans">Ehrlich: nein. Ich lese die <em>projektierte</em> Topologie aus der Hardwarekonfiguration. Die real per LLDP eingelesene Topologie käme aus dem Online-Zugriff oder aus PRONETA. Mein Tool vergleicht also EPLAN-Planung gegen TIA-Projektierung — zwei Engineering-Stände. Der Abgleich gegen die physische Anlage wäre der konsequente nächste Schritt.</span></li>
+            </ul>
+          </div>
+          <div class="warn">
+            <p class="lab">Diese Frage ist scharf — bereite sie ernsthaft vor</p>
+            <p>Deine Arbeit spricht mehrfach von der „eingelesenen Ist-Topologie" aus dem TIA Portal und stellt sie der „Soll-Topologie" aus EPLAN gegenüber. Streng genommen sind <strong>beides Planungsstände</strong>: TIA Portal enthält die <em>projektierte</em> Hardwarekonfiguration, nicht das, was tatsächlich verkabelt ist. Wenn ein Prüfer das bemerkt — und ein Praktiker <em>wird</em> es bemerken — dann gewinnst du mit einer souveränen Einordnung viel mehr, als du mit Verteidigen retten kannst. Sag es von dir aus im Referat oder in der ersten Antwort.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="blk v2">
+        <div class="blk-h"><h3>B4 · Netzwerktopologien und Switch-Integration</h3><span class="chip l2">Hoch</span></div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>Charakteristikum von PROFINET:</strong> Switch-Funktionalität ist <strong>in die Feldgeräte integriert</strong>. Die meisten Geräte haben mindestens zwei Ethernet-Ports, intern über einen Switch verbunden. Dadurch Linientopologie <strong>ohne externe Netzkomponenten</strong> — deutlich weniger Verkabelungsaufwand als die in der IT übliche Sterntopologie.</li>
+              <li>Die sieben Formen: <strong>Linie</strong> (minimaler Aufwand), <strong>Bus</strong>, <strong>Ring</strong> (Medienredundanz — bei Kabelbruch Umleitung), <strong>Stern</strong> (Ausfall eines Geräts betrifft nur dieses), <strong>Baum</strong>, <strong>Mesh</strong> (jeder mit jedem; unflexibel und schlecht erweiterbar), <strong>Hybrid</strong>.</li>
+              <li><strong>Der Preis der Linie:</strong> jeder Switch-Durchlauf kostet Latenz (einige µs pro Gerät), und ein Kabelbruch trennt alles Nachgelagerte ab. Das ist der Grund, warum es überhaupt Ringe gibt.</li>
+            </ul>
+          </div>
+          <div class="gapbox">
+            <p class="lab">Nicht in deiner Arbeit — sehr wahrscheinliche Nachfrage</p>
+            <p>Du schreibst „Ring: Medienredundanz", nennst aber <strong>nicht das Protokoll</strong>. Es heißt <strong>MRP</strong> (Media Redundancy Protocol, <strong>IEC 62439-2</strong>). Ein Gerät ist <em>Redundanz-Manager</em> und hält einen Port logisch blockiert, damit kein Kreis entsteht; bei Unterbrechung schaltet er ihn frei. Rekonfigurationszeit typisch <strong>≤ 200 ms</strong>. Für IRT gibt es <strong>MRPD</strong> (Media Redundancy for Planned Duplication) mit stoßfreier Umschaltung durch Doppelsendung.</p>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Warum in der Industrie Linie, in der IT Stern?</q><span class="ans">Anlagen sind räumlich linear angeordnet — die Fördertechnik verläuft als Strecke. Ein Sternnetz bräuchte für jedes Gerät ein Kabel zum zentralen Schrank; das vervielfacht Kabellänge und Schleppketten. Da PROFINET-Geräte den Switch eingebaut haben, kostet die Linie keine Zusatzhardware.</span></li>
+              <li><q>Wie viele Geräte darf eine Linie haben?</q><span class="ans">Begrenzt durch die aufsummierte Durchlaufverzögerung im Verhältnis zur Aktualisierungszeit. Als Faustregel gelten bei 1-ms-Zyklen einige Dutzend Geräte; die Projektierung im TIA Portal rechnet es aus. Präziser antwortest du mit „das prüft die Topologieplanung", statt eine Zahl zu raten.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="blk v1">
+        <div class="blk-h"><h3>B5 · Algorithmen: Hash-Matching, DFS, Zwei-Phasen-Abgleich</h3><span class="chip l1">Kern</span></div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>Das ist die Antwort auf deine Forschungsfrage 2</strong> — also der wissenschaftliche Kern der Arbeit. Hier musst du am sichersten sein.</li>
+              <li><strong>Rekursive Tiefensuche</strong> über den TIA-Projektbaum: <span class="mono">DeviceItem</span> prüfen auf <span class="mono">GetService&lt;NetworkInterface&gt;()</span>, Ports registrieren, dann für alle <span class="mono">DeviceItems</span> (Kinder) rekursiv absteigen. Grund: TIA-Projekte sind tief verschachtelt, ein linearer Scan der obersten Ebene übersieht Ports.</li>
+              <li><strong>Normalisierung</strong> per Regex: TIA sagt <span class="mono">Port_1</span>, <span class="mono">RJ45</span>, <span class="mono">1000mbit</span>, EPLAN sagt <span class="mono">P4</span>, <span class="mono">X1:P2</span>, <span class="mono">XF1</span>. Zweistufig: erst herstellerspezifische Zusätze entfernen, dann per Muster <span class="mono">(?:p|pn|tp|port)(\d+)</span> die reine Portnummer extrahieren → <span class="mono">p1</span>.</li>
+              <li><strong>Kettenauflösung:</strong> EPLAN dokumentiert die physische Verdrahtung <em>inklusive passiver Komponenten</em> (Klemmen <span class="mono">-X</span>, Rangierverteiler), TIA nur die logische Sicht aktiver Teilnehmer. Passive Bauteile werden überbrückt, bis ein aktiver Teilnehmer gefunden ist. Das ist der Grund, warum ein direkter Rohdatenvergleich <strong>nicht</strong> möglich ist.</li>
+              <li><strong>Hash-Matching:</strong> Aus <span class="mono">Quellgerät:Port</span> und <span class="mono">Zielgerät:Port</span> wird ein <strong>alphabetisch sortierter, richtungsunabhängiger</strong> Schlüssel gebildet und in ein <span class="mono">HashSet</span> gelegt. Lookup <strong>O(1)</strong> statt linearer Suche.</li>
+              <li><strong>Zwei-Phasen-Abgleich:</strong> Phase 1 EPLAN als Master (findet fehlende und falsch verschaltete Geräte), Phase 2 <strong>Reverse-Check</strong> mit TIA als Master (findet <em>undokumentierte</em> Hardware, die Phase 1 prinzipiell nicht sehen kann).</li>
+            </ul>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Was ist die Komplexität von linearer Suche gegenüber Ihrem Hash-Verfahren?</q><span class="ans">Lineare Suche: für jede der n EPLAN-Verbindungen die m TIA-Verbindungen durchlaufen → <strong>O(n·m)</strong>, bei ähnlicher Größe O(n²). Hash: einmal alle TIA-Einträge indizieren, O(m), danach je Abfrage O(1) im Mittel → gesamt <strong>O(n+m)</strong>, also linear.</span></li>
+              <li><q>Sie sagen O(1). Stimmt das immer?</q><span class="ans">Nein, im Mittel. Bei vielen Hash-Kollisionen degeneriert der Bucket zur Liste und der Zugriff wird O(n). Bei String-Schlüsseln mit guter Streuung ist das praktisch irrelevant — aber die ehrliche Antwort ist „amortisiert O(1)".</span></li>
+              <li><q>Warum ein richtungsunabhängiger Schlüssel?</q><span class="ans">Weil dieselbe physische Verbindung in EPLAN als A→B und in TIA als B→A dokumentiert sein kann. Durch alphabetisches Sortieren der beiden Endpunkte vor dem Verketten entsteht für beide Richtungen derselbe Schlüssel. Ohne das bräuchte ich zwei Vergleiche pro Verbindung.</span></li>
+              <li><q>Warum reicht die erste Phase nicht?</q><span class="ans">Weil sie über die EPLAN-Liste iteriert. Ein Gerät, das nur in TIA existiert, kommt in dieser Schleife gar nicht vor — es ist strukturell unsichtbar. Erst der Reverse-Check mit vertauschter Master-Rolle deckt undokumentierte Hardware auf.</span></li>
+              <li><q>Was, wenn Ihre Regex einen Port nicht erkennt?</q><span class="ans">Dann greift der Fallback <span class="mono">"px"</span>. Das ist die Schwachstelle: zwei nicht erkannte Ports werden beide zu <span class="mono">px</span> und könnten fälschlich als übereinstimmend gelten. Sauberer wäre, den Fallback als expliziten Fehlerzustand zu behandeln und in der Diagnose-Konsole zu melden, statt ihn in den Vergleich zu geben.</span></li>
+            </ul>
+          </div>
+          <div class="warn">
+            <p class="lab">Der Widerspruch, den ein guter Prüfer findet</p>
+            <p>Du begründest das Hash-Verfahren mit Effizienz — zu Recht. Aber deine <strong>Kettenauflösung</strong> (Listing 4) sucht mit <span class="mono">liste.FirstOrDefault(...)</span> <em>innerhalb</em> einer <span class="mono">foreach</span>-Schleife, und das Ganze läuft in einer Wiederholschleife bis keine Änderung mehr eintritt. Das ist <strong>O(n²) oder schlechter</strong> — genau das, was du beim Matching vermeidest.</p>
+            <p><strong>Gute Antwort:</strong> „Richtig erkannt. Die Kettenauflösung läuft einmalig auf der Vorverarbeitung und betrifft nur die Teilmenge der Verbindungen mit passiven Komponenten — dort war die Laufzeit unkritisch. Der Abgleich dagegen läuft über den gesamten Datenbestand, deshalb habe ich dort optimiert. Konsequent wäre, auch die Überbrückung über einen Knotenindex zu lösen; das wäre der nächste Refactoring-Schritt." Das ist eine <em>starke</em> Antwort — sie zeigt, dass du deinen eigenen Code kritisch liest.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="blk v2">
+        <div class="blk-h"><h3>B6 · TIA Portal Openness</h3><span class="chip l2">Hoch</span></div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li>Openness ist die öffentliche <strong>.NET-API</strong> für Siemens Engineering Frameworks, bereitgestellt über <strong><span class="mono">Siemens.Engineering.dll</span></strong>. Sie bildet das interne Objektmodell des TIA Portals ab: lesender und schreibender Zugriff auf Projekte, Hardware-Baum, Projektinformationen.</li>
+              <li><strong>Zwei Sicherheitsmechanismen</strong> — beide wirst du gefragt: (1) Der ausführende Windows-Benutzer muss Mitglied der lokalen Gruppe <strong>„Siemens TIA Openness"</strong> sein, sonst verweigert die API jeden Zugriff. (2) Das TIA Portal erzwingt beim ersten Verbindungsversuch einen <strong>Security Prompt</strong>; der Anwender bestätigt die Vertrauenswürdigkeit, und ein <strong>digitaler Fingerabdruck</strong> der Anwendung wandert in eine interne Whitelist.</li>
+              <li>Objektmodell: <span class="mono">DeviceItem</span> → <span class="mono">GetService&lt;NetworkInterface&gt;()</span> → <span class="mono">NetworkPort</span>. Du hältst ein Dictionary <span class="mono">_portMap</span>, das die Port-Objekte direkt mit den bereinigten Namen verbindet — damit muss der Projektbaum nicht erneut durchsucht werden.</li>
+              <li>Der Parameter <span class="mono">festerName</span> wird durch die Rekursion durchgereicht, weil TIA-Komponenten aus mehreren verschachtelten Modulen bestehen und das BMK auf der übergeordneten Ebene liegt.</li>
+            </ul>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Warum diese Sicherheitsmechanismen?</q><span class="ans">Weil Openness Schreibzugriff auf Automatisierungsprojekte erlaubt. Ohne Schutz könnte eine fremde Anwendung unbemerkt die Hardwarekonfiguration einer Produktionsanlage manipulieren. Die Kombination aus Benutzergruppe und Fingerabdruck-Whitelist stellt sicher, dass sowohl der Mensch als auch die konkrete Programmversion autorisiert sind — ein geänderter Build löst den Dialog erneut aus.</span></li>
+              <li><q>Warum C# und nicht Python?</q><span class="ans">Openness ist eine .NET-Schnittstelle. VB.NET oder Python über Bridges gingen prinzipiell, aber C# ist die native Sprache der API, hat die direkteste Typbindung an das Objektmodell und ist im Siemens-Engineering-Umfeld Industriestandard — was für Wartbarkeit durch Kollegen zählt.</span></li>
+              <li><q>Was macht GetService&lt;NetworkInterface&gt;() genau?</q><span class="ans">Es prüft zur Laufzeit, ob das Hardware-Objekt einen bestimmten Dienst anbietet — hier: ob es netzwerkfähig ist. Liefert es null, hat das DeviceItem keine PROFINET-Schnittstelle. Das ist ein typisches Service-Provider-Muster, mit dem die API optionale Fähigkeiten anbietet, ohne für jede Gerätevariante eine eigene Klasse zu brauchen.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="blk v2">
+        <div class="blk-h"><h3>B7 · Datenformate: AML, Excel, CSV</h3><span class="chip l2">Hoch</span></div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>AML</strong> (AutomationML): XML-basiert, objektorientiert, der Industriestandard für Engineering-Datenaustausch. Speichert nicht nur Topologie, sondern auch Geometrie, Kinematik und Logik. Erzeugt tief verschachtelte Strukturen.</li>
+              <li><strong>Excel Open XML</strong> (<strong>ECMA-376</strong>): Standard für benutzergenerierte Listen in der Industrie. Speichert Strings XML-basiert → <strong>garantiert Unicode-Treue</strong>.</li>
+              <li><strong>CSV</strong> (<strong>RFC 4180</strong>): reine Rohdaten, Zeilenumbruch trennt Datensätze, Semikolon/Komma die Felder.</li>
+              <li><strong>Deine Begründung für Excel</strong> — zwei Argumente, beide musst du parat haben: (1) <strong>Datenintegrität:</strong> die Konvertierung nach CSV, besonders beim Zwischenspeichern über Excel, zerschießt Umlaute und Sonderzeichen in BMK und Portbezeichnungen. (2) <strong>Vermeidung eines Medienbruchs:</strong> die EPLAN-Exportliste wird direkt eingebunden, ohne manuellen Konvertierungsschritt — und Medienbrüche zu vermeiden ist das Thema der ganzen Arbeit.</li>
+              <li><strong>ExcelDataReader</strong> liest den binären Dateistrom direkt, ohne Office- oder EPLAN-Installation, und ist dadurch schnell.</li>
+            </ul>
+          </div>
+          <div class="warn">
+            <p class="lab">Die Frage kommt fast sicher</p>
+            <p>„<strong>AML ist der Industriestandard. Warum haben Sie ihn nicht verwendet?</strong>" Das ist die Alternativen-Frage aus dem 14-Punkte-Kriterium, und du hast sie in der Arbeit selbst aufgeworfen — also wird sie gestellt. Antworte nicht defensiv: AML ist für den <em>vollständigen bidirektionalen</em> Austausch gedacht. Ich brauche eine flache Kantenliste mit vier Spalten. AML hätte Parser-Aufwand und eine Abhängigkeit erzeugt, ohne dass ein einziges zusätzliches Datum nutzbar wäre. Für ein Round-Trip-Engineering — meinem eigenen Ausblick — wäre AML dagegen die richtige Wahl, weil dann Rückschreiben dazukommt.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="blk v2">
+        <div class="blk-h"><h3>B8 · Abweichungstypen und Diagnoselogik</h3><span class="chip l2">Hoch</span></div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <div class="tw"><table>
+              <thead><tr><th>Typ</th><th>Was passiert</th><th>Folge</th><th>Farbe</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Fehlverschaltung</strong></td><td>Nicht die geplanten Partnergeräte sind verbunden</td><td>Nachbarschaft ≠ Soll; Gerätetausch blockiert</td><td>Blau</td></tr>
+                <tr><td><strong>Port-Vertauschung</strong></td><td>Richtige Geräte, falscher Port</td><td>Kommunikation läuft, Dokumentation ungültig</td><td>Orange</td></tr>
+                <tr><td><strong>Fehlendes Gerät in TIA</strong></td><td>Geplante Komponente nicht projektiert</td><td>Anlage ggf. funktionsunfähig</td><td>Rot</td></tr>
+                <tr><td><strong>Zusätzliches Gerät in TIA</strong></td><td>Hardware ohne Planungsgrundlage</td><td>Undokumentierte Anlagenteile</td><td>Lila / Magenta</td></tr>
+              </tbody>
+            </table></div>
+            <p style="margin:12px 0 0">Der Punkt für die Prüfung: Das Tool liefert <strong>kein binäres Richtig/Falsch, sondern eine qualitative Handlungsempfehlung</strong>. Die Port-Vertauschung ist das beste Beispiel — sie ist funktional unauffällig und genau deshalb gefährlich.</p>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Welcher der vier Typen ist der gefährlichste?</q><span class="ans">Die Port-Vertauschung. Alle anderen fallen bei der Inbetriebnahme auf, weil etwas nicht funktioniert. Die Port-Vertauschung funktioniert — bis Jahre später jemand ein Gerät tauscht oder eine Störung sucht und sich auf eine Dokumentation verlässt, die nicht stimmt.</span></li>
+              <li><q>Was, wenn ein Gerät in EPLAN einen anderen Namen trägt als in TIA?</q><span class="ans">Dann meldet mein Tool es fälschlich als „fehlt in TIA" plus „zusätzlich in TIA". Das ist eine bekannte Grenze: der Abgleich setzt eine konsistente BMK-Vergabe voraus. Ich speichere deshalb das Original-BMK im Datenmodell, damit sich der Fall in der Ausgabe zurückverfolgen lässt.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="blk v3">
+        <div class="blk-h"><h3>B9 · Stand der Technik: PRONETA und Wireshark</h3><span class="chip l3">Mittel</span></div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>PRONETA:</strong> kostenfreies Siemens-Diagnose- und Inbetriebnahmewerkzeug. Scannt per <strong>DCP und LLDP</strong>, stellt die Topologie grafisch dar, kann Gerätenamen und IP-Adressen ändern <em>ohne geladene SPS-Software</em>. <strong>Fehlender Baustein:</strong> keine Schnittstelle zum Import von Plandaten → kein automatisierter Abgleich.</li>
+              <li><strong>Wireshark:</strong> Industriestandard für Protokollanalyse auf Paketebene, mit PROFINET-Decodern, zerlegt LLDP-Frames bis aufs Bit. Für schnelle Topologieabgleiche <strong>zu komplex</strong>. <strong>Dual-Use:</strong> versetzt die Netzkarte in den <em>Promiscuous Mode</em>; ermöglicht Angreifern das Ausspähen von Anlagenstruktur und Prozessdaten — deshalb in vielen Produktionsnetzen reguliert. Sichere Alternative: PRONETA Professional.</li>
+            </ul>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Warum haben Sie PRONETA nicht einfach erweitert?</q><span class="ans">PRONETA ist proprietäre Siemens-Software ohne öffentliche Erweiterungsschnittstelle. Der Weg über TIA Openness ist der von Siemens dafür vorgesehene, offiziell dokumentierte und unterstützte Zugang.</span></li>
+              <li><q>Was ist der Promiscuous Mode?</q><span class="ans">Ein Betriebsmodus, in dem die Netzwerkkarte alle empfangenen Frames an das Betriebssystem weiterreicht, nicht nur die an die eigene MAC-Adresse gerichteten. Nötig für Mitschnitte — und genau das, was ihn zum Werkzeug für Angreifer macht.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="blk v4">
+        <div class="blk-h"><h3>B10 · Einordnung: Industrie 4.0, CPS, Digitaler Zwilling</h3><span class="chip l4">Randthema</span></div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>CPS</strong> = Cyber-physisches System: Maschinen sind nicht mehr isolierte physische Einheiten, sondern dauerhaft vernetzt und in einem digitalen Modell abgebildet.</li>
+              <li><strong>Digitaler Zwilling</strong> = virtueller Repräsentant der Anlage über den gesamten Lebenszyklus (Planung → Inbetriebnahme → Instandhaltung). <strong>Sein Wert steht und fällt mit der Konsistenz der Daten</strong> — das ist die Klammer beider Arbeiten.</li>
+              <li>Dein Aufhänger: das Brewster-Zitat „In theory, there is no difference between theory and practice, while in practice there is." Und die Kernthese: die physische Verkabelung darf keine „Black Box" bleiben.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ 4 ============ -->
+  <section id="quer">
+    <div class="sec-head">
+      <div class="eyebrow">Teil 4</div>
+      <h2>Querschnitt — was in <em>beiden</em> Arbeiten steht</h2>
+      <p>Diese Themen sind besonders gefährlich, weil die Kommission sie aus zwei Richtungen anfahren kann und weil eine inkonsistente Antwort sofort auffällt.</p>
+    </div>
+
+    <div class="blocks">
+      <div class="blk v1">
+        <div class="blk-h"><h3>Das OSI-Modell — in beiden Arbeiten ein eigenes Kapitel</h3><span class="chip l1">Kern</span></div>
+        <div class="blk-b">
+          <p style="margin:0 0 11px">Du beschreibst es zweimal, für zwei völlig verschiedene Zwecke: einmal für eine serielle Punkt-zu-Punkt-Verbindung (Schichten 1, 2, 7 — Rest entfällt), einmal für PROFINET (Schichten 1, 2 Standard-Ethernet; RT umgeht 3 und 4). <strong>Wenn du eines perfekt können musst, dann das.</strong></p>
+          <div class="tw"><table>
+            <thead><tr><th class="num">#</th><th>Schicht</th><th>Aufgabe</th><th>In deinen Arbeiten</th></tr></thead>
+            <tbody>
+              <tr><td class="num">7</td><td>Anwendung</td><td>Bedeutung der Nachricht</td><td>ASCII-Protokoll des Messgeräts</td></tr>
+              <tr><td class="num">6</td><td>Darstellung</td><td>Codierung, Verschlüsselung</td><td>entfällt (beide)</td></tr>
+              <tr><td class="num">5</td><td>Sitzung</td><td>Sitzungsverwaltung</td><td>entfällt (beide)</td></tr>
+              <tr><td class="num">4</td><td>Transport</td><td>Ende-zu-Ende, TCP/UDP</td><td>PROFINET NRT; von RT umgangen</td></tr>
+              <tr><td class="num">3</td><td>Vermittlung</td><td>Routing, IP</td><td>PROFINET NRT; von RT umgangen</td></tr>
+              <tr><td class="num">2</td><td>Sicherung</td><td>Rahmenbildung, Fehlererkennung</td><td>UART-Rahmen · Ethernet 802.3 · LLDP · DCP · RT</td></tr>
+              <tr><td class="num">1</td><td>Bitübertragung</td><td>physikalische Bits</td><td>RS-232/RS-485 · Ethernet-Physik</td></tr>
+            </tbody>
+          </table></div>
+          <p style="margin:12px 0 0"><strong>Merksatz für die Prüfung:</strong> Das OSI-Modell ist <em>kein Protokoll, sondern ein Ordnungsrahmen</em> der ISO. Jede Schicht bietet der darüberliegenden Dienste und verbirgt die Details der darunterliegenden. Dieser Satz allein rettet die Frage.</p>
+        </div>
+      </div>
+
+      <div class="blk v2">
+        <div class="blk-h"><h3>EPLAN Electric P8 — zweimal derselbe Ausgangspunkt, zwei verschiedene Sichten</h3><span class="chip l2">Hoch</span></div>
+        <div class="blk-b">
+          <p style="margin:0">In der PROFINET-Arbeit nutzt du die <strong>Netzwerkplandarstellung</strong> (Bus-Anschlüsse, Quell-/Ziel-Port), in der DGUV-Arbeit die <strong>Stromlaufplan-Seite</strong> (Kabelübersicht, Loopliste, Erdungsverbindungen). Beides derselbe Datenbestand, unterschiedliche Sichten. Wenn du das von dir aus sagst, wirkt es souverän: „EPLAN ist die gemeinsame Datenquelle beider Arbeiten — ich habe einmal den Netzwerkplan und einmal den Stromlaufplan ausgewertet."</p>
+        </div>
+      </div>
+
+      <div class="blk v2">
+        <div class="blk-h"><h3>EVA-Prinzip und Drei-Schichten-Architektur — identisch in beiden Arbeiten</h3><span class="chip l2">Hoch</span></div>
+        <div class="blk-b">
+          <p style="margin:0 0 11px">Beide Tools folgen demselben Muster. Das ist gut — aber du musst begründen können, <em>warum</em> das Muster passt, sonst wirkt es wie ein Reflex.</p>
+          <ul class="know" style="margin:0">
+            <li><strong>EVA</strong> ist der <em>Ablauf</em>: Eingabe (Dateien/API lesen) → Verarbeitung (normalisieren, zuordnen, vergleichen) → Ausgabe (Protokoll schreiben / Konsole).</li>
+            <li><strong>Schichtenarchitektur</strong> ist die <em>Struktur</em>: Präsentation / Anwendungslogik / Datenzugriff, entkoppelt über schlanke Datenmodellklassen ohne eigene Logik.</li>
+            <li><strong>Die Begründung:</strong> Beide Werkzeuge hängen an fremden Formaten, die sich ändern werden — EPLAN-Exportschemata, TIA-Versionen, Protokollvorlagen. Die Schichtung sorgt dafür, dass eine Formatänderung genau eine Komponente trifft und die fachliche Ableitungslogik unberührt bleibt.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="blk v3">
+        <div class="blk-h"><h3>Zwei verschiedene Excel-Bibliotheken in zwei Arbeiten</h3><span class="chip l3">Mittel</span></div>
+        <div class="blk-b">
+          <div class="note">
+            <p class="lab">Darauf wirst du wahrscheinlich angesprochen</p>
+            <p>PROFINET-Arbeit: <strong>ExcelDataReader</strong>. DGUV-Arbeit: <strong>NPOI</strong>. Beide begründest du mit „kein Office nötig". Warum dann zwei?</p>
+            <p><strong>Die richtige Antwort:</strong> ExcelDataReader kann nur <em>lesen</em>. In der DGUV-Arbeit muss ich in eine bestehende, formatierte Vorlage <em>schreiben</em> und dabei Zellstile, Rahmen, Zeilenhöhen und verbundene Zellen erhalten — das kann ExcelDataReader nicht, NPOI schon. Die Anforderung hat die Bibliothek bestimmt, nicht die Gewohnheit.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="blk v3">
+        <div class="blk-h"><h3>Regex, Rekursion, LINQ, Windows Forms</h3><span class="chip l3">Mittel</span></div>
+        <div class="blk-b">
+          <ul class="know" style="margin:0">
+            <li><strong>Regex</strong> in beiden: Filtern der Leistungskabel <span class="mono">-WD</span> und Zerlegen der EPLAN-Bezeichnung (DGUV) / Normalisieren der Portnamen (PROFINET). Können solltest du: <em>Capture Group</em> (<span class="mono">(\d+)</span> → <span class="mono">Groups[1]</span>), <em>Non-Capturing Group</em> (<span class="mono">(?:p|pn)</span>), Anker.</li>
+            <li><strong>Rekursion</strong> in beiden: Kettenverfolgung im Verbindungsgraphen (DGUV) und Tiefensuche im TIA-Projektbaum (PROFINET). Beides sind Graph-/Baumdurchläufe.</li>
+            <li><strong>LINQ:</strong> <span class="mono">Where</span>, <span class="mono">OrderBy</span>/<span class="mono">ThenBy</span>, <span class="mono">FirstOrDefault</span>. Wissen solltest du: LINQ wertet <strong>verzögert</strong> aus (deferred execution), erst <span class="mono">ToList()</span> materialisiert. Und <span class="mono">OrderBy</span> in .NET ist ein <strong>stabiler</strong> Sort — deshalb funktioniert deine fünfstufige Sortierkette überhaupt.</li>
+            <li><strong>Windows Forms</strong> in beiden: lokal ausführbares Werkzeug am Arbeitsplatz, keine Server- oder Weboberfläche nötig. Bei der DGUV-Arbeit zusätzlich seitenbasiertes Portal mit umschaltbaren Modulseiten.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5 ============ -->
+  <section id="luecken">
+    <div class="sec-head">
+      <div class="eyebrow">Teil 5</div>
+      <h2>Lücken — was du noch schließen musst</h2>
+      <p>Dieselbe Darstellung, die dein DGUV-Tool für noch nicht befüllte Protokollzellen verwendet. Diese Themen fehlen in deinen Arbeiten, sind aber so nah dran, dass eine Frage darauf sehr wahrscheinlich ist.</p>
+    </div>
+
+    <div class="blocks">
+      <div class="blk" style="border-left-color:var(--gap)">
+        <div class="blk-h"><h3>Netzformen TN-S, TN-C, TN-C-S, TT, IT</h3><span class="chip lg">Größte Lücke</span></div>
+        <div class="blk-b">
+          <div class="gapbox">
+            <p class="lab">Nicht befüllt</p>
+            <p>Deine DGUV-Arbeit behandelt Schutzleiter, Isolation, FI, LS und Schleifenimpedanz — <strong>aber nie die Netzform</strong>. Das ist die Voraussetzung für alles andere: <em>welche</em> Schutzmaßnahme überhaupt greift, hängt vom Netzsystem ab. Für eine Professorin mit Schwerpunkt Energieversorgung ist das die naheliegendste Einstiegsfrage.</p>
+          </div>
+          <ul class="know">
+            <li>Der erste Buchstabe beschreibt die <strong>Erdung der Stromquelle</strong> (T = direkt geerdet, I = isoliert/hochohmig), der zweite die <strong>Erdung der Körper</strong> (T = eigener Erder, N = Verbindung zum Betriebserder).</li>
+            <li><strong>TN-S:</strong> N und PE über die gesamte Anlage getrennt geführt. Beste EMV-Eigenschaften, Standard in Industrieneubauten — dein Fall.</li>
+            <li><strong>TN-C:</strong> N und PE als kombinierter PEN-Leiter. Kein FI möglich, Ausgleichsströme über den PEN → EMV-Probleme. In Neuanlagen vermieden.</li>
+            <li><strong>TN-C-S:</strong> vorne PEN, ab einem definierten Punkt aufgeteilt. Häufig im Bestand. <strong>Wichtig:</strong> Nach der Aufteilung darf N und PE nie wieder zusammengeführt werden.</li>
+            <li><strong>TT:</strong> Anlagenerder separat vom Betriebserder. Hohe Schleifenimpedanz → <strong>FI zwingend</strong>, weil der LS nicht sicher auslöst.</li>
+            <li><strong>IT:</strong> Stromquelle isoliert. Der <em>erste</em> Fehler führt zu keiner Abschaltung (nur Meldung über Isolationsüberwachung) — deshalb dort eingesetzt, wo Weiterbetrieb kritisch ist (OP-Säle, wichtige Prozessanlagen).</li>
+            <li><strong>Abschaltbedingung im TN:</strong> <span class="mono">Z<sub>S</sub> · I<sub>a</sub> ≤ U<sub>0</sub></span>. Abschaltzeit <span class="mono">≤ 0,4 s</span> (Endstromkreise ≤ 32 A, 230 V) bzw. <span class="mono">≤ 5 s</span> (Verteilungsstromkreise).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="blk" style="border-left-color:var(--gap)">
+        <div class="blk-h"><h3>Konkrete Grenzwerte und Prüfströme</h3><span class="chip lg">Lücke</span></div>
+        <div class="blk-b">
+          <div class="gapbox">
+            <p class="lab">Nicht befüllt</p>
+            <p>Du schreibst „definierter Prüfstrom" und „Gleichspannung ≥ 500 V", nennst aber <strong>keinen einzigen Zahlenwert für die Bewertung</strong>. Bei einer Arbeit über Prüfprotokolle, deren erklärter Zweck die Dokumentation von Messwerten <em>samt zugehöriger normativer Grenzwerte</em> ist, fällt das auf.</p>
+          </div>
+          <div class="tw"><table>
+            <thead><tr><th>Prüfung</th><th>Prüfgröße</th><th class="num">Grenzwert</th><th>Quelle</th></tr></thead>
+            <tbody>
+              <tr><td>Schutzleiter (ortsveränderlich)</td><td>≥ 200 mA</td><td class="num">0,3 Ω bis 5 m<br>+0,1 Ω / 7,5 m, max. 1 Ω</td><td>DIN VDE 0701-0702</td></tr>
+              <tr><td>Isolation SELV/PELV</td><td>250 V DC</td><td class="num">≥ 0,5 MΩ</td><td>DIN VDE 0100-600</td></tr>
+              <tr><td>Isolation bis 500 V</td><td>500 V DC</td><td class="num">≥ 1,0 MΩ</td><td>DIN VDE 0100-600</td></tr>
+              <tr><td>Isolation über 500 V</td><td>1000 V DC</td><td class="num">≥ 1,0 MΩ</td><td>DIN VDE 0100-600</td></tr>
+              <tr><td>Abschaltzeit TN, ≤ 32 A, 230 V</td><td>Z<sub>S</sub> · I<sub>a</sub> ≤ U<sub>0</sub></td><td class="num">≤ 0,4 s</td><td>DIN VDE 0100-410</td></tr>
+              <tr><td>Abschaltzeit Verteilungsstromkreis</td><td>—</td><td class="num">≤ 5 s</td><td>DIN VDE 0100-410</td></tr>
+              <tr><td>FI Zusatzschutz</td><td>I<sub>Δn</sub></td><td class="num">30 mA</td><td>DIN VDE 0100-410</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+
+      <div class="blk" style="border-left-color:var(--gap)">
+        <div class="blk-h"><h3>PROFINET: Geräterollen, Conformance Classes, MRP</h3><span class="chip lg">Lücke</span></div>
+        <div class="blk-b">
+          <div class="gapbox">
+            <p class="lab">Nicht befüllt</p>
+            <p><strong>IO-Controller / IO-Device / IO-Supervisor</strong> — das Grundvokabular fehlt komplett. <strong>Conformance Classes CC-A/B/C</strong> — fehlt, obwohl dein Gerätetausch-Szenario mindestens CC-B braucht. <strong>MRP</strong> — du nennst Medienredundanz, aber nicht das Protokoll. Details in B2 und B4 oben.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="blk" style="border-left-color:var(--gap)">
+        <div class="blk-h"><h3>DIN EN 81346-2 für die Kennzeichen = + −</h3><span class="chip lg">Lücke</span></div>
+        <div class="blk-b">
+          <div class="gapbox">
+            <p class="lab">Nicht befüllt</p>
+            <p>Dein gesamter Zuordnungsalgorithmus baut auf <span class="mono">=</span> Funktionsgruppe, <span class="mono">+</span> Ortskennzeichen, <span class="mono">−</span> BMK auf — die Norm dahinter nennst du nie. <strong>DIN EN 81346-2</strong>, früher DIN EN 61346, davor DIN 40719. Ein Satz in der Prüfung, große Wirkung.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6 ============ -->
+  <section id="angriff">
+    <div class="sec-head">
+      <div class="eyebrow">Teil 6</div>
+      <h2>Angriffsflächen — wo es wehtun wird</h2>
+      <p>Nicht Wissenslücken, sondern Stellen in den Arbeiten selbst, an denen ein aufmerksamer Prüfer ansetzt. Für jede eine Antwort, die aus der Schwäche eine Stärke macht.</p>
+    </div>
+
+    <details open>
+      <summary>1 · Modul 2 der DGUV-Arbeit wurde nicht umgesetzt — die Grundlagen dazu stehen aber drin</summary>
+      <div class="d-b">
+        <p><strong>Der Angriff:</strong> „Sie schreiben ein ganzes Kapitel über OSI, UART, RS-232 und ASCII-Protokolle — und setzen dann nur Modul 1 um. Wozu die Grundlagen?"</p>
+        <p><strong>Die Antwort:</strong> Nicht entschuldigen. Die Grundlagenarbeit war die Voraussetzung dafür, die Nichtrealisierbarkeit überhaupt <em>begründen</em> zu können. Genau die Auseinandersetzung mit den Protokollebenen hat gezeigt: für die DGUV-V3-Prüfung ist kein Messgerät vorgeschrieben, die eingesetzten Geräte verwenden herstellereigene, teils nicht offengelegte Protokolle, manche haben gar keine rechnergestützte Schnittstelle. Eine geräteübergreifende Lösung wäre für jedes Gerät eine eigene Implementierung — im gegebenen Rahmen nicht verlässlich leistbar.</p>
+        <p><strong>Und dann der Dreh:</strong> „Die Entscheidung, Modul 2 zu verwerfen, war die wichtigste Projektentscheidung der Arbeit. Ich habe sie nicht aus Zeitmangel getroffen, sondern weil die technische Analyse ergeben hat, dass eine allgemeingültige Lösung nicht existiert. Stattdessen habe ich Modul 1 vollständig statt beide Module halb umgesetzt." Das <em>ist</em> kritische Würdigung — eines der vier Bewertungskriterien.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>2 · Mealy- und Moore-Automaten stehen in den Grundlagen, werden aber nie verwendet</summary>
+      <div class="d-b">
+        <p><strong>Der Angriff:</strong> „Wo in Ihrer Software ist der Zustandsautomat?"</p>
+        <p><strong>Die ehrliche Antwort:</strong> Der Zustandsautomat war für Modul 2 vorgesehen — die Ablaufsteuerung der Messwertübernahme (Warten auf Datenstrom → Empfangen → Validieren → Schreiben → Zelle weiterschalten) ist genau ein solcher Automat, ereignisgetrieben durch das Eintreffen eines Messwerts. Mit dem Wegfall von Modul 2 entfiel die Anwendung, das Grundlagenkapitel blieb stehen. <strong>Sag das offen und beschreibe den Automaten, den du entworfen hättest</strong> — dann hast du die Frage in einen Kompetenznachweis verwandelt.</p>
+        <p>Halte bereit: Mealy vs. Moore am Beispiel, und warum du für diesen Fall Moore wählen würdest (definierte, stabile Zustände; die Ausgabe darf nicht von einem einzelnen Zeichen des Datenstroms abhängen).</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>3 · Die DGUV-Arbeit ist noch nicht fertig — mehrere Kapitel sind leer</summary>
+      <div class="d-b">
+        <p>In der vorliegenden Fassung sind leer: <strong>Zusammenfassung</strong>, <strong>Abstract</strong>, <strong>1.3 Forschungsfragen und Zielsetzung</strong>, <strong>1.4 Aufbau und Abgrenzung</strong>, <strong>Kapitel 6 vollständig</strong> (Funktionstest, Prozessvergleich, Übertragbarkeit) und <strong>Kapitel 7</strong> (Fazit, Ausblick SPS).</p>
+        <p>Abgabe ist der 07.09.2026, Prüfung der 25.09.2026 — du hast Zeit. Aber zwei Dinge sind prüfungsrelevant:</p>
+        <ul>
+          <li><strong>Die Forschungsfragen (1.3) sind das Wichtigste.</strong> In der PROFINET-Arbeit hast du zwei sauber formulierte Fragen und beantwortest sie im Fazit explizit — das ist stark. Mach es in der DGUV-Arbeit genauso, sonst fällt der Vergleich auf. Naheliegend: (1) Wie lässt sich aus flachen CAE-Exporttabellen die zeilenorientierte Struktur eines normkonformen Prüfprotokolls deterministisch ableiten? (2) Welche Ordnungslogik macht ein generiertes Protokoll vor Ort abarbeitbar?</li>
+          <li><strong>Kapitel 6 liefert deine Zahlen.</strong> „Wie viel Zeit sparen Sie?" ist eine Standardfrage der Dualen Partner. Ohne Kapitel 6 hast du keine Antwort. Miss es: Wie lange braucht ein Prüfer für hundert Einträge von Hand, wie lange dein Tool?</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary>4 · Der Effizienz-Widerspruch in der PROFINET-Arbeit</summary>
+      <div class="d-b">
+        <p>Du argumentierst ausführlich für Hash-Matching statt linearer Suche — und die Kettenauflösung passiver Komponenten ist selbst quadratisch (<span class="mono">FirstOrDefault</span> in der Schleife, umschlossen von einer Wiederholschleife). Vollständige Antwort oben in Block B5.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>5 · Das LLM-Argument in der DGUV-Arbeit ist angreifbar</summary>
+      <div class="d-b">
+        <p><strong>Der Angriff:</strong> Du verwirfst einen LLM-basierten Ansatz zur Stromlaufplan-Auswertung u. a. mit „Rate-Limit von 30 Aufrufen pro Minute". Das ist ein <em>Infrastruktur</em>-Argument, kein fachliches — und Rate-Limits ändern sich.</p>
+        <p><strong>Die bessere Begründung, die du nachschieben solltest:</strong> Ein Prüfprotokoll ist ein <strong>haftungsrelevantes Dokument</strong>. Es muss <em>deterministisch</em> und <em>reproduzierbar</em> erzeugt werden — dieselben Eingangsdaten müssen jederzeit dasselbe Ergebnis liefern, und jede Zuordnung muss nachvollziehbar auf eine Regel zurückführbar sein. Ein probabilistisches Modell kann das grundsätzlich nicht garantieren, unabhängig von Rate-Limits oder Kontextlängen. <strong>Das ist ein Ausschlusskriterium, kein Performance-Problem.</strong> Führe das Rate-Limit nur noch als Nebenargument.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>6 · Formale Fehler, die auffallen können</summary>
+      <div class="d-b">
+        <ul>
+          <li><strong>Titelblatt PROFINET-Arbeit:</strong> Datum <span class="mono">15.03.2025</span>, aber alle Quellen sind „besucht am" Dezember 2025 bis Februar 2026. Vermutlich soll es <span class="mono">15.03.2026</span> heißen. Prüf das.</li>
+          <li><strong>Listing 5</strong> ist mit „Entscheidungslogik der Topologie-Diskrepanzen" beschriftet, zeigt aber <span class="mono">SchreibeFormat</span> — reine Ausgabeformatierung, keine Entscheidungslogik. Wenn jemand danach fragt, ist die Beschriftung falsch, nicht der Code.</li>
+          <li><strong>Listing 7</strong> trägt den Kommentar <span class="mono">// PHASE 1: TIA ALS MASTER</span> — es ist Phase 2.</li>
+          <li><strong>Kleinere Tippfehler</strong> in beiden Arbeiten (u. a. „ealy-Automaten" statt „Mealy", „Whireshark", „Flasch/Richtig", „Import-/Export,odulen", „Verarbeitungs- und Vergleichmetodik"). Ein Korrekturdurchgang vor der Abgabe der DGUV-Arbeit lohnt sich.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary>7 · Eigenanteil und KI-Nutzung</summary>
+      <div class="d-b">
+        <p>Deine DGUV-Arbeit enthält eine explizite KI-Anmerkung: Recherche von Literaturstellen, Formulierungs- und Überarbeitungshilfe, Unterstützung bei Quelltext, Übersetzung. Das ist korrekt und transparent — <strong>und genau deshalb wird danach gefragt</strong>, weil „Eigenanteil" ein benanntes Bewertungskriterium ist.</p>
+        <p><strong>Vorbereitung:</strong> Du solltest zu <em>jeder</em> zentralen Entscheidung sagen können, dass sie von dir stammt — und das an einem Detail belegen. Am stärksten wirkt das dort, wo die Entscheidung nicht offensichtlich war:</p>
+        <ul>
+          <li>Die Erkenntnis, dass ein Messpunkt einem <em>Kabelsegment</em> entspricht und nicht einem Betriebsmittel.</li>
+          <li>Die dreistufige Ordnung entlang des Energiebusses, damit der Prüfer das Protokoll in Laufrichtung abarbeitet.</li>
+          <li>Die Entscheidung, Modul 2 zu verwerfen.</li>
+          <li>Der richtungsunabhängige Hash-Schlüssel und der Reverse-Check als zweite Phase.</li>
+        </ul>
+        <p>Wer den <em>Weg</em> zu einer Entscheidung erzählen kann — was er zuerst probiert hat, woran es scheiterte, was daraus folgte — beweist Eigenanteil überzeugender als jede Beteuerung.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>8 · „Ist-Topologie" aus dem TIA Portal</summary>
+      <div class="d-b">
+        <p>Die begriffliche Unschärfe zwischen projektierter und realer Topologie. Vollständige Einordnung oben in Block B3 — komm dem zuvor, statt es dir nachweisen zu lassen.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 7 ============ -->
+  <section id="sicher">
+    <div class="sec-head">
+      <div class="eyebrow">Teil 7</div>
+      <h2>Die zwölf Fragen, auf die du eine Antwort haben musst</h2>
+      <p>Wenn du nur noch eine Stunde Zeit hast, lern diese. Sie decken alle vier Bewertungsachsen ab.</p>
+    </div>
+
+    <div class="tw"><table>
+      <thead><tr><th class="num">#</th><th>Frage</th><th>Woher</th><th>Achse</th></tr></thead>
+      <tbody>
+        <tr><td class="num">1</td><td>Erklären Sie das OSI-Modell und ordnen Sie <em>beide</em> Arbeiten hinein.</td><td>A5 · B2</td><td>Grundlagen</td></tr>
+        <tr><td class="num">2</td><td>Was misst man bei einer DGUV-V3-Prüfung, warum, und gegen welche Grenzwerte?</td><td>A2 · A3 · Teil 5</td><td>Grundlagen</td></tr>
+        <tr><td class="num">3</td><td>Wer legt die Prüffristen fest und warum nicht die DGUV?</td><td>A1</td><td>Grundlagen</td></tr>
+        <tr><td class="num">4</td><td>Rechnen Sie mir einen Schutzleiter-Sollwert vor.</td><td>A2</td><td>Grundlagen</td></tr>
+        <tr><td class="num">5</td><td>Warum haben Sie Modul 2 nicht umgesetzt?</td><td>Teil 6.1</td><td>Kern / Würdigung</td></tr>
+        <tr><td class="num">6</td><td>Warum Hash-Matching statt linearer Suche — und was kostet das?</td><td>B5</td><td>Kern</td></tr>
+        <tr><td class="num">7</td><td>Warum reicht ein einphasiger Vergleich nicht?</td><td>B5</td><td>Kern</td></tr>
+        <tr><td class="num">8</td><td>AML ist Standard. Warum Excel?</td><td>B7</td><td>Alternativen</td></tr>
+        <tr><td class="num">9</td><td>Was ist LLDP und warum ist die Topologie funktionsrelevant?</td><td>B3</td><td>Grundlagen</td></tr>
+        <tr><td class="num">10</td><td>Was war Ihr Eigenanteil, was hat die KI gemacht?</td><td>Teil 6.7</td><td>Eigenanteil</td></tr>
+        <tr><td class="num">11</td><td>Wie viel Zeit spart Ihr Werkzeug — mit Zahlen?</td><td>Kap. 6 (offen)</td><td>Ergebnis</td></tr>
+        <tr><td class="num">12</td><td>Was würden Sie heute anders machen?</td><td>Teil 6.4 · 6.5</td><td>Würdigung</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="note" style="margin-top:20px">
+      <p class="lab">Zu Frage 12 — halte drei Punkte bereit</p>
+      <p>Die „Was würden Sie anders machen"-Frage kommt fast immer, und eine ausweichende Antwort kostet direkt Punkte im Kriterium „Kritische Würdigung". Drei belastbare Antworten aus deinen eigenen Arbeiten: <strong>(1)</strong> Die Kettenauflösung ebenfalls über einen Knotenindex lösen statt quadratisch zu suchen. <strong>(2)</strong> Den Regex-Fallback <span class="mono">"px"</span> als expliziten Fehlerzustand behandeln statt ihn stillschweigend in den Vergleich zu geben. <strong>(3)</strong> Die Suchtiefe 8 als konfigurierbaren Parameter führen und bei Erreichen warnen, statt still <span class="mono">null</span> zurückzugeben.</p>
+      <p>Alle drei sind konkret, technisch, selbst gefunden — und keine davon entwertet die Arbeit.</p>
+    </div>
+  </section>
+
+  </main>
+</div>
+
+<footer>
+  <hr class="rule">
+  <h4>Quellen und Vorbehalte</h4>
+  <ul>
+    <li>Inhaltliche Grundlage: deine beiden T2000-Dokumentationen (DGUV V3, Stand vor Abgabe 07.09.2026; PROFINET, abgegeben).</li>
+    <li>Prüferrecherche: <a href="https://www.dhbw-stuttgart.de/studium/bachelor-studienangebot/technik/embedded-systems/ansprechpersonen/prof-dr-katharina-nerz/">DHBW Stuttgart — Prof. Dr. Katharina Nerz</a>, <a href="https://www.dhbw-stuttgart.de/studium/bachelor-studienangebot/technik/embedded-systems/labore/quantum-technology-lab/">Quantum Technology Lab</a>, <a href="https://www.dhbw-stuttgart.de/studium/bachelor-studienangebot/technik/elektrotechnik-und-informationstechnik/ansprechpersonen/prof-dr-ing-helene-kasjanow/">Prof. Dr.-Ing. Helene Kasjanow</a>, <a href="https://www.dhbw-stuttgart.de/dhbw-stuttgart/ansprechpersonen/">Ansprechpersonenverzeichnis DHBW Stuttgart</a>.</li>
+    <li><strong>Marius Maier, Andreas Heid und Manuel Mukkenfuß konnten nicht zweifelsfrei identifiziert werden.</strong> Die Einschätzungen zu diesen dreien in Teil 1 sind aus Titel und Rolle abgeleitet, nicht belegt — behandle sie als Arbeitshypothese.</li>
+    <li>Normwerte in Teil 5 nach DIN VDE 0100-410, 0100-600, 0701-0702 sowie DGUV Vorschrift 3 und BetrSichV. Für die Arbeit selbst im Normtext gegenprüfen, nicht aus dieser Übersicht zitieren.</li>
+  </ul>
+</footer>
