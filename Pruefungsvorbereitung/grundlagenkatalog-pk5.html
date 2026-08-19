@@ -166,6 +166,8 @@
   footer ul{margin:0; padding-left:18px; display:grid; gap:4px}
   hr.rule{border:0; border-top:1px solid var(--rule); margin:0 0 22px}
   .legend{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
+  .feeds{font-family:var(--mono); font-size:11px; color:var(--ink-3); letter-spacing:.02em; margin:0; flex-basis:100%; line-height:1.45}
+  .feeds b{color:var(--accent); font-weight:600}
   @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
 </style>
 
@@ -175,7 +177,7 @@
     <div>
       <div class="eyebrow">DHBW Stuttgart · TES24 · Mündliche Prüfung</div>
       <h1>Grundlagenkatalog PK5</h1>
-      <p class="dek">Alle Grundlagen aus beiden T2000-Arbeiten, sortiert nach Prüfungswahrscheinlichkeit — plus die Stellen, an denen die Kommission bohren wird.</p>
+      <p class="dek">Alle Grundlagen aus beiden T2000-Arbeiten <em>und</em> den dahinterliegenden Themenfeldern, sortiert nach Prüfungswahrscheinlichkeit — plus die Stellen, an denen die Kommission bohren wird.</p>
       <div class="legend">
         <span class="chip l1">Kern · fast sicher</span>
         <span class="chip l2">Hoch</span>
@@ -203,9 +205,10 @@
       <li><a href="#dguv">2 · Arbeit A — DGUV V3</a></li>
       <li><a href="#profinet">3 · Arbeit B — PROFINET</a></li>
       <li><a href="#quer">4 · Querschnitt (beide)</a></li>
-      <li><a href="#luecken">5 · Lücken schließen</a></li>
-      <li><a href="#angriff">6 · Angriffsflächen</a></li>
-      <li><a href="#sicher">7 · Fast sichere Fragen</a></li>
+      <li><a href="#felder">5 · Allgemeine Grundlagen</a></li>
+      <li><a href="#luecken">6 · Lücken schließen</a></li>
+      <li><a href="#angriff">7 · Angriffsflächen</a></li>
+      <li><a href="#sicher">8 · Fast sichere Fragen</a></li>
     </ol>
   </nav>
 
@@ -228,9 +231,10 @@
       </div>
 
       <div class="blk v1">
-        <div class="blk-h"><h3>„Grundlagen" heißt: das Kapitel 2, nicht dein Code</h3><span class="chip l1">Kern</span></div>
+        <div class="blk-h"><h3>„Grundlagen" heißt: dein Kapitel 2 <em>und</em> das Fachgebiet dahinter</h3><span class="chip l1">Kern</span></div>
         <div class="blk-b">
-          <p style="margin:0">Alles, was du in Kapitel 2 geschrieben hast, hast du damit als „beherrscht" deklariert. Das ist der schärfste Hebel der Prüfer: Sie müssen sich keine Fragen ausdenken — sie lesen dein Grundlagenkapitel und fragen es ab. In deinen beiden Arbeiten stehen dort u. a. OSI-Modell, UART/RS-232, Mealy- und Moore-Automaten, CLR/JIT, Schleifenimpedanz, IRT-Jitter. <strong>Auch das, was du am Ende nicht gebraucht hast.</strong></p>
+          <p style="margin:0 0 11px">Alles, was du in Kapitel 2 geschrieben hast, hast du als „beherrscht" deklariert. Das ist der bequemste Hebel der Prüfer: Sie müssen sich keine Fragen ausdenken — sie lesen dein Grundlagenkapitel und fragen es ab. Dort stehen OSI-Modell, UART/RS-232, Mealy- und Moore-Automaten, CLR/JIT, Schleifenimpedanz, IRT-Jitter. <strong>Auch das, was du am Ende nicht gebraucht hast.</strong></p>
+          <p style="margin:0"><strong>Aber die Formulierung geht weiter.</strong> „Zugehörige Grundlagen" meint die Grundlagen des <em>Themenkomplexes</em>, nicht die Grundlagen deines Textes. Dein Kapitel 2 ist eine Auswahl — geprüft wird das Feld, aus dem du sie getroffen hast. Wer über Schutzleiterwiderstände schreibt, wird zu Netzformen und Körperstromwirkung gefragt; wer über PROFINET schreibt, zu Ethernet und Switching; wer Software baut, zu Komplexität und Entwurfsmustern. <strong>Teil 5 dieses Katalogs deckt genau diese neun Felder ab</strong> — sie sind der größere Teil des Prüfungsstoffs.</p>
         </div>
       </div>
 
@@ -374,7 +378,7 @@
             <p class="lab">Nicht in deiner Arbeit — aber sicher gefragt</p>
             <p><strong>Prüfstrom und Grenzwerte.</strong> Du schreibst nur „definierter Prüfstrom". Nach DIN VDE 0701-0702 (ortsveränderliche Betriebsmittel): mind. <span class="mono">200 mA</span>, Grenzwert <span class="mono">0,3 Ω</span> bis 5 m Leitungslänge, <span class="mono">+0,1 Ω</span> je weitere 7,5 m, max. <span class="mono">1 Ω</span>. Bei ortsfesten Anlagen (dein Fall) wird stattdessen die <strong>Durchgängigkeit</strong> geprüft und über die <strong>Abschaltbedingung</strong> bewertet — deshalb rechnest du den Sollwert aus l und A.</p>
             <p><strong>Abschaltbedingung im TN-System:</strong> <span class="mono">Z<sub>S</sub> · I<sub>a</sub> ≤ U<sub>0</sub></span>. Abschaltzeiten nach DIN VDE 0100-410: <span class="mono">≤ 0,4 s</span> für Endstromkreise bis 32 A bei 230 V, <span class="mono">≤ 5 s</span> für Verteilungsstromkreise.</p>
-            <p><strong>Netzformen:</strong> TN-S, TN-C, TN-C-S, TT, IT. Kommen in deiner Arbeit gar nicht vor, sind aber die Voraussetzung dafür, überhaupt über Schutzmaßnahmen zu reden. → siehe Teil 5.</p>
+            <p><strong>Netzformen:</strong> TN-S, TN-C, TN-C-S, TT, IT. Kommen in deiner Arbeit gar nicht vor, sind aber die Voraussetzung dafür, überhaupt über Schutzmaßnahmen zu reden. → siehe Teil 6.</p>
           </div>
           <div>
             <p class="lab">Typische Fragen</p>
@@ -889,11 +893,334 @@
   </section>
 
   <!-- ============ 5 ============ -->
-  <section id="luecken">
+  <section id="felder">
     <div class="sec-head">
       <div class="eyebrow">Teil 5</div>
+      <h2>Allgemeine Grundlagen der Themenfelder</h2>
+      <p>Geprüft wird nicht nur, was in deinem Kapitel 2 steht, sondern das Fachgebiet, in dem deine Arbeiten stehen. Neun Felder. Was hier steht, findest du in deinen Arbeiten <em>nicht</em> — es wird trotzdem vorausgesetzt.</p>
+    </div>
+
+    <div class="blocks">
+
+      <!-- TF1 -->
+      <div class="blk v1">
+        <div class="blk-h">
+          <h3>F1 · Elektrotechnik — die Rechengrundlagen</h3><span class="chip l1">Kern</span>
+          <p class="feeds">Speist: <b>DGUV-Arbeit</b> · Basis für jede Frage zu Schutzmaßnahmen</p>
+        </div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>Ohmsches Gesetz</strong> <span class="mono">U = R · I</span>. <strong>Leistung</strong> <span class="mono">P = U · I = I²·R = U²/R</span>.</li>
+              <li><strong>Kirchhoff:</strong> Knotenregel <span class="mono">ΣI = 0</span> (was reinfließt, fließt raus), Maschenregel <span class="mono">ΣU = 0</span> (Summe der Spannungen im geschlossenen Umlauf ist null).</li>
+              <li><strong>Leiterwiderstand</strong> <span class="mono">R = ρ·l/A = l/(κ·A)</span>. κ<sub>Cu</sub> ≈ 56, κ<sub>Al</sub> ≈ 36 m/(Ω·mm²). <strong>Temperaturabhängig:</strong> α<sub>Cu</sub> ≈ 0,0039 /K — bei 60 K Erwärmung steigt R um rund 23 %.</li>
+              <li><strong>Effektivwert:</strong> die Gleichspannung, die am selben Widerstand dieselbe Wirkleistung umsetzt. <span class="mono">û = √2 · U<sub>eff</sub></span> → 230 V effektiv = 325 V Scheitelwert.</li>
+              <li><strong>Drehstrom:</strong> drei um 120° versetzte Phasen. <span class="mono">U<sub>Leiter</sub> = √3 · U<sub>Strang</sub></span> → √3 · 230 V ≈ 400 V. Bei symmetrischer Last ist der Neutralleiterstrom null.</li>
+              <li><strong>Stern (Y) und Dreieck (Δ):</strong> Im Stern liegt an jedem Strang U/√3, im Dreieck fließt im Strang I/√3. <strong>Stern-Dreieck-Anlauf</strong> senkt Anlaufstrom <em>und</em> Drehmoment auf ein Drittel.</li>
+              <li><strong>Leistungsdreieck:</strong> <span class="mono">S = √(P² + Q²)</span>, Leistungsfaktor <span class="mono">cos φ = P/S</span>. Drehstrom: <span class="mono">P = √3 · U · I · cos φ</span>.</li>
+              <li><strong>Impedanz</strong> <span class="mono">Z = √(R² + X²)</span> mit <span class="mono">X<sub>L</sub> = 2πfL</span> und <span class="mono">X<sub>C</sub> = 1/(2πfC)</span>. Das ist die Brücke zu deiner Schleifenimpedanz.</li>
+              <li><strong>Spannungsfall</strong> auf Leitungen: zulässig üblicherweise 3 % für Beleuchtung, 5 % für sonstige Verbraucher.</li>
+            </ul>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Warum liegen zwischen zwei Außenleitern 400 V, wenn jeder nur 230 V gegen N hat?</q><span class="ans">Weil sie um 120° phasenverschoben sind. Die Differenz ist keine arithmetische, sondern eine geometrische Addition: √3 · 230 V ≈ 398 V.</span></li>
+              <li><q>Was ist der Effektivwert und warum rechnet man damit?</q><span class="ans">Der Wert einer Gleichspannung, die am selben Widerstand dieselbe Wirkleistung umsetzt. Man rechnet damit, weil sich damit Leistung, Erwärmung und Belastbarkeit direkt wie im Gleichstromfall berechnen lassen.</span></li>
+              <li><q>Ihr Schutzleiter erwärmt sich im Fehlerfall. Was passiert mit dem Widerstand?</q><span class="ans">Er steigt — bei Kupfer rund 0,39 % je Kelvin. Damit steigt die Schleifenimpedanz genau im Moment des Fehlers, der Fehlerstrom sinkt und die Abschaltung wird träger. Deshalb sind die Grenzwerte mit Reserve angesetzt.</span></li>
+              <li><q>Warum ist ein schlechter cos φ ein Problem?</q><span class="ans">Bei gleicher Wirkleistung fließt ein höherer Strom. Das erfordert größere Querschnitte, erzeugt höhere Verluste in den Leitungen und wird vom Energieversorger berechnet.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- TF2 -->
+      <div class="blk v1">
+        <div class="blk-h">
+          <h3>F2 · Elektrische Sicherheit — das vollständige Schutzkonzept</h3><span class="chip l1">Kern</span>
+          <p class="feeds">Speist: <b>DGUV-Arbeit</b> · das Feld, aus dem deine Arbeit ihre Berechtigung zieht</p>
+        </div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>Die drei Schutzarten.</strong> <em>Basisschutz</em> (gegen direktes Berühren: Isolierung, Abdeckung, Gehäuse). <em>Fehlerschutz</em> (bei indirektem Berühren: Schutzerdung plus automatische Abschaltung). <em>Zusatzschutz</em> (RCD mit 30 mA). Dein R<sub>ISO</sub> prüft den Basisschutz, dein R<sub>SL</sub> den Fehlerschutz — <strong>das ist die saubere Einordnung deiner beiden Messungen</strong>.</li>
+              <li><strong>Schutzklassen:</strong> I = Schutzleiteranschluss, II = Schutzisolierung (Symbol: Quadrat im Quadrat), III = Kleinspannung SELV/PELV.</li>
+              <li><strong>SELV / PELV / FELV:</strong> SELV = sichere Kleinspannung mit sicherer Trennung, <em>nicht</em> geerdet. PELV = wie SELV, aber geerdet. FELV = nur funktionale Kleinspannung ohne sichere Trennung, deshalb kein Schutz durch Kleinspannung.</li>
+              <li><strong>Zulässige Berührungsspannung U<sub>L</sub>:</strong> 50 V AC / 120 V DC im Normalfall, 25 V AC / 60 V DC bei erhöhter Gefährdung (feucht, leitfähige Umgebung).</li>
+              <li><strong>Körperstromwirkung</strong> nach DIN EN 60479-1: Wahrnehmung ab ca. 0,5 mA, <strong>Loslassschwelle</strong> ca. 10 mA, ab ca. 30 mA Atemlähmung, ab ca. 50 mA Gefahr von <strong>Herzkammerflimmern</strong> — abhängig von Einwirkdauer und Stromweg. Körperwiderstand als Rechengröße etwa 1000 Ω.</li>
+              <li><strong>Auslösecharakteristiken LS:</strong> B löst bei 3–5·I<sub>n</sub> aus, C bei 5–10·I<sub>n</sub>, D bei 10–20·I<sub>n</sub>. An Anlagen mit Frequenzumrichtern und Motoren nimmt man C oder D, weil B durch Einschaltstromspitzen fehlauslösen würde.</li>
+              <li><strong>Die fünf Sicherheitsregeln</strong> in dieser Reihenfolge: freischalten — gegen Wiedereinschalten sichern — Spannungsfreiheit feststellen — erden und kurzschließen — benachbarte unter Spannung stehende Teile abdecken.</li>
+              <li><strong>IP-Schutzarten:</strong> erste Ziffer Fremdkörper und Berührung (0–6), zweite Wasser (0–9). IP54 ist typischer Industriestandard, IP65 staubdicht und strahlwassergeschützt.</li>
+              <li><strong>Selektivität:</strong> Bei einem Fehler soll nur das nächstgelegene Schutzorgan auslösen, nicht die übergeordnete Sicherung — sonst steht die ganze Anlage.</li>
+            </ul>
+          </div>
+          <div class="gapbox">
+            <p class="lab">Der Punkt, der dir an einer Förderanlage fehlt</p>
+            <p><strong>RCD Typ A reicht bei Frequenzumrichtern nicht.</strong> Typ A erfasst sinusförmige und pulsierende Gleichfehlerströme — aber <em>keine glatten Gleichfehlerströme</em>, wie sie im Zwischenkreis eines Frequenzumrichters entstehen. Schlimmer: ein solcher Gleichanteil kann den Summenstromwandler eines Typ-A-RCD magnetisch vorsättigen und ihn damit <strong>blind für den eigentlichen Fehlerstrom</strong> machen. Deshalb ist an Anlagen mit Frequenzumrichtern ein <strong>allstromsensitiver RCD Typ B</strong> erforderlich.</p>
+            <p>Das ist genau deine Anlage — und ein Prüfer aus der Praxis wird es fragen, weil es der klassische Fehler in Fördertechnik-Installationen ist.</p>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Warum ausgerechnet 30 mA beim FI?</q><span class="ans">Die Loslassschwelle liegt bei etwa 10 mA, Herzkammerflimmern wird ab etwa 50 mA kritisch. 30 mA in Verbindung mit einer Abschaltzeit unter 300 ms liegt in dem Bereich, der nach DIN EN 60479 als beherrschbar gilt. Es ist ein Zusatzschutz, kein Ersatz für den Fehlerschutz.</span></li>
+              <li><q>Ordnen Sie Ihre beiden Messungen in das Schutzkonzept ein.</q><span class="ans">Der Isolationswiderstand prüft den Basisschutz — ob die Isolierung ihre Trennfunktion noch erfüllt. Der Schutzleiterwiderstand prüft den Fehlerschutz — ob im Fehlerfall ein ausreichend niederohmiger Rückweg für die Abschaltung existiert. Zusammen decken sie die zwei Ebenen ab, die vor dem Zusatzschutz greifen müssen.</span></li>
+              <li><q>Was ist der Unterschied zwischen SELV und PELV?</q><span class="ans">Beide haben sichere Trennung vom Netz und begrenzte Spannung. SELV ist zusätzlich nicht geerdet, PELV ist geerdet. PELV nimmt man, wenn aus funktionalen Gründen ein Erdbezug nötig ist.</span></li>
+              <li><q>Welche LS-Charakteristik an Ihrer Förderanlage — und warum?</q><span class="ans">C, teils D. Frequenzumrichter ziehen beim Zuschalten hohe Ladeströme in den Zwischenkreis, Motoren haben Anlaufströme. Eine B-Charakteristik würde beim normalen Einschalten auslösen.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- TF3 -->
+      <div class="blk v2">
+        <div class="blk-h">
+          <h3>F3 · Messtechnik — allgemeine Grundlagen</h3><span class="chip l2">Hoch</span>
+          <p class="feeds">Speist: <b>DGUV-Arbeit</b> · deine Arbeit heißt „Prüfkonzept", also wird Messtechnik gefragt</p>
+        </div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>Messabweichung</strong> = Messwert minus wahrer Wert. <strong>Messunsicherheit</strong> = der Bereich, in dem der wahre Wert mit einer bestimmten Wahrscheinlichkeit liegt. Zwei verschiedene Dinge.</li>
+              <li><strong>Systematische Abweichungen</strong> sind einseitig gerichtet und korrigierbar (Kalibrierfehler, Innenwiderstand des Messgeräts). <strong>Zufällige Abweichungen</strong> streuen und lassen sich durch Mittelwertbildung verringern.</li>
+              <li><strong>Kalibrieren</strong> = Abweichung feststellen und dokumentieren. <strong>Justieren</strong> = das Gerät verstellen, sodass die Abweichung verschwindet. <strong>Eichen</strong> = hoheitliche Prüfung durch eine amtliche Stelle. Nur das mittlere verändert das Gerät.</li>
+              <li><strong>Rückführbarkeit:</strong> Jede Kalibrierung muss über eine lückenlose Kette auf ein nationales Normal (in Deutschland die PTB) zurückführbar sein. Das ist die Grundlage dafür, dass ein Messwert überhaupt beweiskräftig ist.</li>
+              <li><strong>Genauigkeitsangabe</strong> meist als <span class="mono">±(x % vom Messwert + n Digit)</span>. Bei kleinen Messwerten dominiert der Digit-Anteil.</li>
+              <li><strong>Belastungsfehler:</strong> Ein Voltmeter braucht einen hohen Innenwiderstand, ein Amperemeter einen niedrigen — sonst verändert die Messung den Messwert.</li>
+              <li><strong>Messkategorien CAT I–IV:</strong> Beschreiben die Überspannungsfestigkeit. Für Messungen in festen Installationen ist mindestens CAT III, an der Einspeisung CAT IV erforderlich.</li>
+            </ul>
+          </div>
+          <div class="gapbox">
+            <p class="lab">Nicht in deiner Arbeit — und hier besonders schmerzhaft</p>
+            <p><strong>Vierleitermessung (Kelvin-Messung).</strong> Du misst Schutzleiterwiderstände im <em>Milliohm</em>-Bereich. Die Messleitungen selbst haben Widerstände in derselben Größenordnung. Bei einer Zweileitermessung misst du deine eigenen Prüfleitungen mit.</p>
+            <p>Die Lösung: getrennte Strom- und Spannungspfade. Über zwei Leitungen wird der Prüfstrom eingespeist, über zwei weitere direkt am Messobjekt die Spannung abgegriffen. Da über die Spannungspfade praktisch kein Strom fließt, fällt an ihnen auch keine Spannung ab. Alternativ bei Zweileitermessung: <strong>Nullabgleich</strong> der Prüfleitungen vor der Messung.</p>
+            <p>Deine ganze Arbeit dreht sich um die Integrität von Milliohm-Werten — du schreibst selbst von der „verrutschten Kommastelle bei Milliohm-Werten". Wenn du das Messverfahren dahinter nicht erklären kannst, fällt das auf.</p>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Sie dokumentieren 180 mΩ. Wie belastbar ist dieser Wert?</q><span class="ans">Das hängt an drei Dingen: der Genauigkeitsklasse des Geräts, dem Messverfahren und der Temperatur. Bei Milliohm-Messungen ist die Vierleitermessung oder zumindest ein Nullabgleich der Prüfleitungen Voraussetzung — sonst liegt der Leitungswiderstand in derselben Größenordnung wie das Messobjekt.</span></li>
+              <li><q>Muss ein Prüfgerät kalibriert sein, wenn das Protokoll als Entlastungsbeweis dienen soll?</q><span class="ans">Ja. Ohne Rückführbarkeit auf ein nationales Normal ist der Messwert nicht beweiskräftig. Deshalb gehört die Kalibrierinformation des Geräts eigentlich mit ins Protokoll — ein Punkt, den mein Werkzeug in einer produktiven Fassung ergänzen sollte.</span></li>
+              <li><q>Warum reicht Mittelwertbildung nicht gegen jede Abweichung?</q><span class="ans">Sie hilft nur gegen zufällige Streuung. Eine systematische Abweichung, etwa ein dejustiertes Gerät, bleibt auch nach tausend Messungen bestehen — sie verschiebt den Mittelwert einfach mit.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- TF4 -->
+      <div class="blk v2">
+        <div class="blk-h">
+          <h3>F4 · Normen- und Rechtsrahmen — die Hierarchie</h3><span class="chip l2">Hoch</span>
+          <p class="feeds">Speist: <b>DGUV-Arbeit</b> · und jede Frage nach Verbindlichkeit</p>
+        </div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>Die Hierarchie von oben nach unten:</strong> EU-Richtlinie → nationales Gesetz (ArbSchG, ProdSG) → Verordnung (BetrSichV, ArbStättV) → Technische Regel (TRBS) → Unfallverhütungsvorschrift (DGUV Vorschrift) → Norm (DIN, VDE, EN, IEC).</li>
+              <li><strong>Normen sind keine Gesetze.</strong> Sie werden erst verbindlich, wenn eine Rechtsvorschrift auf sie verweist. Unabhängig davon gelten sie als <strong>anerkannte Regeln der Technik</strong> — wer davon abweicht, muss im Schadensfall nachweisen, dass seine Lösung mindestens gleichwertig sicher ist. Das ist die sogenannte Vermutungswirkung.</li>
+              <li><strong>Die VDE-Normen, die dein Thema betreffen:</strong> DIN VDE 0100 (Errichten von Niederspannungsanlagen), <strong>0100-410</strong> (Schutz gegen elektrischen Schlag), <strong>0100-600</strong> (Prüfungen), <strong>0105-100</strong> (Betrieb elektrischer Anlagen), <strong>0113-1 / EN 60204-1</strong> (elektrische Ausrüstung von Maschinen), <strong>0701-0702</strong> (Prüfung ortsveränderlicher Betriebsmittel).</li>
+              <li><strong>DIN EN 60204-1</strong> ist die für deine Förderanlage eigentlich einschlägige Maschinennorm — sie regelt die elektrische Ausrüstung von Maschinen einschließlich der Prüfungen vor Inbetriebnahme. Sie steht nicht in deiner Arbeit.</li>
+              <li><strong>TRBS 1201</strong> (Prüfungen von Arbeitsmitteln) und <strong>TRBS 1203</strong> (zur Prüfung befähigte Person) konkretisieren die BetrSichV.</li>
+              <li><strong>Elektrofachkraft</strong> (DGUV V3 § 2) ist der Begriff des Unfallverhütungsrechts, <strong>befähigte Person</strong> (BetrSichV / TRBS 1203) der des Arbeitsschutzrechts. Für Prüfungen elektrischer Anlagen fallen sie praktisch zusammen — die befähigte Person für elektrotechnische Prüfungen muss Elektrofachkraft sein.</li>
+              <li><strong>Betreiberpflicht vs. Herstellerpflicht:</strong> Der Hersteller bringt die Maschine mit CE-Kennzeichnung und Konformitätserklärung in Verkehr. Der Betreiber muss sie sicher betreiben und wiederkehrend prüfen. Deine Arbeit sitzt auf der Betreiberseite.</li>
+            </ul>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Ist eine DIN-Norm rechtlich bindend?</q><span class="ans">Nicht aus sich heraus. Sie wird bindend durch Verweis in einer Rechtsvorschrift oder vertraglich. Im Haftungsfall gilt sie als anerkannte Regel der Technik — die Abweichung ist erlaubt, aber begründungs- und beweispflichtig.</span></li>
+              <li><q>Welche Norm gilt für die elektrische Ausrüstung einer Förderanlage?</q><span class="ans">DIN EN 60204-1, in Deutschland VDE 0113-1. Sie regelt die elektrische Ausrüstung von Maschinen einschließlich der Erstprüfung. DIN VDE 0100 gilt für die Gebäudeinstallation bis zur Maschinenanschlussstelle.</span></li>
+              <li><q>Wer haftet, wenn nach einem Unfall kein Prüfprotokoll vorliegt?</q><span class="ans">Der Unternehmer. Das Protokoll ist sein Entlastungsbeweis — fehlt es, kann er nicht nachweisen, seiner Prüfpflicht nachgekommen zu sein. Die Beweislast kehrt sich faktisch um. Genau darum geht es in meiner Arbeit bei der Datenintegrität.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- TF5 -->
+      <div class="blk v1">
+        <div class="blk-h">
+          <h3>F5 · Netzwerktechnik — die Ethernet-Grundlagen unter PROFINET</h3><span class="chip l1">Kern</span>
+          <p class="feeds">Speist: <b>PROFINET-Arbeit</b> · und über UART/OSI auch die DGUV-Arbeit</p>
+        </div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>Ethernet-Frame</strong> nach IEEE 802.3: Präambel, Ziel-MAC, Quell-MAC, EtherType, Nutzdaten (46–1500 Byte), FCS mit CRC-32. Die <strong>MAC-Adresse</strong> ist 48 Bit lang, die ersten 24 Bit identifizieren den Hersteller (OUI).</li>
+              <li><strong>Hub, Switch, Router:</strong> Der Hub arbeitet auf Schicht 1 und verteilt jedes Signal an alle Ports — eine gemeinsame Kollisionsdomäne. Der <strong>Switch</strong> arbeitet auf Schicht 2, lernt MAC-Adressen und leitet gezielt weiter — jeder Port eine eigene Kollisionsdomäne. Der <strong>Router</strong> arbeitet auf Schicht 3 und trennt Broadcast-Domänen.</li>
+              <li><strong>Store-and-Forward vs. Cut-Through:</strong> Store-and-Forward liest den Frame vollständig ein und prüft die CRC, bevor er weiterleitet — sicher, aber die Latenz hängt von der Framelänge ab. Cut-Through leitet weiter, sobald die Zieladresse gelesen ist — konstante, sehr geringe Latenz, aber fehlerhafte Frames werden mit weitergereicht. <strong>PROFINET IRT nutzt Cut-Through</strong>, weil die Durchlaufverzögerung planbar sein muss.</li>
+              <li><strong>VLAN nach IEEE 802.1Q:</strong> 4 Byte Tag im Frame, davon 12 Bit VLAN-ID und 3 Bit Priority Code Point. <strong>PROFINET RT verwendet Priorität 6</strong>; darüber bevorzugen Switches diese Frames in ihren Warteschlangen.</li>
+              <li><strong>TCP vs. UDP:</strong> TCP ist verbindungsorientiert, gesichert, mit Reihenfolgegarantie und Flusskontrolle, Verbindungsaufbau über Drei-Wege-Handshake. UDP ist verbindungslos und ungesichert, dafür ohne Overhead und ohne Wartezeit auf Bestätigungen.</li>
+              <li><strong>Zeichenkodierung:</strong> ASCII ist 7 Bit (128 Zeichen, keine Umlaute). ISO-8859-1 und Windows-1252 sind 8-Bit-Erweiterungen. <strong>UTF-8</strong> ist variabel lang (1–4 Byte), abwärtskompatibel zu ASCII und der heutige Standard.</li>
+            </ul>
+          </div>
+          <div class="note">
+            <p class="lab">Damit rettest du dein schwächstes Argument</p>
+            <p>Du begründest die Wahl von Excel gegenüber CSV mit „fehlerhaften Darstellungen von Betriebsmittelkennzeichen" — das klingt anekdotisch. Die präzise Begründung: <strong>CSV enthält keine Deklaration seiner Zeichenkodierung.</strong> Ein CSV ist eine reine Bytefolge; wie sie zu interpretieren ist, muss die lesende Anwendung raten. Excel schreibt beim Speichern je nach Ländereinstellung Windows-1252 statt UTF-8, dabei gehen Umlaute und Sonderzeichen verloren. Das <span class="mono">.xlsx</span>-Format speichert die Strings XML-basiert und <strong>deklariert die Kodierung im XML-Header</strong> — deshalb kann sie nicht falsch interpretiert werden.</p>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Warum kann man PROFINET nicht über einen Hub betreiben?</q><span class="ans">Ein Hub arbeitet auf Schicht 1 und kennt keine Frames — er kann die VLAN-Priorität nicht auswerten und nicht gezielt weiterleiten. Alle Teilnehmer liegen in einer Kollisionsdomäne, damit ist keine deterministische Übertragung möglich. PROFINET setzt Switching voraus, und genau deshalb ist der Switch in die Feldgeräte integriert.</span></li>
+              <li><q>Was passiert in einem Switch mit einem PROFINET-RT-Frame?</q><span class="ans">Er liest den VLAN-Tag, erkennt Priorität 6 und stellt den Frame in die höherpriore Warteschlange. Damit wird er vor wartenden IT-Frames ausgesendet. Ohne diese Priorisierung könnte ein gerade laufender 1500-Byte-Frame den Zyklus verzögern.</span></li>
+              <li><q>Warum eignet sich TCP nicht für zyklische Prozessdaten?</q><span class="ans">Wegen der Sicherungsmechanismen. Eine erneute Übertragung eines verlorenen Prozessdatums liefert einen veralteten Wert und verzögert alle nachfolgenden. Bei zyklischer Übertragung ist es sinnvoller, das nächste aktuelle Telegramm abzuwarten.</span></li>
+              <li><q>Wie groß darf ein Ethernet-Frame sein und warum ist das für PROFINET relevant?</q><span class="ans">1500 Byte Nutzdaten, mit Header rund 1518 Byte. Bei 100 MBit/s dauert die Übertragung eines vollen Frames rund 120 µs — solange kann ein bereits gesendeter IT-Frame ein wartendes RT-Telegramm blockieren. Das ist die Begründung für IRT mit reservierten Zeitschlitzen.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- TF6 -->
+      <div class="blk v2">
+        <div class="blk-h">
+          <h3>F6 · Automatisierungstechnik, SPS und Antriebe</h3><span class="chip l2">Hoch</span>
+          <p class="feeds">Speist: <b>beide Arbeiten</b> · dein Ausblick nennt selbst eine SPS</p>
+        </div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>SPS-Zyklus:</strong> Prozessabbild der Eingänge einlesen → Anwenderprogramm abarbeiten → Prozessabbild der Ausgänge schreiben. Danach beginnt der Zyklus neu. Ein <strong>Watchdog</strong> überwacht die maximale Zykluszeit.</li>
+              <li><strong>Warum das Prozessabbild?</strong> Damit die Eingangswerte während eines Zyklusdurchlaufs konsistent bleiben. Würde man direkt auf die Peripherie zugreifen, könnte derselbe Eingang am Anfang und am Ende des Programms unterschiedliche Werte liefern.</li>
+              <li><strong>IEC 61131-3</strong> definiert die SPS-Sprachen: KOP (Kontaktplan), FUP (Funktionsplan), AWL (Anweisungsliste, mittlerweile abgekündigt), ST/SCL (strukturierter Text) und AS (Ablaufsprache).</li>
+              <li><strong>SIMATIC S7-1500</strong> mit TIA Portal, dezentrale Peripherie über <strong>ET 200</strong>. Organisationsbausteine: OB1 zyklisch, dazu Weckalarm- und Prozessalarm-OBs.</li>
+              <li><strong>Analogsignale:</strong> 4–20 mA ist dem 0–10-V-Signal überlegen, weil ein Leitungsbruch als 0 mA erkennbar ist (Live Zero) und Stromsignale unempfindlicher gegen Spannungsabfälle und Einstreuungen sind.</li>
+              <li><strong>Frequenzumrichter:</strong> Gleichrichter → Gleichspannungszwischenkreis mit Kondensator → Wechselrichter, der über <strong>Pulsweitenmodulation</strong> ein Drehfeld variabler Frequenz und Amplitude erzeugt. Steuerverfahren: U/f-Kennlinie (einfach) oder feldorientierte Vektorregelung (dynamisch, drehmomentgenau).</li>
+              <li><strong>Funktionale Sicherheit:</strong> Performance Level PL a–e nach EN ISO 13849-1, Safety Integrity Level SIL 1–3 nach IEC 61508 / 62061. Über PROFINET wird Sicherheit mit <strong>PROFIsafe</strong> übertragen — ein Protokoll auf Anwendungsebene, das über dem Standardkanal läuft (Black-Channel-Prinzip).</li>
+            </ul>
+          </div>
+          <div class="warn">
+            <p class="lab">Der Zusammenhang, der beide Arbeiten verbindet</p>
+            <p><strong>Warum Frequenzumrichter für deine Isolationsmessung so unangenehm sind:</strong> Die PWM schaltet mit sehr steilen Flanken (hohes du/dt). Über die Kapazitäten zwischen Motorwicklung, Kabel und Erde fließen dadurch <strong>betriebsmäßige Ableitströme</strong> — im Normalbetrieb, ohne jeden Fehler. Das hat drei Folgen, die alle deine Arbeit betreffen:</p>
+            <p><strong>(1)</strong> Bei der Isolationsmessung würden die Y-Kondensatoren und Halbleiter des Umrichters einen zu niedrigen Widerstand vortäuschen — deshalb abklemmen oder kurzschließen. <strong>(2)</strong> Es braucht geschirmte Motorleitungen mit beidseitig aufgelegtem Schirm, damit der Ableitstrom einen definierten Rückweg hat. <strong>(3)</strong> Der Schutz erfordert einen allstromsensitiven RCD Typ B (siehe F2).</p>
+            <p>Wenn du diese Kette von der PWM über die Kabelkapazität bis zur Konsequenz für dein Prüfverfahren erzählen kannst, zeigst du genau das Systemverständnis, das im Kriterium „Kern der Arbeit" bewertet wird.</p>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Ihr Ausblick nennt eine SPS zur vollautomatisierten Anlagenpositionierung. Wie stellen Sie sich das vor?</q><span class="ans">Bereite das ernsthaft vor — du hast es selbst geschrieben. Die Idee: Statt dass der Prüfer die Förderanlage manuell in die Prüfposition fährt, gibt die Software den nächsten Messpunkt aus dem Protokoll an die Steuerung, die den Anlagenabschnitt automatisch anfährt. Voraussetzungen, die du nennen solltest: sicherer Betriebsartenwahlschalter, Zustimmtaster, reduzierte Geschwindigkeit im Einrichtbetrieb — die Anlage bewegt sich, während ein Mensch daran arbeitet, das ist sicherheitstechnisch der kritische Punkt.</span></li>
+              <li><q>Wie funktioniert ein Frequenzumrichter?</q><span class="ans">Gleichrichter, Zwischenkreis, Wechselrichter mit PWM. Über Frequenz und Spannung wird die Motordrehzahl stufenlos gestellt; bei U/f-Steuerung wird das Verhältnis konstant gehalten, damit der Fluss und damit das Drehmoment erhalten bleibt.</span></li>
+              <li><q>Warum liest eine SPS nicht direkt die Eingänge?</q><span class="ans">Wegen der Konsistenz. Das Prozessabbild friert die Eingangswerte für die Dauer eines Zyklus ein, sodass dieselbe Bedingung an zwei Programmstellen dasselbe Ergebnis liefert.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- TF7 -->
+      <div class="blk v1">
+        <div class="blk-h">
+          <h3>F7 · Algorithmen und Datenstrukturen</h3><span class="chip l1">Kern</span>
+          <p class="feeds">Speist: <b>beide Arbeiten</b> · und es ist das Heimspiel der Vorsitzenden</p>
+        </div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>O-Notation</strong> beschreibt das <em>asymptotische</em> Wachstum, nicht die absolute Laufzeit. Konstanten fallen weg. Die Skala: <span class="mono">O(1)</span> → <span class="mono">O(log n)</span> → <span class="mono">O(n)</span> → <span class="mono">O(n log n)</span> → <span class="mono">O(n²)</span> → <span class="mono">O(2ⁿ)</span>. Unterscheide best, average und worst case.</li>
+              <li><strong>Datenstrukturen und ihre Kosten.</strong> Array: Zugriff über Index O(1), Einfügen O(n). Verkettete Liste: Einfügen O(1), Suchen O(n). <strong>Hashtabelle:</strong> Suchen, Einfügen und Löschen im Mittel O(1), im schlechtesten Fall O(n). Balancierter Baum: alles O(log n), dafür sortiert.</li>
+              <li><strong>Wie eine Hashtabelle funktioniert:</strong> Eine Hashfunktion bildet den Schlüssel auf einen Bucket-Index ab. Bei <strong>Kollisionen</strong> (zwei Schlüssel, ein Bucket) hilft Verkettung oder offene Adressierung. Steigt der <strong>Lastfaktor</strong> zu weit, wird die Tabelle vergrößert und alles neu gehasht (Rehashing).</li>
+              <li><strong>In .NET:</strong> <span class="mono">GetHashCode()</span> und <span class="mono">Equals()</span> müssen konsistent sein — gleiche Objekte müssen denselben Hash liefern. Und ein Schlüssel darf nach dem Einfügen nicht mehr verändert werden, sonst findet man ihn nicht wieder. Du umgehst das elegant, indem du <strong>Strings</strong> als Schlüssel verwendest: unveränderlich und mit vernünftiger Hashfunktion.</li>
+              <li><strong>Graphen:</strong> gerichtet oder ungerichtet, gewichtet oder ungewichtet. Darstellung als Adjazenzliste (speichereffizient bei dünnen Graphen) oder Adjazenzmatrix. <strong>DFS</strong> geht in die Tiefe (Stack oder Rekursion), <strong>BFS</strong> in die Breite (Queue) und findet damit den kürzesten Weg in ungewichteten Graphen. <strong>Dijkstra</strong> für gewichtete Graphen.</li>
+              <li><strong>Rekursion vs. Iteration:</strong> Jede Rekursion lässt sich mit einem expliziten Stack iterativ formulieren. Rekursion ist lesbarer, kostet aber Stack-Tiefe und riskiert bei unbegrenzter Tiefe einen Stack Overflow.</li>
+              <li><strong>Sortierverfahren:</strong> Quicksort O(n log n) im Mittel, O(n²) im schlechtesten Fall, instabil. Mergesort O(n log n) garantiert, <strong>stabil</strong>. <strong>Stabil</strong> heißt: gleiche Schlüssel behalten ihre relative Reihenfolge.</li>
+            </ul>
+          </div>
+          <div class="note">
+            <p class="lab">Das erklärt, warum deine Sortierung funktioniert</p>
+            <p>Deine fünfstufige <span class="mono">OrderBy … ThenBy … ThenBy …</span>-Kette funktioniert nur, weil <strong>LINQ stabil sortiert</strong>. Jede <span class="mono">ThenBy</span>-Stufe darf die Ordnung der vorherigen nicht zerstören. Wenn dich jemand fragt, warum das nicht durcheinandergerät, ist „weil OrderBy in LINQ ein stabiler Sort ist" die exakte Antwort. <span class="mono">Array.Sort</span> dagegen ist Introsort und <em>nicht</em> stabil — damit hätte dieselbe Logik nicht funktioniert.</p>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>BFS oder DFS — was haben Sie verwendet und warum?</q><span class="ans">In beiden Arbeiten DFS. Im TIA-Projektbaum, weil ich alle Ports vollständig erfassen will und die Reihenfolge egal ist. Bei der Kettenverfolgung, weil ich irgendeinen Weg zum speisenden Schaltschrank suche, nicht den kürzesten. Bräuchte ich den kürzesten Pfad, wäre BFS die richtige Wahl.</span></li>
+              <li><q>Was ist eine Hash-Kollision und was passiert dann?</q><span class="ans">Zwei verschiedene Schlüssel landen im selben Bucket. Die Tabelle hängt sie dann in eine Liste an diesem Bucket und vergleicht beim Zugriff mit Equals. Bei vielen Kollisionen degeneriert der Zugriff von O(1) auf O(n) — deshalb ist eine gut streuende Hashfunktion entscheidend.</span></li>
+              <li><q>Sie sagen, Ihr Verfahren ist linear. Rechnen Sie das vor.</q><span class="ans">Aufbau des HashSets aus m TIA-Verbindungen: m Einfügeoperationen à O(1) → O(m). Danach für jede der n EPLAN-Verbindungen ein Lookup à O(1) → O(n). Gesamt O(n + m). Die lineare Suche bräuchte für jede der n Verbindungen einen Durchlauf durch m Einträge → O(n · m).</span></li>
+              <li><q>Warum verwenden Sie einen String als Hash-Schlüssel und kein eigenes Objekt?</q><span class="ans">Weil Strings in .NET unveränderlich sind und eine bewährte Hashfunktion mitbringen. Bei einem eigenen Objekt müsste ich GetHashCode und Equals konsistent überschreiben und sicherstellen, dass sich der Schlüssel nach dem Einfügen nicht mehr ändert. Der String vermeidet beide Fehlerquellen.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- TF8 -->
+      <div class="blk v2">
+        <div class="blk-h">
+          <h3>F8 · Softwaretechnik und Objektorientierung</h3><span class="chip l2">Hoch</span>
+          <p class="feeds">Speist: <b>beide Arbeiten</b> · beide sind Softwareentwicklungsprojekte</p>
+        </div>
+        <div class="blk-b">
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>Die vier Säulen der OOP:</strong> <em>Kapselung</em> (Daten und Verhalten zusammen, Zugriff kontrolliert), <em>Abstraktion</em> (nur das Wesentliche nach außen), <em>Vererbung</em> (Spezialisierung einer Basisklasse), <em>Polymorphie</em> (dieselbe Schnittstelle, unterschiedliches Verhalten).</li>
+              <li><strong>Interface vs. abstrakte Klasse:</strong> Ein Interface beschreibt nur einen Vertrag ohne Implementierung, eine Klasse kann beliebig viele implementieren. Eine abstrakte Klasse kann Implementierung mitbringen, aber es gibt nur eine Basisklasse.</li>
+              <li><strong>SOLID</strong> — mindestens das erste und das letzte Prinzip: <em>Single Responsibility</em> (eine Klasse, ein Grund zur Änderung — das ist genau deine Schichtentrennung) und <em>Dependency Inversion</em> (gegen Abstraktionen programmieren, nicht gegen konkrete Klassen).</li>
+              <li><strong>Entwurfsmuster, die in deinem Code stecken:</strong> <em>Adapter/Strategy</em> in deinen SourceReadern — gleiche Aufgabe, je Quellformat eine eigene Umsetzung. <em>Observer</em> in der Ereignissteuerung — Event-Handler registrieren sich und werden benachrichtigt. <em>Fassade</em> im ProtokollFiller, der die NPOI-Komplexität hinter einer schlichten Schnittstelle verbirgt.</li>
+              <li><strong>Anforderungen:</strong> <em>funktional</em> = was das System tun soll. <em>nicht-funktional</em> = wie gut (Performance, Benutzbarkeit, Robustheit, Wartbarkeit, Sicherheit, Übertragbarkeit). Du hast beide Kategorien in der PROFINET-Arbeit selbst definiert.</li>
+              <li><strong>Vorgehensmodelle:</strong> Wasserfall (sequenziell, Rücksprünge teuer), V-Modell (jeder Entwurfsphase steht eine Teststufe gegenüber), agil/Scrum (iterativ, Anforderungen dürfen sich ändern). <strong>Deine Arbeiten folgen faktisch dem V-Modell</strong> — Anforderungsanalyse, Konzeption, Implementierung, Evaluierung gegen die eingangs definierten Anforderungen.</li>
+              <li><strong>Teststufen:</strong> Unit-Test (einzelne Methode, isoliert), Integrationstest (Zusammenspiel der Komponenten), Systemtest (Gesamtsystem gegen die Anforderungen), Abnahmetest (durch den Auftraggeber). <strong>Black-Box</strong> testet gegen die Spezifikation, <strong>White-Box</strong> gegen die Codestruktur.</li>
+              <li><strong>Positiv- und Negativtest:</strong> Der Positivtest prüft das erwartete Verhalten bei gültigen Eingaben, der Negativtest das Verhalten bei fehlerhaften. Deine PROFINET-Evaluierung macht genau das — und der Negativtest mit gezielt injizierten Fehlern ist methodisch der wertvollere.</li>
+            </ul>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Welches Entwurfsmuster steckt in Ihren SourceReadern?</q><span class="ans">Im Kern Adapter beziehungsweise Strategy: Jede Quelldatei hat ein eigenes Format, aber alle Leser erfüllen dieselbe Aufgabe und liefern dasselbe Datenmodell. Dadurch ist die Verarbeitungsschicht unabhängig davon, woher die Daten kommen.</span></li>
+              <li><q>Welche Teststufe haben Sie durchgeführt?</q><span class="ans">Ehrliche Antwort: Systemtest im Black-Box-Verfahren, mit Positiv- und Negativfall an einem realen Projekt. Automatisierte Unit-Tests habe ich nicht geschrieben. Für ein produktiv eingesetztes Werkzeug wären sie der nächste Schritt, besonders für die Normalisierung und den Vergleichsalgorithmus, weil beide rein funktional und damit leicht testbar sind.</span></li>
+              <li><q>Warum ist der Negativtest wichtiger als der Positivtest?</q><span class="ans">Weil ein Werkzeug, das Fehler finden soll, sich nicht daran beweist, dass es bei fehlerfreien Daten schweigt — sondern daran, dass es jeden Fehlertyp erkennt und richtig klassifiziert. Deshalb habe ich alle vier Abweichungstypen gezielt injiziert.</span></li>
+              <li><q>Was ist der Unterschied zwischen Kapselung und Abstraktion?</q><span class="ans">Kapselung ist der Mechanismus: Daten und Verhalten liegen zusammen, der Zugriff wird über Sichtbarkeiten kontrolliert. Abstraktion ist die Entwurfsentscheidung, welche Details überhaupt nach außen sichtbar sein sollen. Kapselung ist das Werkzeug, Abstraktion der Zweck.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- TF9 -->
+      <div class="blk v2">
+        <div class="blk-h">
+          <h3>F9 · Embedded Systems — die Grundlagen deines Studiengangs</h3><span class="chip l2">Hoch</span>
+          <p class="feeds">Speist: <b>Studiengang TES24</b> · das Fachgebiet der Vorsitzenden</p>
+        </div>
+        <div class="blk-b">
+          <div class="note">
+            <p class="lab">Warum dieser Block hier steht</p>
+            <p>Du wirst in einem Studiengang <em>Embedded Systems</em> geprüft, mit einer Embedded-Systems-Professorin im Vorsitz. Deine beiden Arbeiten sind aber Desktop-Software und Elektrotechnik — kein einziger Mikrocontroller. Die naheliegende Brücke aus ihrer Perspektive ist: <strong>„Wie würde das auf einem eingebetteten System aussehen?"</strong> Wer diese Brücke selbst schlagen kann, punktet.</p>
+          </div>
+          <div>
+            <p class="lab">Das musst du sagen können</p>
+            <ul class="know">
+              <li><strong>Interrupt vs. Polling.</strong> Beim Polling fragt die CPU zyklisch ab, ob ein Ereignis eingetreten ist — das kostet Rechenzeit und kann Ereignisse verpassen. Beim Interrupt meldet die Peripherie selbst, die CPU springt in eine <strong>Interrupt-Service-Routine</strong> und kehrt danach zurück. <strong>Das ist die Hardware-Entsprechung deiner Event-Handler</strong> — dieselbe Idee, eine Abstraktionsebene tiefer.</li>
+              <li><strong>Zahlensysteme und Zweierkomplement:</strong> negative Zahlen als Komplement plus eins; bei 8 Bit reicht der Wertebereich von −128 bis +127. Überlauf kippt still — eine klassische Fehlerquelle.</li>
+              <li><strong>Digitaltechnik:</strong> Schaltnetz (Ausgang hängt nur von den aktuellen Eingängen ab) vs. <strong>Schaltwerk</strong> (Schaltnetz plus Speicherglieder, Ausgang hängt zusätzlich vom Zustand ab). <strong>Ein Schaltwerk ist die Hardware-Realisierung eines Zustandsautomaten</strong> — damit schließt sich der Kreis zu deinem Mealy-/Moore-Kapitel.</li>
+              <li><strong>Speicher und Architektur:</strong> von-Neumann (gemeinsamer Bus für Code und Daten) vs. Harvard (getrennt, dadurch parallel zugreifbar — üblich bei Mikrocontrollern). Flash für Programm, RAM für Daten.</li>
+              <li><strong>Echtzeitbetriebssystem:</strong> Tasks mit Prioritäten, präemptives Scheduling, Semaphore und Mutex zur Synchronisation. <strong>Prioritätsinversion</strong> als klassisches Problem: eine niedrigpriore Task hält eine Ressource und blockiert damit eine hochpriore.</li>
+              <li><strong>Nebenläufigkeit:</strong> <em>Race Condition</em> = das Ergebnis hängt von der zeitlichen Reihenfolge zweier Zugriffe ab. <em>Kritischer Abschnitt</em> = der Bereich, der geschützt werden muss. <em>Deadlock</em> = zwei Tasks warten wechselseitig aufeinander.</li>
+              <li><strong>A/D-Wandlung:</strong> Auflösung in Bit bestimmt die Quantisierungsstufen (12 Bit = 4096 Stufen). <strong>Abtasttheorem</strong> nach Nyquist/Shannon: die Abtastfrequenz muss <em>mehr als doppelt</em> so hoch sein wie die höchste Signalfrequenz, sonst entsteht Aliasing.</li>
+              <li><strong>Serielle Busse im Embedded-Umfeld:</strong> <em>UART</em> asynchron, zwei Leitungen, Punkt-zu-Punkt. <em>SPI</em> synchron mit Taktleitung, Master-Slave, vier Leitungen, schnell. <em>I²C</em> synchron, zwei Leitungen, adressbasiert und busfähig, dafür langsamer. <em>CAN</em> differenziell, busfähig, mit Arbitrierung und Fehlerbehandlung — im Fahrzeug- und Automatisierungsumfeld.</li>
+            </ul>
+          </div>
+          <div>
+            <p class="lab">Typische Fragen</p>
+            <ul class="qs">
+              <li><q>Sie beschreiben Ereignissteuerung mit Event-Handlern. Was ist das Äquivalent auf einem Mikrocontroller?</q><span class="ans">Der Interrupt. Beim seriellen Empfang wäre das ein Empfangsinterrupt des UART: Statt in einer Schleife den Statusregister-Bit abzufragen, meldet die Hardware das eingetroffene Zeichen und die ISR liest es in einen Ringpuffer. Beides ist dasselbe Prinzip — reagieren statt fragen — nur einmal in Hardware und einmal vom Betriebssystem bereitgestellt.</span></li>
+              <li><q>Ihr Zustandsautomat aus Kapitel 2 — wie würde der in Hardware aussehen?</q><span class="ans">Als Schaltwerk: ein Zustandsregister aus Flipflops speichert den aktuellen Zustand, ein Übergangsschaltnetz berechnet aus Zustand und Eingängen den Folgezustand, ein Ausgabeschaltnetz die Ausgabe. Beim Moore-Automaten hängt das Ausgabeschaltnetz nur am Zustandsregister, beim Mealy zusätzlich an den Eingängen — deshalb kann Mealy im selben Takt reagieren.</span></li>
+              <li><q>Wo hätten Sie in Ihrer Software eine Race Condition?</q><span class="ans">Genau dort, wo ich sie vermieden habe: Der Verarbeitungs-Thread erzeugt Statusmeldungen, die im Live-Protokoll der Oberfläche erscheinen sollen. Windows Forms erlaubt Zugriff auf Steuerelemente nur aus dem erzeugenden Thread. Ohne Marshalling über Invoke wäre das ein unsynchronisierter Zugriff auf einen gemeinsamen Zustand — also eine Race Condition mit undefiniertem Verhalten.</span></li>
+              <li><q>Warum ist Polling für serielle Empfangsdaten problematisch?</q><span class="ans">Weil die Daten zeitlich nicht vorhersehbar eintreffen. Pollt man zu selten, läuft der Empfangspuffer über und Zeichen gehen verloren; pollt man oft genug, verbrennt man Rechenzeit mit Warten. Der Interrupt löst beides: keine Last im Leerlauf und garantierte Reaktion beim Eintreffen.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ 6 ============ -->
+  <section id="luecken">
+    <div class="sec-head">
+      <div class="eyebrow">Teil 6</div>
       <h2>Lücken — was du noch schließen musst</h2>
-      <p>Dieselbe Darstellung, die dein DGUV-Tool für noch nicht befüllte Protokollzellen verwendet. Diese Themen fehlen in deinen Arbeiten, sind aber so nah dran, dass eine Frage darauf sehr wahrscheinlich ist.</p>
+      <p>Dieselbe Darstellung, die dein DGUV-Tool für noch nicht befüllte Protokollzellen verwendet. Während Teil 5 das ganze Fachgebiet abdeckt, sind das hier die vier Stellen, an denen deine Arbeit selbst eine erkennbare Lücke lässt — so nah am Text, dass die Frage fast erzwungen ist.</p>
     </div>
 
     <div class="blocks">
@@ -960,10 +1287,10 @@
     </div>
   </section>
 
-  <!-- ============ 6 ============ -->
+  <!-- ============ 7 ============ -->
   <section id="angriff">
     <div class="sec-head">
-      <div class="eyebrow">Teil 6</div>
+      <div class="eyebrow">Teil 7</div>
       <h2>Angriffsflächen — wo es wehtun wird</h2>
       <p>Nicht Wissenslücken, sondern Stellen in den Arbeiten selbst, an denen ein aufmerksamer Prüfer ansetzt. Für jede eine Antwort, die aus der Schwäche eine Stärke macht.</p>
     </div>
@@ -1048,10 +1375,10 @@
     </details>
   </section>
 
-  <!-- ============ 7 ============ -->
+  <!-- ============ 8 ============ -->
   <section id="sicher">
     <div class="sec-head">
-      <div class="eyebrow">Teil 7</div>
+      <div class="eyebrow">Teil 8</div>
       <h2>Die zwölf Fragen, auf die du eine Antwort haben musst</h2>
       <p>Wenn du nur noch eine Stunde Zeit hast, lern diese. Sie decken alle vier Bewertungsachsen ab.</p>
     </div>
@@ -1060,17 +1387,17 @@
       <thead><tr><th class="num">#</th><th>Frage</th><th>Woher</th><th>Achse</th></tr></thead>
       <tbody>
         <tr><td class="num">1</td><td>Erklären Sie das OSI-Modell und ordnen Sie <em>beide</em> Arbeiten hinein.</td><td>A5 · B2</td><td>Grundlagen</td></tr>
-        <tr><td class="num">2</td><td>Was misst man bei einer DGUV-V3-Prüfung, warum, und gegen welche Grenzwerte?</td><td>A2 · A3 · Teil 5</td><td>Grundlagen</td></tr>
+        <tr><td class="num">2</td><td>Was misst man bei einer DGUV-V3-Prüfung, warum, und gegen welche Grenzwerte?</td><td>A2 · A3 · F2 · Teil 6</td><td>Grundlagen</td></tr>
         <tr><td class="num">3</td><td>Wer legt die Prüffristen fest und warum nicht die DGUV?</td><td>A1</td><td>Grundlagen</td></tr>
         <tr><td class="num">4</td><td>Rechnen Sie mir einen Schutzleiter-Sollwert vor.</td><td>A2</td><td>Grundlagen</td></tr>
-        <tr><td class="num">5</td><td>Warum haben Sie Modul 2 nicht umgesetzt?</td><td>Teil 6.1</td><td>Kern / Würdigung</td></tr>
+        <tr><td class="num">5</td><td>Warum haben Sie Modul 2 nicht umgesetzt?</td><td>Teil 7.1</td><td>Kern / Würdigung</td></tr>
         <tr><td class="num">6</td><td>Warum Hash-Matching statt linearer Suche — und was kostet das?</td><td>B5</td><td>Kern</td></tr>
         <tr><td class="num">7</td><td>Warum reicht ein einphasiger Vergleich nicht?</td><td>B5</td><td>Kern</td></tr>
         <tr><td class="num">8</td><td>AML ist Standard. Warum Excel?</td><td>B7</td><td>Alternativen</td></tr>
         <tr><td class="num">9</td><td>Was ist LLDP und warum ist die Topologie funktionsrelevant?</td><td>B3</td><td>Grundlagen</td></tr>
-        <tr><td class="num">10</td><td>Was war Ihr Eigenanteil, was hat die KI gemacht?</td><td>Teil 6.7</td><td>Eigenanteil</td></tr>
+        <tr><td class="num">10</td><td>Was war Ihr Eigenanteil, was hat die KI gemacht?</td><td>Teil 7.7</td><td>Eigenanteil</td></tr>
         <tr><td class="num">11</td><td>Wie viel Zeit spart Ihr Werkzeug — mit Zahlen?</td><td>Kap. 6 (offen)</td><td>Ergebnis</td></tr>
-        <tr><td class="num">12</td><td>Was würden Sie heute anders machen?</td><td>Teil 6.4 · 6.5</td><td>Würdigung</td></tr>
+        <tr><td class="num">12</td><td>Was würden Sie heute anders machen?</td><td>Teil 7.4 · 7.5</td><td>Würdigung</td></tr>
       </tbody>
     </table></div>
 
